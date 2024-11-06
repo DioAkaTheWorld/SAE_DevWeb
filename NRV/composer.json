@@ -1,0 +1,13 @@
+{
+  "name": "s3/nrv",
+  "description": "festivale nancy rock vibration",
+  "type": "project",
+  "autoload": {
+    "psr-4": {
+      "nrv\\": "./src/classes"
+    }
+  },
+  "require": {
+    "ext-pdo": "*"
+  }
+}
