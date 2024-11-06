@@ -1,6 +1,6 @@
 <?php
 
-namespace iutnc\deefy\action;
+namespace nrv\action;
 
 /**
  * Action permettant de se déconnecter

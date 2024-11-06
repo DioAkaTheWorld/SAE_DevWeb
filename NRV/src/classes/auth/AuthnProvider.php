@@ -1,9 +1,9 @@
 <?php
 
-namespace iutnc\deefy\auth;
+namespace nrv\auth;
 
-use iutnc\deefy\exception\AuthnException;
-use iutnc\deefy\repository\DeefyRepository;
+use nrv\exception\AuthnException;
+use nrv\repository\NrvRepository;
 
 /**
  * Classe abstraite pour la gestion de l'authentification
@@ -18,7 +18,7 @@ abstract class AuthnProvider {
      * @throws AuthnException
      */
     public static function signin(string $email, string $passwd2check): void {
-        $r = DeefyRepository::getInstance();
+        $r = NrvRepository::getInstance();
         $hash = $r->getHash($email);
 
         if (password_verify($passwd2check, $hash)) {
@@ -52,7 +52,7 @@ abstract class AuthnProvider {
      * @throws AuthnException
      */
     public static function register(string $email, string $pass): void {
-        $repo = DeefyRepository::getInstance();
+        $repo = NrvRepository::getInstance();
         if ($repo->userExistsEmail($email)) {
             throw new AuthnException("Adresse email déjà utilisée");
         }

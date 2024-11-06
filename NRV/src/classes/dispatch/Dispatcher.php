@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace iutnc\deefy\dispatch;
+namespace nrv\dispatch;
 
-use iutnc\deefy\action\AddUserAction;
-use iutnc\deefy\action\DefaultAction;
-use iutnc\deefy\action\SignInAction;
-use iutnc\deefy\action\SignOutAction;
+use nrv\action\AddUserAction;
+use nrv\action\DefaultAction;
+use nrv\action\SignInAction;
+use nrv\action\SignOutAction;
 
 /**
  * Classe Dispatcher

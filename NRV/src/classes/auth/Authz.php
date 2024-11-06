@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace iutnc\deefy\auth;
+namespace nrv\auth;
 
-use iutnc\deefy\exception\AuthzException;
-use iutnc\deefy\exception\InvalidPropertyNameException;
-use iutnc\deefy\repository\DeefyRepository;
+use nrv\exception\AuthzException;
+use nrv\exception\InvalidPropertyNameException;
+use nrv\repository\NrvRepository;
 
 /**
  * Classe pour la gestion des autorisations
@@ -29,7 +29,6 @@ class Authz {
      * Vérifie si l'utilisateur connecté a le rôle nécessaire
      * @param int $required rôle nécessaire
      * @return void
-     * @throws InvalidPropertyNameException
      * @throws AuthzException
      */
     public function checkRole(int $required) : void {
@@ -48,7 +47,7 @@ class Authz {
             http_response_code(401);
             throw new AuthzException("<div><h2>Erreur 401</h2>Vous n'êtes pas connecté</div>");
         }
-        $repo = DeefyRepository::getInstance();
+        $repo = NrvRepository::getInstance();
         $userID = $_SESSION['user']->__get('id');
         if (!$repo->userExistsId($userID)) {
             http_response_code(404);

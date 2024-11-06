@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace iutnc\deefy\repository;
+namespace nrv\repository;
 
 use Exception;
-use iutnc\deefy\auth\User;
+use nrv\auth\User;
 use PDO;
 
 /**
@@ -14,8 +14,8 @@ class NrvRepository {
 
     /** @var PDO connexion avec la BD */
     private PDO $pdo;
-    /** @var DeefyRepository|null instance unique de la classe */
-    private static ?DeefyRepository $instance = null;
+    /** @var NrvRepository|null instance unique de la classe */
+    private static ?NrvRepository $instance = null;
     /** @var array configuration de la connexion à la BD */
     private static array $config = [];
 
@@ -36,9 +36,9 @@ class NrvRepository {
      * Méthode permettant de récupérer l'instance unique de la classe
      * @return DeefyRepository|null instance unique de la classe
      */
-    public static function getInstance(): ?DeefyRepository {
+    public static function getInstance(): ?NrvRepository {
         if (is_null(self::$instance)) {
-            self::$instance = new DeefyRepository(self::$config);
+            self::$instance = new NrvRepository(self::$config);
         }
         return self::$instance;
     }

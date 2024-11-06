@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace iutnc\deefy\action;
+namespace nrv\action;
 
 /**
  * Action par défaut

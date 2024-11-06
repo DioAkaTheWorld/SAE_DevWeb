@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace iutnc\deefy\auth;
+namespace nrv\auth;
 
-use iutnc\deefy\exception\InvalidPropertyNameException;
+use nrv\exception\InvalidPropertyNameException;
 
 /**
  * Classe représentant un utilisateur

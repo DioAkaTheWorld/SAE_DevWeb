@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace iutnc\deefy\action;
+namespace nrv\action;
 
-use iutnc\deefy\auth\AuthnProvider;
-use iutnc\deefy\exception\AuthnException;
+use nrv\auth\AuthnProvider;
+use nrv\exception\AuthnException;
 
 /**
  * Action permettant de se connecter

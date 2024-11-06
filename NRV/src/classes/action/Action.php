@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace iutnc\deefy\action;
+namespace nrv\action;
 
-use iutnc\deefy\auth\AuthnProvider;
+use nrv\auth\AuthnProvider;
 
 /**
  * Classe absraite Action qui gère les actions GET et POST
