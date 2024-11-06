@@ -122,4 +122,35 @@ class NrvRepository {
         return $stmt->fetch()[0];
     }
 
+    /** Fonction permettant de lister pour chaque spectacle son titre , sa date, son horaire et une image */
+    function getAllSpectacles() {
+        $query = "SELECT titre, date, horaire, image FROM spectacles";
+        return executeQuery($query);
+    }
+
+
+    /** fonction permettant de filtrer pour un spectacle sa date  */
+    function filtreSpecDate(){
+        $query = "SELECT date,titre,horaire,image FROM spectacles where date = ?";
+        return executeQuerywithparam($query,[$date]);
+
+    }
+
+    /** fonction permettant de filtrer par style de spectacle  */
+    function filtreSpecStyle(){
+        $query ="SELECT date,titre,horaire,image FROM spectacles where style = ?"
+            return executeQuerywithparam($query,[$style]);
+    }
+
+    /** fonction permettant de filtrer par lieu de spectacle */
+    function filtreSpecLieu($lieu){
+        $query ="SELECT date,titre,horarie,image FROM spectacles where lieu = ? ";
+        return executeQuerywithparam($query,[$lieu]);
+
+    }
+
+
+
+
+
 }
