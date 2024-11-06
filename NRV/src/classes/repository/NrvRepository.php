@@ -144,7 +144,7 @@ class NrvRepository {
 
     /** fonction permettant de filtrer par lieu de spectacle */
     function filtreSpecLieu($lieu){
-        $query ="SELECT date,titre,horarie,image FROM spectacles where lieu = ? ";
+        $query ="SELECT date,titre,horaire,image FROM spectacles where lieu = ? ";
         return executeQuerywithparam($query,[$lieu]);
 
     }
