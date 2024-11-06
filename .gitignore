@@ -1,0 +1,9 @@
+*.ini
+
+# IntelliJ IDEA
+.idea/
+*.iml
+
+# Composer
+*.lock
+vendor/
