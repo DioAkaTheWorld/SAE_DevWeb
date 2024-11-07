@@ -38,6 +38,6 @@ class DisplayAllSpectaclesAction extends Action {
     }
 
     public function executePost(): string {
-        $this->executeGet();
+        return $this->executeGet();
     }
 }
