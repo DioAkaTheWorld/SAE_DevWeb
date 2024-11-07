@@ -5,6 +5,7 @@ namespace nrv\dispatch;
 
 use nrv\action\AddUserAction;
 use nrv\action\DefaultAction;
+use nrv\action\DisplayAllSpectaclesAction;
 use nrv\action\SignInAction;
 use nrv\action\SignOutAction;
 
@@ -39,6 +40,7 @@ class Dispatcher {
      */
     public function run(): void {
         $actionObjet = match ($this->action) {
+            'display-all-spectacles' => new DisplayAllSpectaclesAction(),
             'add-user' => new AddUserAction(),
             'sign-in' => new SignInAction(),
             'sign-out' => new SignOutAction(),
@@ -106,13 +108,7 @@ class Dispatcher {
         } else {
             return <<<FIN
             <li class="nav-item p-1">
-                                <a class="nav-link" href="?action=display-playlists-user">Mes playlists</a>
-                            </li>
-                            <li class="nav-item p-1">
-                                <a class="nav-link" href="?action=add-playlist">Ajouter une playlist</a>
-                            </li>
-                            <li class="nav-item p-1">
-                                <a class="nav-link" href="?action=display-current-playlist">Afficher la playlist courante</a>
+                                <a class="nav-link" href="?action=display-all-spectacles">Les spectacles</a>
                             </li>
                             <li class="nav-item p-1 d-flex align-items-center">
                                 <a class="btn btn-danger text-dark my-0 p-2" href="?action=sign-out"><strong>Se déconnecter</strong></a>

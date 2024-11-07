@@ -85,7 +85,7 @@ class NrvRepository {
      * @return void
      */
     public function addUser(string $email, string $hash) : void {
-        $stmt = $this->pdo->prepare("INSERT INTO user (email, passwd, role) VALUES (?, ?, ?)");
+        $stmt = $this->pdo->prepare("INSERT INTO user (email, hash, role) VALUES (?, ?, ?)");
         $stmt->execute([$email, $hash, 1]);
     }
 
@@ -117,15 +117,52 @@ class NrvRepository {
      * @return string hash du mot de passe
      */
     public function getHash(string $email) : string {
-        $stmt = $this->pdo->prepare("SELECT passwd FROM user WHERE email = ?");
+        $stmt = $this->pdo->prepare("SELECT hash FROM user WHERE email = ?");
         $stmt->execute([$email]);
         return $stmt->fetch()[0];
     }
 
-    /** Fonction permettant de lister pour chaque spectacle son titre , sa date, son horaire et une image */
-    function getAllSpectacles() {
-        $query = "SELECT titre, date, horaire, image FROM spectacles";
-        return executeQuery($query);
+    /**
+     * Fonction permettant de récupérer tous les spectacles
+     * @return array spectacles
+     */
+    public function findAllSpectacles() : array {
+        $stmt = $this->pdo->prepare("SELECT * FROM spectacle");
+        $stmt->execute();
+        return $stmt->fetchAll();
+    }
+
+    /**
+     * Fonction permettant de récupérer une date de spectacle à partir de son id
+     * @param int $id id du spectacle
+     * @return string date du spectacle
+     */
+    public function getDateSpectacle(int $id) : string {
+        $stmt = $this->pdo->prepare("SELECT S.date 
+                                            FROM soiree S
+                                            JOIN soiree2spectacle S2P ON S.id = S2P.id_soiree
+                                            JOIN spectacle SP ON S2P.id_spectacle = SP.id
+                                            WHERE SP.id = ?");
+        $stmt->execute([$id]);
+        $date = $stmt->fetch();
+        if (empty($date)) {
+            return "Pas de date";
+        }
+        return $date['date'];
+    }
+
+    /**
+     * Fonction permettant de récupérer les images d'un spectacle à partir de son id
+     * @param int $id id du spectacle
+     * @return array images du spectacle
+     */
+    public function getImagesSpectacle(int $id) : array {
+        $stmt = $this->pdo->prepare("SELECT I.url
+                                            FROM image I
+                                            JOIN spectacle2image S2I ON I.id = S2I.id_image
+                                            WHERE S2I.id_spectacle = ?");
+        $stmt->execute([$id]);
+        return $stmt->fetchAll();
     }
 
 
