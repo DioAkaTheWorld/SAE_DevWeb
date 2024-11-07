@@ -67,7 +67,7 @@ class Dispatcher {
         <body data-bs-theme="dark">
             <nav class="navbar navbar-expand-sm bg-success bg-gradient">
                 <div class="container-fluid">
-                    <a class="navbar-brand ps-5" href="./Index.php">Deefy</a>
+                    <a class="navbar-brand ps-5" href="./index.php">Deefy</a>
                     <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#menu">
                         <span class="navbar-toggler-icon"></span>
                     </button>

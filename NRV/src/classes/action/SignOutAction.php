@@ -42,7 +42,7 @@ class SignOutAction extends Action {
 
         // Déconnexion
         session_destroy();
-        header('Location:Index.php');
+        header('Location:index.php');
         return <<<FIN
         <div class="alert alert-success my-5" role="alert">
             Vous avez bien été déconnecté.
