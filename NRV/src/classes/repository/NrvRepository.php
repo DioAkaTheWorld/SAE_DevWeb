@@ -138,7 +138,7 @@ class NrvRepository {
 
     /** fonction permettant de filtrer par style de spectacle  */
     function filtreSpecStyle(){
-        $query ="SELECT date,titre,horaire,image FROM spectacles where style = ?"
+        $query ="SELECT date,titre,horaire,image FROM spectacles where style = ?";
             return executeQuerywithparam($query,[$style]);
     }
 

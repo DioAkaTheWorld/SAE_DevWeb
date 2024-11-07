@@ -61,13 +61,13 @@ class Dispatcher {
         <head>
             <meta charset='utf-8'>
             <meta name="viewport" content="width=device-width, initial-scale=1">
-            <title>Deefy App</title>
+            <title>NRV</title>
             <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
         </head>
         <body data-bs-theme="dark">
             <nav class="navbar navbar-expand-sm bg-success bg-gradient">
                 <div class="container-fluid">
-                    <a class="navbar-brand ps-5" href="./index.php">Deefy</a>
+                    <a class="navbar-brand ps-5" href="./index.php">NRV</a>
                     <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#menu">
                         <span class="navbar-toggler-icon"></span>
                     </button>

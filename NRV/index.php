@@ -9,7 +9,7 @@ use nrv\dispatch\Dispatcher;
 session_start();
 
 try {
-    NrvRepository::setConfig('config/db.config.ini');
+    NrvRepository::setConfig('../config/db.config.ini');
 } catch (Exception $e) {
     print("Erreur de configuration : " . $e->getMessage());
 }

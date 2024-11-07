@@ -15,14 +15,10 @@ class DefaultAction extends Action {
     public function executeGet(): string {
         // Message de bienvenue
         return <<<FIN
-        <h2 class="h3 text-center" >Bienvenue sur Deefy !</h2>
+        <h2 class="h3 text-center" >Bienvenue sur NRV !</h2>
                 <div class="text-center my-4">
-                    <p>Créez et personnalisez vos playlists en un clin d'œil ! Notre site vous permet de :</p>
-                    <ul class="list-inline">
-                        <li>Ajouter des playlists pour organiser vos morceaux selon vos styles et ambiances préférés.</li>
-                        <li>Ajouter des pistes pour enrichir vos listes et explorer de nouveaux sons.</li>
-                        <li>Afficher toutes vos playlists et profiter d’une vue d'ensemble claire et facile d'accès.</li>
-                    </ul>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab accusantium aliquam aliquid atque cumque enim incidunt labore laudantium, molestiae, nihil nostrum numquam omnis perferendis, quibusdam quo sed temporibus vel veniam?</p>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cupiditate ea eos facere libero, nemo nobis officia quam quasi! Ab adipisci aspernatur assumenda distinctio ex hic ipsa neque omnis reprehenderit tempore.</p>
                 </div>
         FIN;
 
