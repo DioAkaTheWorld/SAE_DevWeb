@@ -27,6 +27,11 @@ class AddSpectacleAction extends Action {
                 <input type="time" class="form-control" id="horaire" name="horaire" required>
             </div>
             <div>
+            <label for="duree" class ="form-label">Durée*</label>
+            <input type="time" class="form-control" id="duree" name="duree" required>
+            </div>
+
+            <div>
                 <label for="style" class="form-label">Style*</label>
                 <input type="text" class="form-control" id="style" name="style" required>
             </div>
@@ -48,6 +53,7 @@ class AddSpectacleAction extends Action {
         $description = filter_var($_POST['description'], FILTER_SANITIZE_STRING);
         $horaire = filter_var($_POST['horaire'], FILTER_SANITIZE_STRING);
         $style = filter_var($_POST['style'], FILTER_SANITIZE_STRING);
+        $duree = filter_var($_POST['duree']=FILTER_SANITIZE_STRING);
         try {
             if (empty($titre)) {
                 throw new InvalidPropertyValueException("Titre manquant.");
@@ -60,6 +66,9 @@ class AddSpectacleAction extends Action {
             }
             if (empty($style)) {
                 throw new InvalidPropertyValueException("Style manquant.");
+            }
+            if (empty($duree)){
+                throw new InvalidPropertyValueException("Durée non valide");
             }
         } catch (InvalidPropertyValueException $e) {
             return $this->executeGet() . $e->getMessage();

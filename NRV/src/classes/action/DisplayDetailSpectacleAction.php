@@ -41,7 +41,7 @@ class DisplayDetailSpectacleAction extends Action {
         $html = "<h1>{$spectacleDetails['titre']}</h1>";
         $html .= "<p><strong>Style :</strong> {$spectacleDetails['style']}</p>";
         $html .= "<p><strong>Description :</strong> {$spectacleDetails['description']}</p>";
-        $html .= "<p><strong>Durée :</strong> {$spectacleDetails['horaire']}</p>";
+        $html .= "<p><strong>Durée :</strong> {$spectacleDetails['duree']}</p>";
 
         // Liste des artistes
         $html .= "<h2>Artistes</h2><ul>";
