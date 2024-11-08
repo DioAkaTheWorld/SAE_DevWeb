@@ -6,6 +6,7 @@ namespace nrv\dispatch;
 use nrv\action\AddUserAction;
 use nrv\action\DefaultAction;
 use nrv\action\DisplayAllSpectaclesAction;
+use nrv\action\DisplayDetailSpectacleAction;
 use nrv\action\SignInAction;
 use nrv\action\SignOutAction;
 
@@ -41,6 +42,7 @@ class Dispatcher {
     public function run(): void {
         $actionObjet = match ($this->action) {
             'display-all-spectacles' => new DisplayAllSpectaclesAction(),
+            'display-spectacle' => new DisplayDetailSpectacleAction(),
             'add-user' => new AddUserAction(),
             'sign-in' => new SignInAction(),
             'sign-out' => new SignOutAction(),
@@ -112,7 +114,7 @@ class Dispatcher {
                             </li>
                             <li class="nav-item p-1 d-flex align-items-center">
                                 <a class="btn btn-danger text-dark my-0 p-2" href="?action=sign-out"><strong>Se déconnecter</strong></a>
-                            </li>
+                            </li> 
             FIN;
         }
     }

@@ -10,7 +10,8 @@ use PDO;
 /**
  * Classe permettant de gérer les accès à la base de données
  */
-class NrvRepository {
+class NrvRepository
+{
 
     /** @var PDO connexion avec la BD */
     private PDO $pdo;
@@ -294,6 +295,44 @@ class NrvRepository {
 
 
         }
+    }
+
+    /**
+     * Récupérer les détails d'un spectacle par son ID
+     * @param int $spectacleId ID du spectacle
+     * @return array informations du spectacle
+     * @throws Exception
+     */
+    public function getSpectacleDetails(int $spectacleId): array {
+        $stmt = $this->pdo->prepare("SELECT titre, description, style, horaire, url FROM Spectacle WHERE id = ?");
+        $stmt->execute([$spectacleId]);
+        $spectacle = $stmt->fetch(PDO::FETCH_ASSOC);
+        if (!$spectacle) {
+            throw new Exception("Spectacle non trouvé");
+        }
+        return $spectacle;
+    }
+
+    /**
+     * Récupérer les artistes d'un spectacle
+     * @param int $spectacleId ID du spectacle
+     * @return array liste des artistes
+     */
+    public function getSpectacleArtists(int $spectacleId): array {
+        $stmt = $this->pdo->prepare("SELECT DISTINCT a.nom FROM artiste a INNER JOIN spectacle2artiste sa ON a.id = sa.id_spectacle WHERE sa.id_spectacle = ?");
+        $stmt->execute([$spectacleId]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Récupérer les images d'un spectacle
+     * @param int $spectacleId ID du spectacle
+     * @return array liste des URLs d'images
+     */
+    public function getSpectacleImages(int $spectacleId): array {
+        $stmt = $this->pdo->prepare("SELECT i.url FROM Image i INNER JOIN spectacle2image si ON i.id = si.id_image WHERE si.id_image = ?");
+        $stmt->execute([$spectacleId]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
 }
