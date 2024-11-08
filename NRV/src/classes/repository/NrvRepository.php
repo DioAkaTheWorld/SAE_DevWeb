@@ -246,15 +246,21 @@ class NrvRepository
         return (int)$this->pdo->lastInsertId();
     }
 
-    public function getNextSpectacleId() : int {
-        $stmt = $this->pdo->prepare("SELECT MAX(id) FROM spectacle");
-        $stmt->execute();
-        return $stmt->fetch()[0]+1;
-    }
-
     public function addImageToSpectacle(int $idImage, int $idSpectacle) : void {
         $stmt = $this->pdo->prepare("INSERT INTO spectacle2image (id_spectacle, id_image) VALUES (?, ?)");
         $stmt->execute([$idSpectacle, $idImage]);
+    }
+
+
+    /**
+     * Fonction permettant de récupérer les spectacles par style
+     * @param string $style style de musique
+     * @return array spectacles filtrés par style
+     */
+    public function findSpectaclesByStyle(string $style) : array {
+        $stmt = $this->pdo->prepare("SELECT * FROM spectacle WHERE style = ?");
+        $stmt->execute([$style]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
 }
