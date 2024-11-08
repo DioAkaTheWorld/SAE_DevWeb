@@ -39,6 +39,7 @@ class DisplayAllSpectaclesAction extends Action {
                             </div>
                             <span>Date: $date, </span>
                             <span>Horaire: {$spectacle['horaire']}</span>
+                            <span>Durée :{$spectacle['duree']}</span>
                             <img src="/SAE_DevWeb/images/$image" alt="image spectacle">
                         </li>
 
