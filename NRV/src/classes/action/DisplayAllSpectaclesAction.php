@@ -31,7 +31,7 @@ class DisplayAllSpectaclesAction extends Action {
             $date = $repo->getDateSpectacle($spectacle['id']);
             $inter = $repo->getImagesSpectacle($spectacle['id']);
             if($inter ){
-                $image = $inter[0]['url'];
+                $image = $inter[0]['chemin_fichier'];
                 $res .= <<<FIN
                         <li>
                             <div>

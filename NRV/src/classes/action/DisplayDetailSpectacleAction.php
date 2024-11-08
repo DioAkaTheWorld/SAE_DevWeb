@@ -53,15 +53,15 @@ class DisplayDetailSpectacleAction extends Action {
         // Images du spectacle
         $html .= "<h2>Images</h2><div class='spectacle-images'>";
         foreach ($images as $image) {
-            $html .= "<img src='{$image['url']}' alt='Image du spectacle' style='width: 150px; margin: 5px;'>";
+            $html .= "<img src='{$image['chemin_fichier']}' alt='Image du spectacle' style='width: 150px; margin: 5px;'>";
         }
         $html .= "</div>";
 
         // Extrait vidéo
-        if (!empty($spectacleDetails['url'])) {
+        if (!empty($spectacleDetails['chemin_fichier'])) {
             $html .= "<h2>Extrait Vidéo</h2>";
             $html .= "<video width='320' height='240' controls>
-                        <source src='{$spectacleDetails['url']}' type='video/mp4'>
+                        <source src='{$spectacleDetails['chemin_fichier']}' type='video/mp4'>
                       </video>";
         }
 

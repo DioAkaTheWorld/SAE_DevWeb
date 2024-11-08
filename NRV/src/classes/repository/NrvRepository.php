@@ -160,7 +160,7 @@ class NrvRepository
      * @return array images du spectacle
      */
     public function getImagesSpectacle(int $id) : array {
-        $stmt = $this->pdo->prepare("SELECT I.url
+        $stmt = $this->pdo->prepare("SELECT I.chemin_fichier
                                             FROM image I
                                             JOIN spectacle2image S2I ON I.id = S2I.id_image
                                             WHERE S2I.id_spectacle = ?");
@@ -174,9 +174,9 @@ class NrvRepository
      * @return Spectacle spectacle ajouté
      */
     function ajouterSpectacle(Spectacle $s) : Spectacle {
-        $sql = "INSERT INTO spectacle (titre, description, url, horaire, style) VALUES (?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO spectacle (titre, description, chemin_fichier, horaire, style) VALUES (?, ?, ?, ?, ?)";
         $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([$s->__get('titre'), $s->__get('description'), $s->__get('url'), $s->__get('horaire'), $s->__get('style')]);
+        $stmt->execute([$s->__get('titre'), $s->__get('description'), $s->__get('chemin_fichier'), $s->__get('horaire'), $s->__get('style')]);
         $s->setId((int)$this->pdo->lastInsertId());
         return $s;
     }
@@ -209,7 +209,7 @@ class NrvRepository
      * @throws Exception
      */
     public function getSpectacleDetails(int $spectacleId): array {
-        $stmt = $this->pdo->prepare("SELECT titre, description, style, horaire, url FROM Spectacle WHERE id = ?");
+        $stmt = $this->pdo->prepare("SELECT titre, description, style, horaire, chemin_fichier FROM Spectacle WHERE id = ?");
         $stmt->execute([$spectacleId]);
         $spectacle = $stmt->fetch(PDO::FETCH_ASSOC);
         if (!$spectacle) {
@@ -232,16 +232,16 @@ class NrvRepository
     /**
      * Récupérer les images d'un spectacle
      * @param int $spectacleId ID du spectacle
-     * @return array liste des URLs d'images
+     * @return array liste des chemin_fichiers d'images
      */
     public function getSpectacleImages(int $spectacleId): array {
-        $stmt = $this->pdo->prepare("SELECT i.url FROM Image i INNER JOIN spectacle2image si ON i.id = si.id_image WHERE si.id_image = ?");
+        $stmt = $this->pdo->prepare("SELECT i.chemin_fichier FROM Image i INNER JOIN spectacle2image si ON i.id = si.id_image WHERE si.id_image = ?");
         $stmt->execute([$spectacleId]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function addImage(string $chemin) : int {
-        $stmt = $this->pdo->prepare("INSERT INTO image (url) VALUES (?)");
+        $stmt = $this->pdo->prepare("INSERT INTO image (chemin_fichier) VALUES (?)");
         $stmt->execute([$chemin]);
         return (int)$this->pdo->lastInsertId();
     }
