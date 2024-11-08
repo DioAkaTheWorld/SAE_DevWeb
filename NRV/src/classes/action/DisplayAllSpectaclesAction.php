@@ -15,11 +15,12 @@ class DisplayAllSpectaclesAction extends Action {
         <hr>
         <ol class='list-group list-group-numbered'>
         FIN;
-
         foreach ($spectacles as $spectacle) {
             $date = $repo->getDateSpectacle($spectacle['id']);
-            $image = $repo->getImagesSpectacle($spectacle['id'])[0]['url'];
-            $res .= <<<FIN
+            $inter = $repo->getImagesSpectacle($spectacle['id']);
+            if($inter ){
+                $image = $inter[0]['url'];
+                $res .= <<<FIN
                         <li>
                             <div>
                                 <a href='?action=display-spectacle&id={$spectacle['id']}'>{$spectacle['titre']}</a>
@@ -29,7 +30,10 @@ class DisplayAllSpectaclesAction extends Action {
                             <img src="$image" alt="image spectacle">
                         </li>
 
-            FIN;
+                       FIN;
+            }
+
+
         }
 
         $res .= "</ol>";
