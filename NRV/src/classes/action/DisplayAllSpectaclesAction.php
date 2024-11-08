@@ -22,7 +22,7 @@ class DisplayAllSpectaclesAction extends Action {
             $res .= <<<FIN
                         <li>
                             <div>
-                                <a href='/NRV/index.php?action=display-spectacle&id={$spectacle['id']}'>{$spectacle['titre']}</a>
+                                <a href='?action=display-spectacle&id={$spectacle['id']}'>{$spectacle['titre']}</a>
                             </div>
                             <span>Date: $date, </span>
                             <span>Horaire: {$spectacle['horaire']}</span>
