@@ -9,14 +9,14 @@ class Spectacle {
     private int $id; // attribut auto-incrémenté
     private string $titre;
     private string $description;
-    private string $url;
+    private string $cheminFichier;
     private string $horaire;
     private string $style;
 
-    public function __construct(string $titre, string $description, string $url, string $horaire, string $style) {
+    public function __construct(string $titre, string $description, string $horaire, string $style, string $cheminFichier = "pas d'image") {
         $this->titre = $titre;
         $this->description = $description;
-        $this->url = $url;
+        $this->cheminFichier = $cheminFichier;
         $this->horaire = $horaire;
         $this->style = $style;
     }
@@ -25,7 +25,9 @@ class Spectacle {
         $this->id = $id;
     }
 
-
+    public function setCheminFichier(string $cheminFichier): void {
+        $this->cheminFichier = $cheminFichier;
+    }
 
     public function __get(string $attrName) : mixed {
         if (property_exists($this, $attrName)) {
