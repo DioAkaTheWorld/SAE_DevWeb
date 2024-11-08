@@ -5,6 +5,8 @@ namespace nrv\repository;
 
 use Exception;
 use nrv\auth\User;
+use nrv\festivale\Soiree;
+use nrv\festivale\Spectacle;
 use PDO;
 
 /**
@@ -165,135 +167,38 @@ class NrvRepository {
         return $stmt->fetchAll();
     }
 
-    /** fonction permettant d'ajouter un spectacle à la base de données */
-    function ajouterSpectacle($pdo, $titre, $description, $url, $horaire, $style)
-    {
-        $sql = "INSERT INTO spectacle (titre, description, url, horaire, style) VALUES (titre, description, url, horaire, style)";
-        $stmt = $pdo->prepare($sql);
-        return $stmt->execute([
-            'titre' => $titre,
-            'description' => $description,
-            'url' => $url,
-            'horaire' => $horaire,
-            'style' => $style
-        ]);
+    /**
+     * Fonction permettant d'ajouter un spectacle
+     * @param Spectacle $s spectacle à ajouter
+     * @return Spectacle spectacle ajouté
+     */
+    function ajouterSpectacle(Spectacle $s) : Spectacle {
+        $sql = "INSERT INTO spectacle (titre, description, url, horaire, style) VALUES (?, ?, ?, ?, ?)";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([$s->__get('titre'), $s->__get('description'), $s->__get('url'), $s->__get('horaire'), $s->__get('style')]);
+        $s->setId((int)$this->pdo->lastInsertId());
+        return $s;
     }
 
-
-    /** fonction permettant de créer un spectacle de saisir les données et les valider */
-    function creerSpectacle()
-    {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            // Récupérer les données du formulaire et les valider
-            $titre = trim($_POST['titre']);
-            $description = trim($_POST['description']);
-            $url = trim($_POST['url']);
-            $horaire = trim($_POST['horaire']);
-            $style = trim($_POST['style']);
-
-
-            // Gestion des erreurs et validation des données
-            $errors = [];
-
-            if (empty($titre)) {
-                $errors[] = "le titre est requis.";
-
-            }
-
-            if (strlen($description) > 200) {
-                $errors[] = " la description ne peut pas dépasser 200 caractères.";
-            }
-
-            if (!empty($url) && filter_var($url, FILTER_VALIDATE_URL)) {
-                $errors[] = "l'url n'est pas valide";
-            }
-
-            if (empty($horaire) || !preg_match('/^(2[0-3]|[01]?[0-9]):[0-5][0-9]$/', $horaire)) {
-                $errors[] = "L'horaire n'est pas au bon format veuillez la mettre au format HH:MM.";
-            }
-            if (empty($style)) {
-                $errors[] = "Le style de musique est requis veuillez le mentionner.";
-            }
-            if (empty($errors)) {
-                if (!empty($pdo)) {
-                    if (ajouterSpectacle($pdo, $titre, $description, $url, $style, $horaire)) {
-                        echo "<p>Le spectacle a été ajouté avec succès !</p>";
-
-                    } else {
-                        echo "<p> Une erreur est survenue lors de l'ajout du spectacle</p>";
-                    }
-                }
-
-
-            }
-            /** fonction permettant d'ajouter une soirée à la base de données */
-            function ajouterSoiree($pdo, $nom, $thematique, $date, $horaire_debut, $horaire_fin, $id_lieu)
-            {
-                $sql = "INSERT INTO soiree (nom, thematique, date, horaire_debut, horaire_fin, id_lieu) 
+    /**
+     * Ajoute une soirée
+     * @param Soiree $s soirée à ajouter
+     * @return Soiree soirée ajoutée
+     */
+    function ajouterSoiree(Soiree $s) : Soiree {
+        $sql = "INSERT INTO soiree (nom, thematique, date, horaire_debut, horaire_fin, id_lieu) 
             VALUES (nom, thematique, date, horaire_debut, horaire_fin, id_lieu)";
-                $stmt = $pdo->prepare($sql);
-                return $stmt->execute([
-                    'nom' => $nom,
-                    'thematique' => $thematique,
-                    'date' => $date,
-                    'horaire_debut' => $horaire_debut,
-                    'horaire_fin' => $horaire_fin,
-                    'id_lieu' => $id_lieu
-                ]);
-            }
-
-            /** Fonctionnalité permettant de créer une soirée de saisir les données et les valider
-             * (Même raisonnement que pour la fonctionnalité précédente mais avec des soirées)
-             */
-            function creerSoiree()
-            {
-                if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-                    // Récupérer les données du formulaire et les valider
-                    $nom = trim($_POST['nom']);
-                    $thematique = trim($_POST['thematique']);
-                    $date = trim($_POST['date']);
-                    $horaire_debut = trim($_POST['horaire_debut']);
-                    $horaire_fin = trim($_POST['horaire_fin']);
-                    $id_lieu = trim($_POST['id_lieu']);
-
-                    $errors = [];
-
-                    // Validation des données
-                    if (empty($nom)) {
-                        $errors[] = "Le nom de la soirée est requis.";
-                    }
-
-                    if (empty($date) || !preg_match('/^\d{4}-\d{2}-\d{2}$/', $date)) {
-                        $errors[] = "La date est requise et doit être au format AAAA-MM-JJ.";
-                    }
-
-                    if (empty($horaire_debut) || !preg_match('/^(2[0-3]|[01]?[0-9]):[0-5][0-9]$/', $horaire_debut)) {
-                        $errors[] = "L'horaire de début est requis et doit être au format HH:MM.";
-                    }
-
-                    if (empty($horaire_fin) || !preg_match('/^(2[0-3]|[01]?[0-9]):[0-5][0-9]$/', $horaire_fin)) {
-                        $errors[] = "L'horaire de fin est requis et doit être au format HH:MM.";
-                    }
-
-                    if (empty($id_lieu) || !is_numeric($id_lieu)) {
-                        $errors[] = "Le lieu est requis et doit être un identifiant valide.";
-                    }
-
-                    if (empty($errors)) {
-                        if (!empty($pdo)) {
-                            if (ajouterSoiree($pdo, $nom, $thematique, $date, $horaire_debut, $horaire_fin, $id_lieu)) {
-                                echo "<p>La soirée a été ajoutée avec succès !</p>";
-                            } else {
-                                echo "<p>Une erreur est survenue lors de l'ajout de la soirée.</p>";
-                            }
-                        }
-
-                    }
-                }
-            }
-
-
-        }
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([
+            'nom' => $s->__get('nom'),
+            'thematique' => $s->__get('thematique'),
+            'date' => $s->__get('date'),
+            'horaire_debut' => $s->__get('horaire_debut'),
+            'horaire_fin' => $s->__get('horaire_fin'),
+            'id_lieu' => $s->__get('id_lieu')
+        ]);
+        $s->setId((int)$this->pdo->lastInsertId());
+        return $s;
     }
 
 }

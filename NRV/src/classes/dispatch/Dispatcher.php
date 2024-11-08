@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace nrv\dispatch;
 
+use nrv\action\AddSoireeAction;
+use nrv\action\AddSpectacleAction;
 use nrv\action\AddUserAction;
 use nrv\action\DefaultAction;
 use nrv\action\DisplayAllSpectaclesAction;
@@ -41,6 +43,8 @@ class Dispatcher {
     public function run(): void {
         $actionObjet = match ($this->action) {
             'display-all-spectacles' => new DisplayAllSpectaclesAction(),
+            'add-spectacle' => new AddSpectacleAction(),
+            'add-soiree' => new AddSoireeAction(),
             'add-user' => new AddUserAction(),
             'sign-in' => new SignInAction(),
             'sign-out' => new SignOutAction(),
@@ -109,6 +113,12 @@ class Dispatcher {
             return <<<FIN
             <li class="nav-item p-1">
                                 <a class="nav-link" href="?action=display-all-spectacles">Les spectacles</a>
+                            </li>
+                            <li class="nav-item p-1">
+                                <a class="nav-link" href="?action=add-spectacle">Ajouter un spectacle</a>
+                            </li>
+                            <li class="nav-item p-1">
+                                <a class="nav-link" href="?action=add-soiree">Ajouter une soirée</a>
                             </li>
                             <li class="nav-item p-1 d-flex align-items-center">
                                 <a class="btn btn-danger text-dark my-0 p-2" href="?action=sign-out"><strong>Se déconnecter</strong></a>
