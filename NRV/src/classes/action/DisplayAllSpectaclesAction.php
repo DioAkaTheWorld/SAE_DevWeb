@@ -12,6 +12,18 @@ class DisplayAllSpectaclesAction extends Action {
 
         $res = <<<FIN
         <h2 class="p-2">Liste des spectacles</h2>
+         <li class="deroulant"><a href="#">Filtrer &ensp;</a>
+            <ul class="sous">
+            <li><a href="#">Date</a></li>
+            <li><a>Style</a></li>
+            <ul><li><a href="?action=display-spectacles-by-style&style=jazz">Jazz</a></li>
+                <li><a href="?action=display-spectacles-by-style&style=rock">Rock</a></li>
+                <li><a href="?action=display-spectacles-by-style&style=blues">Blues</a></li>
+                <li><a href="?action=display-spectacles-by-style&style=classical">Classique</a></li>
+                <li><a href="?action=display-spectacles-by-style&style=electronic">Electro</a></li></ul>
+            <li><a href="#">Lieu</a></li>
+          </ul>
+        </li>
         <hr>
         <ol class='list-group list-group-numbered'>
         FIN;

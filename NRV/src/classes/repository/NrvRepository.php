@@ -240,4 +240,16 @@ class NrvRepository
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+
+    /**
+     * Fonction permettant de récupérer les spectacles par style
+     * @param string $style style de musique
+     * @return array spectacles filtrés par style
+     */
+    public function findSpectaclesByStyle(string $style) : array {
+        $stmt = $this->pdo->prepare("SELECT * FROM spectacle WHERE style = ?");
+        $stmt->execute([$style]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
 }
