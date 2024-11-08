@@ -188,7 +188,7 @@ class NrvRepository
      */
     function ajouterSoiree(Soiree $s) : Soiree {
         $sql = "INSERT INTO soiree (nom, thematique, date, horaire_debut, horaire_fin, id_lieu) 
-            VALUES (nom, thematique, date, horaire_debut, horaire_fin, id_lieu)";
+            VALUES (:nom, :thematique, :date, :horaire_debut, :horaire_fin, :id_lieu)";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([
             'nom' => $s->__get('nom'),
