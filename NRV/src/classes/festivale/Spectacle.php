@@ -11,13 +11,15 @@ class Spectacle {
     private string $description;
     private string $cheminFichier;
     private string $horaire;
+    private string $duree;
     private string $style;
 
-    public function __construct(string $titre, string $description, string $horaire, string $style, string $cheminFichier = "pas d'image") {
+    public function __construct(string $titre, string $description, string $horaire, string $duree,string $style, string $cheminFichier = "pas d'image") {
         $this->titre = $titre;
         $this->description = $description;
         $this->cheminFichier = $cheminFichier;
         $this->horaire = $horaire;
+        $this->duree = $duree;
         $this->style = $style;
     }
 
@@ -28,6 +30,7 @@ class Spectacle {
     public function setCheminFichier(string $cheminFichier): void {
         $this->cheminFichier = $cheminFichier;
     }
+
 
     public function __get(string $attrName) : mixed {
         if (property_exists($this, $attrName)) {

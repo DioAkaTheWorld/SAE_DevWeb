@@ -25,14 +25,14 @@ class DisplayDetailSpectacleAction extends Action {
             FIN;
         }
 
-        $spectacleId = $_GET['id'];
+        $spectacleId = (int)$_GET['id'];
 
         // Obtenir les détails du spectacle depuis le dépôt
         try {
             $repository = NrvRepository::getInstance();
-            $spectacleDetails = $repository->getSpectacleDetails((int)$spectacleId );
-            $artists = $repository->getSpectacleArtists((int)$spectacleId);
-            $images = $repository->getSpectacleImages((int)$spectacleId);
+            $spectacleDetails = $repository->getSpectacleDetails($spectacleId );
+            $artists = $repository->getSpectacleArtists($spectacleId);
+            $images = $repository->getSpectacleImages($spectacleId);
         } catch (Exception $e) {
             return "<p>Erreur lors de la récupération des informations du spectacle : {$e->getMessage()}</p>";
         }

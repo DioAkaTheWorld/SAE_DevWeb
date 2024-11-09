@@ -27,33 +27,29 @@ class AddSpectacleAction extends Action {
                 <input type="time" class="form-control" id="horaire" name="horaire" required>
             </div>
             <div>
-            <label for="duree" class ="form-label">Durée*</label>
-            <input type="time" class="form-control" id="duree" name="duree" required>
+                <label for="duree" class ="form-label">Durée*</label>
+                <input type="time" class="form-control" id="duree" name="duree" required>
             </div>
-
             <div>
                 <label for="style" class="form-label">Style*</label>
                 <input type="text" class="form-control" id="style" name="style" required>
             </div>
             <div class="col-md-6">
-                    <label class="form-label" for="fichier">Ajouter une image: </label>
-                    <input class="form-control" type="file" name="fichier" id="fichier">
-                </div>
+                <label class="form-label" for="fichier">Ajouter une image: </label>
+                <input class="form-control" type="file" name="fichier" id="fichier">
+            </div>
             <button type="submit" class="btn btn-primary">Ajouter</button>
         FIN;
 
     }
 
-    /**
-     * @throws InvalidPropertyValueException
-     */
     public function executePost(): string {
         // Récupérer les données du formulaire et les valider
         $titre = filter_var($_POST['titre'], FILTER_SANITIZE_STRING);
         $description = filter_var($_POST['description'], FILTER_SANITIZE_STRING);
         $horaire = filter_var($_POST['horaire'], FILTER_SANITIZE_STRING);
         $style = filter_var($_POST['style'], FILTER_SANITIZE_STRING);
-        $duree = filter_var($_POST['duree']=FILTER_SANITIZE_STRING);
+        $duree = filter_var($_POST['duree'],FILTER_SANITIZE_STRING);
         try {
             if (empty($titre)) {
                 throw new InvalidPropertyValueException("Titre manquant.");
@@ -74,21 +70,24 @@ class AddSpectacleAction extends Action {
             return $this->executeGet() . $e->getMessage();
         }
 
-        $spectacle = new Spectacle($titre, $description, $horaire, $style);
+        $spectacle = new Spectacle($titre, $description, $horaire, $duree, $style, "Pas d'image");
         $repo = NrvRepository::getInstance();
-        $repo->ajouterSpectacle($spectacle);
-        $nomFichier = "Pas d'image";
+        $spectacle = $repo->ajouterSpectacle($spectacle);
+
         // Gestion du fichier
         try {
             if ($_FILES["fichier"]["error"] === UPLOAD_ERR_OK) {
                 $nomFichier = $this->uploadFile();
                 $idImage = $repo->addImage($nomFichier);
                 $repo->addImageToSpectacle($idImage, $spectacle->__get('id'));
+                $repo->updateImagePathForSpectacle($nomFichier, $spectacle->__get('id'));
+                $spectacle->setCheminFichier($nomFichier);
             }
         } catch (Exception $e) {
             return $this->executeGet() . <<<FIN
             <div class="alert alert-warning my-5" role="alert">
                 {$e->getMessage()}
+            </div>
             FIN;
 
         }

@@ -174,9 +174,9 @@ class NrvRepository
      * @return Spectacle spectacle ajouté
      */
     function ajouterSpectacle(Spectacle $s) : Spectacle {
-        $sql = "INSERT INTO spectacle (titre, description, chemin_fichier, horaire, style) VALUES (?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO spectacle (titre, description, chemin_fichier, horaire, duree, style) VALUES (?, ?, ?, ?, ?, ?)";
         $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([$s->__get('titre'), $s->__get('description'), $s->__get('chemin_fichier'), $s->__get('horaire'), $s->__get('style')]);
+        $stmt->execute([$s->__get('titre'), $s->__get('description'), $s->__get('chemin_fichier'), $s->__get('horaire'), $s->__get('duree'), $s->__get('style')]);
         $s->setId((int)$this->pdo->lastInsertId());
         return $s;
     }
@@ -240,17 +240,38 @@ class NrvRepository
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    /**
+     * Méthode permettant d'ajouter une image
+     * @param string $chemin chemin de l'image
+     * @return int id de l'image ajoutée
+     */
     public function addImage(string $chemin) : int {
         $stmt = $this->pdo->prepare("INSERT INTO image (chemin_fichier) VALUES (?)");
         $stmt->execute([$chemin]);
         return (int)$this->pdo->lastInsertId();
     }
 
+    /**
+     * Méthode permettant d'ajouter une image à un spectacle
+     * @param int $idImage id de l'image
+     * @param int $idSpectacle id du spectacle
+     * @return void
+     */
     public function addImageToSpectacle(int $idImage, int $idSpectacle) : void {
         $stmt = $this->pdo->prepare("INSERT INTO spectacle2image (id_spectacle, id_image) VALUES (?, ?)");
         $stmt->execute([$idSpectacle, $idImage]);
     }
 
+    /**
+     * Méthode permettant de mettre à jour le chemin d'une image pour un spectacle
+     * @param int $chemin chemin de l'image
+     * @param int $idSpectacle id du spectacle
+     * @return void
+     */
+    public function updateImagePathForSpectacle(int $chemin, int $idSpectacle) : void {
+        $stmt = $this->pdo->prepare("UPDATE spectacle SET chemin_fichier = ? WHERE id = ?");
+        $stmt->execute([$chemin, $idSpectacle]);
+    }
 
     /**
      * Fonction permettant de récupérer les spectacles par style
