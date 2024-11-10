@@ -2,6 +2,9 @@
 
 namespace nrv\action;
 
+use nrv\festivale\Spectacle;
+use nrv\renderer\SpectacleFiltersListRenderer;
+use nrv\renderer\SpectacleRenderer;
 use nrv\repository\NrvRepository;
 
 class DisplayAllSpectaclesAction extends Action {
@@ -9,43 +12,36 @@ class DisplayAllSpectaclesAction extends Action {
     public function executeGet(): string {
         $repo = NrvRepository::getInstance();
         $spectacles = $repo->findAllSpectacles();
+        $stylesRenderer = new SpectacleFiltersListRenderer();
 
+        // Liste des filtres
         $res = <<<FIN
         <h2 class="p-2">Liste des spectacles</h2>
-         <li class="deroulant"><a href="#">Filtrer &ensp;</a>
-            <ul class="sous">
-            <li><a href="#">Date</a></li>
-            <li><a>Style</a></li>
-            <ul><li><a href="?action=display-spectacles-by-style&style=jazz">Jazz</a></li>
-                <li><a href="?action=display-spectacles-by-style&style=rock">Rock</a></li>
-                <li><a href="?action=display-spectacles-by-style&style=blues">Blues</a></li>
-                <li><a href="?action=display-spectacles-by-style&style=classical">Classique</a></li>
-                <li><a href="?action=display-spectacles-by-style&style=electronic">Electro</a></li></ul>
-            <li><a href="#">Lieu</a></li>
-          </ul>
-        </li>
+        <ul>
+            <li><span>Filtrer</span>
+                <ul>
+                    <li>Date</li>
+                    <li>{$stylesRenderer->render()}</li>
+                    <li>Lieu</li>
+                </ul>
+            </li>
+        </ul>
         <hr>
         <ol class='list-group list-group-numbered'>
         FIN;
+
+        // Liste des spectacles
         foreach ($spectacles as $spectacle) {
+            $spectacleObjet = new Spectacle($spectacle['titre'], $spectacle['description'], $spectacle['horaire'], $spectacle['duree'],$spectacle['style'], $spectacle['chemin_fichier']);
+            $spectacleObjet->setId($spectacle['id']);
+            $spectacleRenderer = new SpectacleRenderer($spectacleObjet);
             $date = $repo->getDateSpectacle($spectacle['id']);
-            $inter = $repo->getImagesSpectacle($spectacle['id']);
-            if($inter ){
-                $image = $inter[0]['chemin_fichier'];
-                $res .= <<<FIN
-                        <li>
-                            <div>
-                                <a href='?action=display-spectacle&id={$spectacle['id']}'>{$spectacle['titre']}</a>
-                            </div>
-                            <span>Date: $date, </span>
-                            <span>Horaire: {$spectacle['horaire']}</span>
-                            <img src="/SAE_DevWeb/images/$image" alt="image spectacle">
-                        </li>
-
-                       FIN;
+            $image = $repo->getImagesSpectacle($spectacle['id']); // On prend la première image
+            if($image){
+                $res .= $spectacleRenderer->renderAsCompact($date, $image[0]['chemin_fichier']);
+            } else {
+                $res .= $spectacleRenderer->renderAsCompact($date, "pas d'image");
             }
-
-
         }
 
         $res .= "</ol>";

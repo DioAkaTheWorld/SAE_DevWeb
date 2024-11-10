@@ -284,4 +284,10 @@ class NrvRepository
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function getListeStyleSpectacle() : array {
+        $stmt = $this->pdo->prepare("SELECT DISTINCT style FROM spectacle");
+        $stmt->execute();
+        return $stmt->fetchAll();
+    }
+
 }
