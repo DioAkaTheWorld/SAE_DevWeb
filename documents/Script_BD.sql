@@ -188,7 +188,7 @@ CREATE TABLE `spectacle` (
                              `id` int(5) NOT NULL,
                              `titre` varchar(50) NOT NULL,
                              `description` varchar(200) DEFAULT NULL,
-                             `chemin_fichier` varchar(100) DEFAULT NULL,
+                             `chemin_video` varchar(100) DEFAULT NULL,
                              `horaire` time DEFAULT NULL,
                              `duree` time DEFAULT NULL,
                              `style` varchar(50) DEFAULT NULL
@@ -198,18 +198,18 @@ CREATE TABLE `spectacle` (
 -- Déchargement des données de la table `spectacle`
 --
 
-INSERT INTO `spectacle` (`id`, `titre`, `description`, `chemin_fichier`, `horaire`, `duree`, `style`) VALUES
-                                                                                                          (1, 'Jazz Band Live', 'A famous jazz band live in concert.', 'jazzlive.jpg', '20:00:00', '02:00:00', 'Jazz'),
-                                                                                                          (2, 'Acoustic Jazz Trio', 'Smooth acoustic jazz trio.', 'acousticjazz.jpg', '21:00:00', '03:30:00', 'Jazz'),
-                                                                                                          (3, 'Jazz Solo Piano', 'Relaxing solo piano jazz.', 'solopiano.jpg', '22:30:00', '01:00:00', 'Jazz'),
-                                                                                                          (4, 'Rock Legends', 'Classic rock covers.', 'rocklegends.jpg', '20:30:00', '01:00:00', 'Rock'),
-                                                                                                          (5, 'Indie Rock Band', 'Local indie rock band performance.', 'indierock.jpg', '22:00:00', '00:45:00', 'Rock'),
-                                                                                                          (6, 'Blues Guitar', 'Blues guitar solo performance.', 'bluesguitar.jpg', '19:00:00', '02:20:00', 'Blues'),
-                                                                                                          (7, 'Soulful Blues', 'Deep, soulful blues.', 'soulblues.jpg', '20:30:00', '00:30:00', 'Blues'),
-                                                                                                          (8, 'Classical Quartet', 'String quartet performance.', 'classicalquartet.jpg', '19:45:00', '01:20:00', 'Classical'),
-                                                                                                          (9, 'Electro DJ Set', 'Dance to electronic beats.', 'electro.jpg', '21:30:00', '02:00:00', 'Electronic'),
-                                                                                                          (10, 'Techno Night', 'Non-stop techno music.', 'techno.jpg', '23:00:00', '1:05:00', 'Electronic'),
-                                                                                                          (11, 'House Party', 'House music by top DJs.', 'house.jpg', '01:00:00', '04:00:00', 'Electronic');
+INSERT INTO `spectacle` (`id`, `titre`, `description`, `chemin_video`, `horaire`, `duree`, `style`) VALUES
+                                                                                                          (1, 'Jazz Band Live', 'A famous jazz band live in concert.', 'jazzlive.mp4', '20:00:00', '02:00:00', 'Jazz'),
+                                                                                                          (2, 'Acoustic Jazz Trio', 'Smooth acoustic jazz trio.', 'acousticjazz.mp4', '21:00:00', '03:30:00', 'Jazz'),
+                                                                                                          (3, 'Jazz Solo Piano', 'Relaxing solo piano jazz.', 'solopiano.mp4', '22:30:00', '01:00:00', 'Jazz'),
+                                                                                                          (4, 'Rock Legends', 'Classic rock covers.', 'rocklegends.mp4', '20:30:00', '01:00:00', 'Rock'),
+                                                                                                          (5, 'Indie Rock Band', 'Local indie rock band performance.', 'indierock.mp4', '22:00:00', '00:45:00', 'Rock'),
+                                                                                                          (6, 'Blues Guitar', 'Blues guitar solo performance.', 'bluesguitar.mp4', '19:00:00', '02:20:00', 'Blues'),
+                                                                                                          (7, 'Soulful Blues', 'Deep, soulful blues.', 'soulblues.mp4', '20:30:00', '00:30:00', 'Blues'),
+                                                                                                          (8, 'Classical Quartet', 'String quartet performance.', 'classicalquartet.mp4', '19:45:00', '01:20:00', 'Classical'),
+                                                                                                          (9, 'Electro DJ Set', 'Dance to electronic beats.', 'electro.mp4', '21:30:00', '02:00:00', 'Electronic'),
+                                                                                                          (10, 'Techno Night', 'Non-stop techno music.', 'techno.mp4', '23:00:00', '1:05:00', 'Electronic'),
+                                                                                                          (11, 'House Party', 'House music by top DJs.', 'house.mp4', '01:00:00', '04:00:00', 'Electronic');
 
 -- --------------------------------------------------------
 

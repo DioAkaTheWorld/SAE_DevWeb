@@ -35,7 +35,7 @@ class AddSpectacleAction extends Action {
                 <input type="text" class="form-control" id="style" name="style" required>
             </div>
             <div class="col-md-6">
-                <label class="form-label" for="fichier">Ajouter une image: </label>
+                <label class="form-label" for="fichier">Ajouter une vidéo: </label>
                 <input class="form-control" type="file" name="fichier" id="fichier">
             </div>
             <button type="submit" class="btn btn-primary">Ajouter</button>
@@ -78,10 +78,8 @@ class AddSpectacleAction extends Action {
         try {
             if ($_FILES["fichier"]["error"] === UPLOAD_ERR_OK) {
                 $nomFichier = $this->uploadFile();
-                $idImage = $repo->addImage($nomFichier);
-                $repo->addImageToSpectacle($idImage, $spectacle->__get('id'));
-                $repo->updateImagePathForSpectacle($nomFichier, $spectacle->__get('id'));
-                $spectacle->setCheminFichier($nomFichier);
+                $repo->updateVideoPathForSpectacle($nomFichier, $spectacle->__get('id'));
+                $spectacle->setCheminVideo($nomFichier);
             }
         } catch (Exception $e) {
             return $this->executeGet() . <<<FIN
@@ -107,11 +105,12 @@ class AddSpectacleAction extends Action {
      * @throws Exception
      */
     private function uploadFile(): string {
-        $upload_dir = __DIR__ . "/../../../../images/";
-        $file_name = uniqid() . ".jpg";
+        $upload_dir = __DIR__ . "/../../../../medias/videos/";
+        $file_name = uniqid() . ".mp4";
         $tmp = $_FILES["fichier"]["tmp_name"];
         $dest = $upload_dir . $file_name;
-        if ($_FILES["fichier"]["type"] === "image/jpeg" && move_uploaded_file($tmp, $dest)) {
+        // Vérifie si le fichier est une vidéo mp4 et si sa taille est inférieure à 10 Mo
+        if ($_FILES["fichier"]["type"] === "video/mp4" && $_FILES["fichier"]["size"] < 10485760 && move_uploaded_file($tmp, $dest)) {
             return $file_name;
         }
         throw new Exception("Échec de l'upload ou format audio incorrect");

@@ -174,7 +174,7 @@ class NrvRepository
      * @return Spectacle spectacle ajouté
      */
     function ajouterSpectacle(Spectacle $s) : Spectacle {
-        $sql = "INSERT INTO spectacle (titre, description, chemin_fichier, horaire, duree, style) VALUES (?, ?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO spectacle (titre, description, chemin_video, horaire, duree, style) VALUES (?, ?, ?, ?, ?, ?)";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([$s->__get('titre'), $s->__get('description'), $s->__get('chemin_fichier'), $s->__get('horaire'), $s->__get('duree'), $s->__get('style')]);
         $s->setId((int)$this->pdo->lastInsertId());
@@ -264,12 +264,12 @@ class NrvRepository
 
     /**
      * Méthode permettant de mettre à jour le chemin d'une image pour un spectacle
-     * @param int $chemin chemin de l'image
+     * @param string $chemin chemin de la vidéo
      * @param int $idSpectacle id du spectacle
      * @return void
      */
-    public function updateImagePathForSpectacle(int $chemin, int $idSpectacle) : void {
-        $stmt = $this->pdo->prepare("UPDATE spectacle SET chemin_fichier = ? WHERE id = ?");
+    public function updateVideoPathForSpectacle(string $chemin, int $idSpectacle) : void {
+        $stmt = $this->pdo->prepare("UPDATE spectacle SET chemin_video = ? WHERE id = ?");
         $stmt->execute([$chemin, $idSpectacle]);
     }
 

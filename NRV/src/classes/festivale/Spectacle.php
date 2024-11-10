@@ -9,7 +9,7 @@ class Spectacle {
     private int $id; // attribut auto-incrémenté
     private string $titre;
     private string $description;
-    private string $cheminFichier;
+    private string $chemin_video;
     private string $horaire;
     private string $duree;
     private string $style;
@@ -17,7 +17,7 @@ class Spectacle {
     public function __construct(string $titre, string $description, string $horaire, string $duree,string $style, string $cheminFichier = "pas d'image") {
         $this->titre = $titre;
         $this->description = $description;
-        $this->cheminFichier = $cheminFichier;
+        $this->chemin_video = $cheminFichier;
         $this->horaire = $horaire;
         $this->duree = $duree;
         $this->style = $style;
@@ -27,8 +27,8 @@ class Spectacle {
         $this->id = $id;
     }
 
-    public function setCheminFichier(string $cheminFichier): void {
-        $this->cheminFichier = $cheminFichier;
+    public function setCheminVideo(string $chemin_video): void {
+        $this->chemin_video = $chemin_video;
     }
 
 

@@ -32,7 +32,7 @@ class DisplayAllSpectaclesAction extends Action {
 
         // Liste des spectacles
         foreach ($spectacles as $spectacle) {
-            $spectacleObjet = new Spectacle($spectacle['titre'], $spectacle['description'], $spectacle['horaire'], $spectacle['duree'],$spectacle['style'], $spectacle['chemin_fichier']);
+            $spectacleObjet = new Spectacle($spectacle['titre'], $spectacle['description'], $spectacle['horaire'], $spectacle['duree'],$spectacle['style'], $spectacle['chemin_video']);
             $spectacleObjet->setId($spectacle['id']);
             $spectacleRenderer = new SpectacleRenderer($spectacleObjet);
             $date = $repo->getDateSpectacle($spectacle['id']);
