@@ -9,7 +9,7 @@
   - Fait par : **David** 
 - [X] **5**. Affichage détaillé d’un spectacle : titre, artistes, description, style, durée, image(s),
   extrait audio/vidéo
-  - Fait par : **Burak**
+  - Fait par : **Burak**, **David**
 - [X] **13**. S’authentifier
   - Fait par : **David**
 - [X] **14**. Créer un spectacle : saisir les données et les valider
@@ -20,15 +20,14 @@
 - [ ] **2**. Filtrage de la liste des spectacles par date,
   - Fait par :
 - [X] **3**. Filtrage de la liste des spectacles par style de musique
-  - Fait par : **Burak**
-  - **Remarque** : Amélioration possible : Récupérer les styles de musique depuis la base de données et générer les filtres dynamiquement.
+  - Fait par : **Burak**, **David**
 - [ ] **4**. Filtrage de la liste des spectacles par lieu.
   - Fait par : 
 - [ ] **6**. Affichage du détail d’une soirée : nom de la soirée, thématique, date et horaire, lieu,
   tarifs, ainsi que la liste des spectacles : titre, artistes, description, style de musique, vidéo
   - Fait par :
-- [X] **7**. En cliquant sur un spectacle dans la liste, le détail de la soirée correspondante est affiché
-  - Fait par : **Burak**
+- [ ] **7**. En cliquant sur un spectacle dans la liste, le détail de la soirée correspondante est affiché
+  - Fait par :
 - [ ] **15**. Créer une soirée : saisir les données et les valider
   - Fait par : **Paul**
 - [ ] **16**. Ajouter un spectacle à une soirée
