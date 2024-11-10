@@ -11,6 +11,7 @@ use nrv\action\DisplayAllSpectaclesAction;
 use nrv\action\DisplayDetailSpectacleAction;
 use nrv\action\DisplaySpectacleByStyleAction;
 use nrv\action\DisplaySpectaclesByDatesAction;
+use nrv\action\DisplaySpectaclesByLocation;
 use nrv\action\SignInAction;
 use nrv\action\SignOutAction;
 
@@ -54,6 +55,7 @@ class Dispatcher {
             'sign-out' => new SignOutAction(),
             'display-spectacles-by-style' => new DisplaySpectacleByStyleAction(),
             'display-spectacles-by-date' => new DisplaySpectaclesByDatesAction(),
+            'display-spectacles-by-lieu' => new DisplaySpectaclesByLocation(),
             default => new DefaultAction(),
         };
         $this->renderPage($actionObjet());

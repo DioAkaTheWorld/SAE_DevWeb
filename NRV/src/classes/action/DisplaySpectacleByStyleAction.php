@@ -2,6 +2,7 @@
 namespace nrv\action;
 
 use nrv\festivale\Spectacle;
+use nrv\renderer\SpectacleFiltersListRenderer;
 use nrv\renderer\SpectacleRenderer;
 use nrv\repository\NrvRepository;
 
@@ -10,6 +11,7 @@ class DisplaySpectacleByStyleAction extends Action{
     public function executeGet(): string{
         $style = $_GET['style'] ?? '';
         $repository = NrvRepository::getInstance();
+
 
         if (empty($style)) {
             return "<p>Veuillez spécifier un style de musique.</p>";
@@ -21,8 +23,12 @@ class DisplaySpectacleByStyleAction extends Action{
             return "<p>Aucun spectacle trouvé pour le style '$style'.</p>";
         }
 
+        $filtersRenderer = new SpectacleFiltersListRenderer();
         $html = <<<FIN
             <h2>Spectacles pour le style : $style</h2>
+            <div>
+                {$filtersRenderer->render()}
+            </div>
             <hr>
             <ul>
         FIN;

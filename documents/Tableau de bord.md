@@ -17,12 +17,12 @@
 
 ### Fonctionnalités minimales attendues
 
-- [ ] **2**. Filtrage de la liste des spectacles par date,
+- [X] **2**. Filtrage de la liste des spectacles par date,
   - Fait par : **David**
 - [X] **3**. Filtrage de la liste des spectacles par style de musique
   - Fait par : **Burak**, **David**
-- [ ] **4**. Filtrage de la liste des spectacles par lieu.
-  - Fait par : 
+- [X] **4**. Filtrage de la liste des spectacles par lieu.
+  - Fait par : **David**
 - [ ] **6**. Affichage du détail d’une soirée : nom de la soirée, thématique, date et horaire, lieu,
   tarifs, ainsi que la liste des spectacles : titre, artistes, description, style de musique, vidéo
   - Fait par :

@@ -11,21 +11,24 @@ class SpectacleFiltersListRenderer {
         $repo = NrvRepository::getInstance();
         $styles = $repo->getListeStyleSpectacle();
         $dates = $repo->getListeDateSpectacle();
+        $lieus = $repo->getListeLieuSpectacle();
 
         $html = <<<FIN
+            <h5>Filtrer les spectacles</h5>
             <select name="filtre" onchange="location = this.value;">;
+            <option value="?action=display-all-spectacles">Ne pas filtrer</option>
 
         FIN;
 
         // Ajoute les options de date
         $html .= <<<FIN
-            <option value="?action=display-all-spectacles">Filtrer</option>
             <option value="?action=display-all-spectacles">-- par date --</option>
         FIN;
         foreach ($dates as $date) {
             $date = $date['date'];
+            $dateFormatted = date('d/m/Y', strtotime($date));
             $html .= <<<FIN
-                    <option value="?action=display-spectacles-by-date&date=$date">$date</option>
+                    <option value="?action=display-spectacles-by-date&date=$date">$dateFormatted</option>
 
             FIN;
         }
@@ -38,6 +41,18 @@ class SpectacleFiltersListRenderer {
             $style = $style['style'];
             $html .= <<<FIN
                     <option value="?action=display-spectacles-by-style&style=$style">$style</option>
+
+            FIN;
+        }
+
+        // Ajoute les options de lieu
+        $html .= <<<FIN
+            <option value="?action=display-all-spectacles">-- par lieu --</option>
+        FIN;
+        foreach ($lieus as $lieu) {
+            $lieu = $lieu['nom'];
+            $html .= <<<FIN
+                    <option value="?action=display-spectacles-by-lieu&lieu=$lieu">$lieu</option>
 
             FIN;
         }

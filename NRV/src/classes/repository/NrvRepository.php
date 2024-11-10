@@ -318,4 +318,30 @@ class NrvRepository
         $stmt->execute();
         return $stmt->fetchAll();
     }
+
+    /**
+     * Fonction permettant de récupérer les spectacles par lieu
+     * @param string $lieu lieu du spectacle
+     * @return array spectacles filtrés par lieu
+     */
+    public function findSpectaclesByLieu(string $lieu) : array {
+        $stmt = $this->pdo->prepare("SELECT *
+                                            FROM spectacle
+                                            JOIN soiree2spectacle ON spectacle.id = soiree2spectacle.id_spectacle
+                                            JOIN soiree ON soiree.id = soiree2spectacle.id_soiree
+                                            JOIN lieu ON lieu.id = soiree.id_lieu
+                                            WHERE lieu.nom = ?");
+        $stmt->execute([$lieu]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Fonction permettant de récupérer la liste des lieux de spectacle
+     * @return array liste des lieux de spectacle
+     */
+    public function getListeLieuSpectacle() :array {
+        $stmt = $this->pdo->prepare("SELECT DISTINCT nom FROM lieu");
+        $stmt->execute();
+        return $stmt->fetchAll();
+    }
 }

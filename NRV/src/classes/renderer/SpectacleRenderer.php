@@ -13,6 +13,7 @@ class SpectacleRenderer {
     }
 
     public function renderAsCompact(string $date, string $image): string {
+        $date = date('d/m/Y', strtotime($date));
         return <<<FIN
             <li>
                 <div>

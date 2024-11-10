@@ -7,26 +7,25 @@ use nrv\renderer\SpectacleFiltersListRenderer;
 use nrv\renderer\SpectacleRenderer;
 use nrv\repository\NrvRepository;
 
-class DisplaySpectaclesByDatesAction extends Action {
+class DisplaySpectaclesByLocation extends Action {
 
     public function executeGet(): string {
-        $date = $_GET['date'] ?? '';
+        $lieu = $_GET['lieu'] ?? '';
         $repository = NrvRepository::getInstance();
-        $dateFormatted = date('d/m/Y', strtotime($date));
 
-        if (empty($date)) {
-            return "<p>Veuillez spécifier une date.</p>";
+        if (empty($lieu)) {
+            return "<p>Veuillez spécifier un lieu.</p>";
         }
 
-        $spectacles = $repository->findSpectaclesByDate($date);
+        $spectacles = $repository->findSpectaclesByLieu($lieu);
 
         if (empty($spectacles)) {
-            return "<p>Aucun spectacle trouvé pour la date $dateFormatted.</p>";
+            return "<p>Aucun spectacle trouvé pour le lieu $lieu.</p>";
         }
 
         $filtersRenderer = new SpectacleFiltersListRenderer();
         $html = <<<FIN
-            <h2>Spectacles pour la date : $dateFormatted</h2>
+            <h2>Spectacles pour le lieu : $lieu</h2>
             <div>
                 {$filtersRenderer->render()}
             </div>
@@ -39,9 +38,9 @@ class DisplaySpectaclesByDatesAction extends Action {
             $image = $repository->getImagesSpectacle($spectacle['id_spectacle']);
             $spectacleRenderer = new SpectacleRenderer($s);
             if($image){
-                $html .= $spectacleRenderer->renderAsCompact($date, $image[0]['chemin_fichier']); // On prend la première image
+                $html .= $spectacleRenderer->renderAsCompact($lieu, $image[0]['chemin_fichier']); // On prend la première image
             } else {
-                $html .= $spectacleRenderer->renderAsCompact($date, "pas d'image");
+                $html .= $spectacleRenderer->renderAsCompact($lieu, "pas d'image");
             }
         }
         $html .= "</ul>";
