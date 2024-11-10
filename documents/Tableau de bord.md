@@ -13,7 +13,7 @@
 - [X] **13**. S’authentifier
   - Fait par : **David**
 - [X] **14**. Créer un spectacle : saisir les données et les valider
-  - Fait par : **Paul**
+  - Fait par : **Paul**, **David**
 
 ### Fonctionnalités minimales attendues
 
