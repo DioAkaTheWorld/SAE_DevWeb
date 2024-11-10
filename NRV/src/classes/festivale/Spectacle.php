@@ -14,10 +14,10 @@ class Spectacle {
     private string $duree;
     private string $style;
 
-    public function __construct(string $titre, string $description, string $horaire, string $duree,string $style, string $cheminFichier = "pas d'image") {
+    public function __construct(string $titre, string $description, string $horaire, string $duree,string $style, string $chemin_video = "pas d'image") {
         $this->titre = $titre;
         $this->description = $description;
-        $this->chemin_video = $cheminFichier;
+        $this->chemin_video = $chemin_video;
         $this->horaire = $horaire;
         $this->duree = $duree;
         $this->style = $style;
