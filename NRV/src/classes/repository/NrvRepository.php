@@ -284,10 +284,38 @@ class NrvRepository
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    /**
+     * Fonction permettant de récupérer la liste des styles de spectacle
+     * @return array liste des styles de spectacle
+     */
     public function getListeStyleSpectacle() : array {
         $stmt = $this->pdo->prepare("SELECT DISTINCT style FROM spectacle");
         $stmt->execute();
         return $stmt->fetchAll();
     }
 
+    /**
+     * Fonction permettant de récupérer les spectacles par date
+     * @param string $date date du spectacle
+     * @return array spectacles filtrés par date
+     */
+    public function findSpectaclesByDate(string $date) : array {
+        $stmt = $this->pdo->prepare("SELECT * 
+                                            FROM spectacle S
+                                            JOIN soiree2spectacle S2P ON S.id = S2P.id_spectacle
+                                            JOIN soiree SO ON S2P.id_soiree = SO.id
+                                            WHERE SO.date = ?");
+        $stmt->execute([$date]);
+        return $stmt->fetchAll();
+    }
+
+    /**
+     * Fonction permettant de récupérer la liste des dates de soirée (et donc de spectacle)
+     * @return array liste des dates de spectacle
+     */
+    public function getListeDateSpectacle() : array {
+        $stmt = $this->pdo->prepare("SELECT DISTINCT date FROM soiree");
+        $stmt->execute();
+        return $stmt->fetchAll();
+    }
 }

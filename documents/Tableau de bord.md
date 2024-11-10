@@ -18,7 +18,7 @@
 ### Fonctionnalités minimales attendues
 
 - [ ] **2**. Filtrage de la liste des spectacles par date,
-  - Fait par :
+  - Fait par : **David**
 - [X] **3**. Filtrage de la liste des spectacles par style de musique
   - Fait par : **Burak**, **David**
 - [ ] **4**. Filtrage de la liste des spectacles par lieu.

@@ -12,20 +12,14 @@ class DisplayAllSpectaclesAction extends Action {
     public function executeGet(): string {
         $repo = NrvRepository::getInstance();
         $spectacles = $repo->findAllSpectacles();
-        $stylesRenderer = new SpectacleFiltersListRenderer();
+        $filtersRenderer = new SpectacleFiltersListRenderer();
 
         // Liste des filtres
         $res = <<<FIN
         <h2 class="p-2">Liste des spectacles</h2>
-        <ul>
-            <li><span>Filtrer</span>
-                <ul>
-                    <li>Date</li>
-                    <li>{$stylesRenderer->render()}</li>
-                    <li>Lieu</li>
-                </ul>
-            </li>
-        </ul>
+        <div>
+            {$filtersRenderer->render()}
+        </div>
         <hr>
         <ol class='list-group list-group-numbered'>
         FIN;
