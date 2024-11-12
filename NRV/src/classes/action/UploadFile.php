@@ -4,7 +4,7 @@ namespace nrv\action;
 
 use Exception;
 
-abstract class UploadAction {
+abstract class UploadFile {
 
     /**
      * Upload le fichier audio
