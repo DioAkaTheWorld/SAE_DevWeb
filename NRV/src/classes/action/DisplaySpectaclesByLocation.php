@@ -40,7 +40,7 @@ class DisplaySpectaclesByLocation extends Action {
             if($image){
                 $html .= $spectacleRenderer->renderAsCompact($lieu, $image[0]['chemin_fichier']); // On prend la première image
             } else {
-                $html .= $spectacleRenderer->renderAsCompact($lieu, "pas d'image");
+                $html .= $spectacleRenderer->renderAsCompact($lieu, "aucune image");
             }
         }
         $html .= "</ul>";

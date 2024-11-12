@@ -41,7 +41,7 @@ class DisplaySpectaclesByDatesAction extends Action {
             if($image){
                 $html .= $spectacleRenderer->renderAsCompact($date, $image[0]['chemin_fichier']); // On prend la première image
             } else {
-                $html .= $spectacleRenderer->renderAsCompact($date, "pas d'image");
+                $html .= $spectacleRenderer->renderAsCompact($date, "aucune image");
             }
         }
         $html .= "</ul>";

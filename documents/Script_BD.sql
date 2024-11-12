@@ -65,17 +65,17 @@ CREATE TABLE `image` (
 --
 
 INSERT INTO `image` (`id`, `chemin_fichier`) VALUES
-                                                 (1, 'jazz1.jpg'),
-                                                 (2, 'jazz2.jpg'),
-                                                 (3, 'jazz3.jpg'),
-                                                 (4, 'rock1.jpg'),
-                                                 (5, 'rock2.jpg'),
-                                                 (6, 'blues1.jpg'),
-                                                 (7, 'blues2.jpg'),
-                                                 (8, 'classical1.jpg'),
-                                                 (9, 'electro1.jpg'),
-                                                 (10, 'electro2.jpg'),
-                                                 (11, 'house1.jpg');
+                                                 (1, 'aucune image'),
+                                                 (2, 'aucune image'),
+                                                 (3, 'aucune image'),
+                                                 (4, 'aucune image'),
+                                                 (5, 'aucune image'),
+                                                 (6, 'aucune image'),
+                                                 (7, 'aucune image'),
+                                                 (8, 'aucune image'),
+                                                 (9, 'aucune image'),
+                                                 (10, 'aucune image'),
+                                                 (11, 'aucune image');
 
 -- --------------------------------------------------------
 
@@ -200,17 +200,17 @@ CREATE TABLE `spectacle` (
 --
 
 INSERT INTO `spectacle` (`id`, `titre`, `description`, `chemin_video`, `horaire`, `duree`, `style`) VALUES
-                                                                                                        (1, 'Jazz Band Live', 'A famous jazz band live in concert.', 'jazzlive.mp4', '20:00:00', '02:00:00', 'Jazz'),
-                                                                                                        (2, 'Acoustic Jazz Trio', 'Smooth acoustic jazz trio.', 'acousticjazz.mp4', '21:00:00', '03:30:00', 'Jazz'),
-                                                                                                        (3, 'Jazz Solo Piano', 'Relaxing solo piano jazz.', 'solopiano.mp4', '22:30:00', '01:00:00', 'Jazz'),
-                                                                                                        (4, 'Rock Legends', 'Classic rock covers.', 'rocklegends.mp4', '20:30:00', '01:00:00', 'Rock'),
-                                                                                                        (5, 'Indie Rock Band', 'Local indie rock band performance.', 'indierock.mp4', '22:00:00', '00:45:00', 'Rock'),
-                                                                                                        (6, 'Blues Guitar', 'Blues guitar solo performance.', 'bluesguitar.mp4', '19:00:00', '02:20:00', 'Blues'),
-                                                                                                        (7, 'Soulful Blues', 'Deep, soulful blues.', 'soulblues.mp4', '20:30:00', '00:30:00', 'Blues'),
-                                                                                                        (8, 'Classical Quartet', 'String quartet performance.', 'classicalquartet.mp4', '19:45:00', '01:20:00', 'Classical'),
-                                                                                                        (9, 'Electro DJ Set', 'Dance to electronic beats.', 'electro.mp4', '21:30:00', '02:00:00', 'Electronic'),
-                                                                                                        (10, 'Techno Night', 'Non-stop techno music.', 'techno.mp4', '23:00:00', '01:05:00', 'Electronic'),
-                                                                                                        (11, 'House Party', 'House music by top DJs.', 'house.mp4', '01:00:00', '04:00:00', 'Electronic');
+                                                                                                        (1, 'Jazz Band Live', 'A famous jazz band live in concert.', 'aucune video', '20:00:00', '02:00:00', 'Jazz'),
+                                                                                                        (2, 'Acoustic Jazz Trio', 'Smooth acoustic jazz trio.', 'aucune video', '21:00:00', '03:30:00', 'Jazz'),
+                                                                                                        (3, 'Jazz Solo Piano', 'Relaxing solo piano jazz.', 'aucune video', '22:30:00', '01:00:00', 'Jazz'),
+                                                                                                        (4, 'Rock Legends', 'Classic rock covers.', 'aucune video', '20:30:00', '01:00:00', 'Rock'),
+                                                                                                        (5, 'Indie Rock Band', 'Local indie rock band performance.', 'aucune video', '22:00:00', '00:45:00', 'Rock'),
+                                                                                                        (6, 'Blues Guitar', 'Blues guitar solo performance.', 'aucune video', '19:00:00', '02:20:00', 'Blues'),
+                                                                                                        (7, 'Soulful Blues', 'Deep, soulful blues.', 'aucune video', '20:30:00', '00:30:00', 'Blues'),
+                                                                                                        (8, 'Classical Quartet', 'String quartet performance.', 'aucune video', '19:45:00', '01:20:00', 'Classical'),
+                                                                                                        (9, 'Electro DJ Set', 'Dance to electronic beats.', 'aucune video', '21:30:00', '02:00:00', 'Electronic'),
+                                                                                                        (10, 'Techno Night', 'Non-stop techno music.', 'aucune video', '23:00:00', '01:05:00', 'Electronic'),
+                                                                                                        (11, 'House Party', 'House music by top DJs.', 'aucune video', '01:00:00', '04:00:00', 'Electronic');
 
 -- --------------------------------------------------------
 

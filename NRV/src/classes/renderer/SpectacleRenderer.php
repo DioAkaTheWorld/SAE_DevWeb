@@ -54,25 +54,30 @@ class SpectacleRenderer {
                 <h2>Images</h2>
                 <div>
             FIN;
-        if (!empty($images)) {
+        if (!empty($images) && $images[0]['chemin_fichier'] !== "aucune image") {
             foreach ($images as $image) {
                 $html .= "<img src='/SAE_DevWeb/medias/images/{$image['chemin_fichier']}' alt='Image du spectacle' style='width: 150px; margin: 5px;'>";
             }
             $html .= "</div>";
         } else {
-            $html .= "<p>Pas d'images pour ce spectacle</p>";
+            $html .= "<p>Pas d'images pour ce spectacle</p></div>";
         }
 
         // Extrait vidéo
-        if (!empty($this->spectacle->__get('chemin_video'))) {
+        $html .= <<<FIN
+                <h2>Vidéo</h2>
+                <div>
+            FIN;
+        if (!empty($this->spectacle->__get('chemin_video')) && $this->spectacle->__get('chemin_video') !== "aucune video") {
             $html .= <<<FIN
                 <h2>Extrait Vidéo</h2>
                 <video width='320' height='240' controls>
                     <source src='/SAE_DevWeb/medias/videos/{$this->spectacle->__get('chemin_video')}' type='video/mp4'>
                 </video>
+            </div>
             FIN;
         } else {
-            $html .= "<p>Pas d'extrait vidéo pour ce spectacle</p>";
+            $html .= "<p>Pas d'extrait vidéo pour ce spectacle</p></div>";
         }
 
         return $html;

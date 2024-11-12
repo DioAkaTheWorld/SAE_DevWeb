@@ -120,7 +120,7 @@ class AddSpectacleAction extends Action {
             return $this->executeGet() . $e->getMessage();
         }
 
-        $spectacle = new Spectacle($titre, $description, $horaire, $duree, $style, "Pas d'image");
+        $spectacle = new Spectacle($titre, $description, $horaire, $duree, $style, "aucune image");
         $spectacle = $repo->ajouterSpectacle($spectacle);
         $spectacleId = $spectacle->__get('id');
 

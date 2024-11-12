@@ -131,7 +131,7 @@ class ModifySpectacleAction extends Action {
             return $this->executeGet() . $e->getMessage();
         }
 
-        $spectacle = new Spectacle($titre, $description, $horaire, $duree, $style, "Pas d'image");
+        $spectacle = new Spectacle($titre, $description, $horaire, $duree, $style, "aucune image");
         $spectacle->setId((int)$_GET['id']);
         $repo = NrvRepository::getInstance();
         try {
@@ -152,7 +152,7 @@ class ModifySpectacleAction extends Action {
                 $previousVideoPath = $repo->getVideoPathFromSpectacle($spectacle->__get('id'));
                 $repo->updateVideoPathForSpectacle($nomFichier, $spectacle->__get('id'));
                 $spectacle->setCheminVideo($nomFichier);
-                if ($previousVideoPath !== "Pas d'image") {
+                if ($previousVideoPath !== "aucune image") {
                     unlink(__DIR__ . "/../../../../medias/videos/" . $previousVideoPath);
                 }
             }
