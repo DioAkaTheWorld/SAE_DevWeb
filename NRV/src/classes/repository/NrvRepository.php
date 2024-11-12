@@ -347,4 +347,112 @@ class NrvRepository
         $stmt->execute();
         return $stmt->fetchAll();
     }
+
+    /**
+     * Fonction permettant de récupérer les soirées existantes
+     * @return array
+     */
+    public function findAllSoirees(): array {
+        $sql = "SELECT id, nom, date FROM soiree ORDER BY date";
+        $stmt = $this->pdo->query($sql);
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Fonction permettant d'ajouter un spectacle à une soirée
+     * @param int $id_soiree
+     * @param int $id_spectacle
+     * @return bool
+     */
+    public function addSpectacleToSoiree(int $id_soiree, int $id_spectacle): bool {
+        // Vérifie si l'association existe déjà
+        $checkSql = "SELECT COUNT(*) FROM soiree2spectacle WHERE id_soiree = :id_soiree AND id_spectacle = :id_spectacle";
+        $stmt = $this->pdo->prepare($checkSql);
+        $stmt->execute(['id_soiree' => $id_soiree, 'id_spectacle' => $id_spectacle]);
+        $exists = $stmt->fetchColumn() > 0;
+
+        if ($exists) {
+            // Retourne false pour signaler qu'il y a un doublon
+            return false;
+        }
+
+        // Si l'association n'existe pas, insérer la nouvelle entrée
+        $sql = "INSERT INTO soiree2spectacle (id_soiree, id_spectacle) VALUES (:id_soiree, :id_spectacle)";
+        $stmt = $this->pdo->prepare($sql);
+        return $stmt->execute(['id_soiree' => $id_soiree, 'id_spectacle' => $id_spectacle]);
+    }
+
+
+
+    public function findAllSoireesWithSpectacles(): array {
+        $sql = "
+        SELECT s.id AS soiree_id, s.nom AS soiree_nom, s.date, s.thematique, 
+               sp.id AS spectacle_id, sp.titre AS spectacle_titre, sp.horaire, sp.style
+        FROM soiree AS so
+        LEFT JOIN soiree2spectacle AS s2s ON so.id = s2s.id_soiree
+        LEFT JOIN spectacle AS sp ON s2s.id_spectacle = sp.id
+        ORDER BY so.date DESC, so.nom, sp.horaire
+    ";
+        $stmt = $this->pdo->query($sql);
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+
+
+
+    public function getSoireeDetails(int $soireeId): array {
+        $query = "SELECT nom, thematique, date, horaire_debut, horaire_fin, id_lieu, tarif FROM soiree WHERE id = :id";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->bindParam(':id', $soireeId, PDO::PARAM_INT);
+        $stmt->execute();
+        $soireeDetails = $stmt->fetch(PDO::FETCH_ASSOC);
+        if (!$soireeDetails) {
+            throw new Exception("Aucune soirée trouvée avec l'ID spécifié.");
+        }
+        return $soireeDetails;
+    }
+
+
+    public function getLieuDetails(int $lieuId): array {
+        $query = "SELECT nom, adresse FROM lieu WHERE id = :id";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->bindParam(':id', $lieuId, PDO::PARAM_INT);
+        $stmt->execute();
+        $lieuDetails = $stmt->fetch(PDO::FETCH_ASSOC);
+        if (!$lieuDetails) {
+            throw new Exception("Aucun lieu trouvé avec l'ID spécifié.");
+        }
+        return $lieuDetails;
+    }
+
+    public function getSoireeSpectacles(int $soireeId): array {
+        $query = "
+        SELECT s.id, s.titre, s.description, s.horaire, s.style, s.chemin_video 
+        FROM spectacle s 
+        JOIN soiree2spectacle ON soiree2spectacle.id_spectacle = s.id 
+        WHERE soiree2spectacle.id_soiree = :id_soiree";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->bindParam(':id_soiree', $soireeId, PDO::PARAM_INT);
+        $stmt->execute();
+        $spectacles = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        if (!$spectacles) {
+            throw new Exception("Aucun spectacle trouvé pour la soirée spécifiée.");
+        }
+        return $spectacles;
+    }
+
+    // Dans NrvRepository
+    public function getSoireeIdBySpectacleId(int $spectacleId): ?int {
+        // Exemple de requête SQL pour récupérer l'ID de la soirée
+        $sql = 'SELECT id FROM spectacle WHERE id = :spectacleId';
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindValue(':spectacleId', $spectacleId, \PDO::PARAM_INT);
+        $stmt->execute();
+        $result = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+        // Retourner l'ID de la soirée ou null si aucune soirée associée
+        return $result ? (int)$result['id'] : null;
+    }
+
+
 }

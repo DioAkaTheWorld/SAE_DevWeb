@@ -11,7 +11,7 @@ use Exception;
 class DisplayDetailSpectacleAction extends Action {
 
     public function executeGet(): string {
-        // Vérifier si l'ID de la playlist est spécifié
+        // Vérifier si l'ID du spectacle est spécifié
         if (!isset($_GET['id'])) {
             http_response_code(400);
             return <<<FIN
@@ -30,6 +30,9 @@ class DisplayDetailSpectacleAction extends Action {
             $spectacleDetails = $repository->getSpectacleDetails($spectacleId );
             $artistes = $repository->getSpectacleArtists($spectacleId);
             $images = $repository->getSpectacleImages($spectacleId);
+
+            // Récupérer l'ID de la soirée associée à ce spectacle
+            $soireeId = $repository->getSoireeIdBySpectacleId($spectacleId); // Nouvelle méthode SQL à créer
         } catch (Exception $e) {
             return "<p>Erreur lors de la récupération des informations du spectacle : {$e->getMessage()}</p>";
         }
@@ -38,6 +41,11 @@ class DisplayDetailSpectacleAction extends Action {
         $spectacleObjet->setId($spectacleId);
         $spectacleRenderer = new SpectacleRenderer($spectacleObjet);
 
+        // Créer le lien vers la soirée associée au spectacle
+        $soireeLink = "";
+        if ($soireeId) {
+            $soireeLink = "<a href='?action=display-detail-soiree&id={$soireeId}'>Voir la soirée associée</a>";
+        }
 
         $html = <<<FIN
             <div>
@@ -45,8 +53,8 @@ class DisplayDetailSpectacleAction extends Action {
             </div>
         FIN;
 
-
-        return $spectacleRenderer->renderAsLong($artistes, $images) . $html;
+        // Affichage détaillé du spectacle avec le lien vers la soirée
+        return $spectacleRenderer->renderAsLong($artistes, $images) . $soireeLink . $html;
     }
 
     public function executePost(): string {

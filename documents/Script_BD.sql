@@ -143,7 +143,8 @@ CREATE TABLE `soiree` (
                           `date` date DEFAULT NULL,
                           `horaire_debut` time DEFAULT NULL,
                           `horaire_fin` time DEFAULT NULL,
-                          `id_lieu` int(5) DEFAULT NULL
+                          `id_lieu` int(5) DEFAULT NULL,
+			  `tarif` int(5) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
@@ -151,9 +152,9 @@ CREATE TABLE `soiree` (
 --
 
 INSERT INTO `soiree` (`id`, `nom`, `thematique`, `date`, `horaire_debut`, `horaire_fin`, `id_lieu`) VALUES
-                                                                                                        (1, 'Best of rock', 'Rock', '2024-11-27', '22:00:00', '00:30:00', 1),
-                                                                                                        (2, 'Best of country music', 'Country', '2024-11-26', '19:20:00', '23:30:00', 2),
-                                                                                                        (3, 'Best of Reggae', 'Reggae', '2024-11-25', '21:00:00', '22:00:00', 3);
+                                                                                                        (1, 'Best of rock', 'Rock', '2024-11-27', '22:00:00', '00:30:00', 1, 7),
+                                                                                                        (2, 'Best of country music', 'Country', '2024-11-26', '19:20:00', '23:30:00', 2,10),
+                                                                                                        (3, 'Best of Reggae', 'Reggae', '2024-11-25', '21:00:00', '22:00:00', 3,9);
 
 -- --------------------------------------------------------
 
