@@ -365,10 +365,23 @@ class NrvRepository
      * @return bool
      */
     public function addSpectacleToSoiree(int $id_soiree, int $id_spectacle): bool {
+        // Vérifie si l'association existe déjà
+        $checkSql = "SELECT COUNT(*) FROM soiree2spectacle WHERE id_soiree = :id_soiree AND id_spectacle = :id_spectacle";
+        $stmt = $this->pdo->prepare($checkSql);
+        $stmt->execute(['id_soiree' => $id_soiree, 'id_spectacle' => $id_spectacle]);
+        $exists = $stmt->fetchColumn() > 0;
+
+        if ($exists) {
+            // Retourne false pour signaler qu'il y a un doublon
+            return false;
+        }
+
+        // Si l'association n'existe pas, insérer la nouvelle entrée
         $sql = "INSERT INTO soiree2spectacle (id_soiree, id_spectacle) VALUES (:id_soiree, :id_spectacle)";
         $stmt = $this->pdo->prepare($sql);
         return $stmt->execute(['id_soiree' => $id_soiree, 'id_spectacle' => $id_spectacle]);
     }
+
 
 
     public function findAllSoireesWithSpectacles(): array {

@@ -80,10 +80,10 @@ class AddSpectacleToSoireeAction extends Action
                 throw new InvalidPropertyValueException("Spectacle non sélectionné.");
             }
 
-            // Ajout de l'association dans la base de données
+            // Tente d'ajouter l'association dans la base de données
             $success = $repo->addSpectacleToSoiree($id_soiree, $id_spectacle);
             if (!$success) {
-                throw new Exception("Erreur lors de l'ajout du spectacle à la soirée.");
+                throw new Exception("Ce spectacle est déjà associé à la soirée sélectionnée.");
             }
 
             // Mettre un indicateur dans la session pour signaler la mise à jour dans le header
