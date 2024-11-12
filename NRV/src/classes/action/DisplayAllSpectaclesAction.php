@@ -2,17 +2,14 @@
 
 namespace nrv\action;
 
-use nrv\festivale\Spectacle;
 use nrv\renderer\SpectacleFiltersListRenderer;
-use nrv\renderer\SpectacleRenderer;
-use nrv\repository\NrvRepository;
+use nrv\renderer\SpectaclesListRenderer;
 
 class DisplayAllSpectaclesAction extends Action {
 
     public function executeGet(): string {
-        $repo = NrvRepository::getInstance();
-        $spectacles = $repo->findAllSpectacles();
         $filtersRenderer = new SpectacleFiltersListRenderer();
+        $spectaclesListRenderer = new SpectaclesListRenderer();
 
         // Liste des filtres
         $res = <<<FIN
@@ -21,25 +18,10 @@ class DisplayAllSpectaclesAction extends Action {
             {$filtersRenderer->render()}
         </div>
         <hr>
-        <ol class='list-group list-group-numbered'>
         FIN;
 
         // Liste des spectacles
-        foreach ($spectacles as $spectacle) {
-            $spectacleObjet = new Spectacle($spectacle['titre'], $spectacle['description'], $spectacle['horaire'], $spectacle['duree'],$spectacle['style'], $spectacle['chemin_video']);
-            $spectacleObjet->setId($spectacle['id']);
-            $spectacleRenderer = new SpectacleRenderer($spectacleObjet);
-            $date = $repo->getDateSpectacle($spectacle['id']);
-            $image = $repo->getImagesSpectacle($spectacle['id']); // On prend la première image
-            if($image){
-                $res .= $spectacleRenderer->renderAsCompact($date, $image[0]['chemin_fichier']);
-            } else {
-                $res .= $spectacleRenderer->renderAsCompact($date, "pas d'image");
-            }
-        }
-
-        $res .= "</ol>";
-        return $res;
+        return $res . $spectaclesListRenderer->render();
 
     }
 

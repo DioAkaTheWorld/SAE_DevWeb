@@ -13,7 +13,10 @@ class SpectacleRenderer {
     }
 
     public function renderAsCompact(string $date, string $image): string {
-        $date = date('d/m/Y', strtotime($date));
+        // Condition pour éviter d'afficher 01/01/1970
+        if($date !== "Pas de date") {
+            $date = date('d/m/Y', strtotime($date));
+        }
         return <<<FIN
             <li>
                 <div>
@@ -53,7 +56,7 @@ class SpectacleRenderer {
             FIN;
         if (!empty($images)) {
             foreach ($images as $image) {
-                $html .= "<img src='{$image['chemin_fichier']}' alt='Image du spectacle' style='width: 150px; margin: 5px;'>";
+                $html .= "<img src='/SAE_DevWeb/medias/images/{$image['chemin_fichier']}' alt='Image du spectacle' style='width: 150px; margin: 5px;'>";
             }
             $html .= "</div>";
         } else {

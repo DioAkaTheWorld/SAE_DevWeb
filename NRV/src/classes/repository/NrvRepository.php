@@ -235,7 +235,10 @@ class NrvRepository
      * @return array liste des chemin_fichiers d'images
      */
     public function getSpectacleImages(int $spectacleId): array {
-        $stmt = $this->pdo->prepare("SELECT i.chemin_fichier FROM Image i INNER JOIN spectacle2image si ON i.id = si.id_image WHERE si.id_image = ?");
+        $stmt = $this->pdo->prepare("SELECT i.chemin_fichier 
+                                            FROM image i 
+                                            JOIN spectacle2image si ON i.id = si.id_image 
+                                            WHERE si.id_spectacle = ?");
         $stmt->execute([$spectacleId]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -344,6 +347,57 @@ class NrvRepository
         $stmt->execute();
         return $stmt->fetchAll();
     }
+
+    /**
+     * Fonction permettant de récupérer les soirées existantes
+     * @return array
+     */
+    public function findAllSoirees(): array {
+        $sql = "SELECT id, nom, date FROM soiree ORDER BY date";
+        $stmt = $this->pdo->query($sql);
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Fonction permettant d'ajouter un spectacle à une soirée
+     * @param int $id_soiree
+     * @param int $id_spectacle
+     * @return bool
+     */
+    public function addSpectacleToSoiree(int $id_soiree, int $id_spectacle): bool {
+        // Vérifie si l'association existe déjà
+        $checkSql = "SELECT COUNT(*) FROM soiree2spectacle WHERE id_soiree = :id_soiree AND id_spectacle = :id_spectacle";
+        $stmt = $this->pdo->prepare($checkSql);
+        $stmt->execute(['id_soiree' => $id_soiree, 'id_spectacle' => $id_spectacle]);
+        $exists = $stmt->fetchColumn() > 0;
+
+        if ($exists) {
+            // Retourne false pour signaler qu'il y a un doublon
+            return false;
+        }
+
+        // Si l'association n'existe pas, insérer la nouvelle entrée
+        $sql = "INSERT INTO soiree2spectacle (id_soiree, id_spectacle) VALUES (:id_soiree, :id_spectacle)";
+        $stmt = $this->pdo->prepare($sql);
+        return $stmt->execute(['id_soiree' => $id_soiree, 'id_spectacle' => $id_spectacle]);
+    }
+
+
+
+    public function findAllSoireesWithSpectacles(): array {
+        $sql = "
+        SELECT s.id AS soiree_id, s.nom AS soiree_nom, s.date, s.thematique, 
+               sp.id AS spectacle_id, sp.titre AS spectacle_titre, sp.horaire, sp.style
+        FROM soiree AS so
+        LEFT JOIN soiree2spectacle AS s2s ON so.id = s2s.id_soiree
+        LEFT JOIN spectacle AS sp ON s2s.id_spectacle = sp.id
+        ORDER BY so.date DESC, so.nom, sp.horaire
+    ";
+        $stmt = $this->pdo->query($sql);
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+
 
 
     public function getSoireeDetails(int $soireeId): array {

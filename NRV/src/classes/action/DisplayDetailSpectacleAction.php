@@ -47,8 +47,14 @@ class DisplayDetailSpectacleAction extends Action {
             $soireeLink = "<a href='?action=display-detail-soiree&id={$soireeId}'>Voir la soirée associée</a>";
         }
 
+        $html = <<<FIN
+            <div>
+                <a href="?action=add-image-to-spectacle">Ajouter une image</a>
+            </div>
+        FIN;
+
         // Affichage détaillé du spectacle avec le lien vers la soirée
-        return $spectacleRenderer->renderAsLong($artistes, $images) . $soireeLink;
+        return $spectacleRenderer->renderAsLong($artistes, $images) . $soireeLink . $html;
     }
 
     public function executePost(): string {
