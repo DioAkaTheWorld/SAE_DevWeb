@@ -53,7 +53,7 @@ class SpectacleRenderer {
             FIN;
         if (!empty($images)) {
             foreach ($images as $image) {
-                $html .= "<img src='{$image['chemin_fichier']}' alt='Image du spectacle' style='width: 150px; margin: 5px;'>";
+                $html .= "<img src='/SAE_DevWeb/medias/images/{$image['chemin_fichier']}' alt='Image du spectacle' style='width: 150px; margin: 5px;'>";
             }
             $html .= "</div>";
         } else {

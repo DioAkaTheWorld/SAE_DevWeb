@@ -14,7 +14,6 @@
   - Fait par : **David**
 - [X] **14**. Créer un spectacle : saisir les données et les valider
   - Fait par : **Paul**, **David**
-  - **Remarque** : Manque l'ajout d'images
 
 ### Fonctionnalités minimales attendues
 

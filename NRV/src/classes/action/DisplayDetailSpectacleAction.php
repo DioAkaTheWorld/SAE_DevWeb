@@ -38,7 +38,15 @@ class DisplayDetailSpectacleAction extends Action {
         $spectacleObjet->setId($spectacleId);
         $spectacleRenderer = new SpectacleRenderer($spectacleObjet);
 
-        return $spectacleRenderer->renderAsLong($artistes, $images);
+
+        $html = <<<FIN
+            <div>
+                <a href="?action=add-image-to-spectacle">Ajouter une image</a>
+            </div>
+        FIN;
+
+
+        return $spectacleRenderer->renderAsLong($artistes, $images) . $html;
     }
 
     public function executePost(): string {
