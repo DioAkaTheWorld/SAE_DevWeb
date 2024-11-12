@@ -48,6 +48,10 @@ class AddSoireeAction extends Action {
                 <input type="number" class="form-control" id="id_lieu" name="id_lieu">
             </div>
             <!--            à implémenter-->
+            <div>
+                <label for="tarif" class="form-label">Tarif*</label>
+                <input type="number" class="form-control" id="tarif" name="tarif">
+            </div>
             <button type="submit" class="btn btn-primary">Ajouter</button>
         FIN;
 
@@ -63,12 +67,13 @@ class AddSoireeAction extends Action {
         }
 
         // Récupérer les données du formulaire et les valider
-        $nom = trim($_POST['nom']);
-        $thematique = trim($_POST['thematique']);
-        $date = trim($_POST['date']);
-        $horaire_debut = trim($_POST['horaire_debut']);
-        $horaire_fin = trim($_POST['horaire_fin']);
-        $id_lieu = trim($_POST['id_lieu']);
+        $nom = filter_var($_POST['nom'], FILTER_SANITIZE_STRING);
+        $thematique = filter_var($_POST['thematique'], FILTER_SANITIZE_STRING);
+        $date = filter_var($_POST['date'], FILTER_SANITIZE_STRING);
+        $horaire_debut = filter_var($_POST['horaire_debut'], FILTER_SANITIZE_STRING);
+        $horaire_fin = filter_var($_POST['horaire_fin'], FILTER_SANITIZE_STRING);
+        $id_lieu = filter_var($_POST['id_lieu'], FILTER_VALIDATE_INT);
+        $tarif = filter_var($_POST['tarif'], FILTER_VALIDATE_FLOAT);
 
         $errors = [];
 
@@ -93,8 +98,12 @@ class AddSoireeAction extends Action {
             $errors[] = "Le lieu est requis et doit être un identifiant valide.";
         }
 
+        if (empty($tarif)) {
+            $errors[] = "Le tarif est requis.";
+        }
+
         if (empty($errors)) {
-            $soiree = new Soiree($nom, $thematique, $date, $horaire_debut, $horaire_fin, $id_lieu);
+            $soiree = new Soiree($nom, $thematique, $date, $horaire_debut, $horaire_fin, $id_lieu, $tarif);
             $repo = NrvRepository::getInstance();
             $repo->ajouterSoiree($soiree);
         }

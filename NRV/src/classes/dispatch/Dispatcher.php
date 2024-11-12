@@ -10,6 +10,7 @@ use nrv\action\AddSpectacleToSoireeAction;
 use nrv\action\AddUserAction;
 use nrv\action\DefaultAction;
 use nrv\action\DisplayAllSpectaclesAction;
+use nrv\action\DisplayDetailSoireeAction;
 use nrv\action\DisplayDetailSpectacleAction;
 use nrv\action\DisplaySpectacleByStyleAction;
 use nrv\action\DisplaySpectaclesByDatesAction;
@@ -17,7 +18,6 @@ use nrv\action\DisplaySpectaclesByLocation;
 use nrv\action\SignInAction;
 use nrv\action\SignOutAction;
 use nrv\auth\User;
-use nrv\action\AddSpectacleToSoiree;
 
 /**
  * Classe Dispatcher
