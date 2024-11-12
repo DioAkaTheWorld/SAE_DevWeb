@@ -13,7 +13,10 @@ class SpectacleRenderer {
     }
 
     public function renderAsCompact(string $date, string $image): string {
-        $date = date('d/m/Y', strtotime($date));
+        // Condition pour éviter d'afficher 01/01/1970
+        if($date !== "Pas de date") {
+            $date = date('d/m/Y', strtotime($date));
+        }
         return <<<FIN
             <li>
                 <div>
