@@ -14,6 +14,7 @@
   - Fait par : **David**
 - [X] **14**. Créer un spectacle : saisir les données et les valider
   - Fait par : **Paul**, **David**
+  - **Remarque** : Manque l'ajout d'images
 
 ### Fonctionnalités minimales attendues
 
@@ -28,7 +29,7 @@
   - Fait par :
 - [ ] **7**. En cliquant sur un spectacle dans la liste, le détail de la soirée correspondante est affiché
   - Fait par :
-- [ ] **15**. Créer une soirée : saisir les données et les valider
+- [X] **15**. Créer une soirée : saisir les données et les valider
   - Fait par : **Paul**
 - [ ] **16**. Ajouter un spectacle à une soirée
   - Fait par :
