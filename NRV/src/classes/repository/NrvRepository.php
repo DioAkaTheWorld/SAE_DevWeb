@@ -230,12 +230,12 @@ class NrvRepository
      * @return array liste des artistes
      */
     public function getArtistsFromSpectacle(int $spectacleId): array {
-        $stmt = $this->pdo->prepare("SELECT DISTINCT a.nom 
+        $stmt = $this->pdo->prepare("SELECT DISTINCT a.nom, a.id
                                             FROM artiste a 
                                             JOIN spectacle2artiste sa ON a.id = sa.id_artiste 
                                             WHERE sa.id_spectacle = ?");
         $stmt->execute([$spectacleId]);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $stmt->fetchAll();
     }
 
     /**
@@ -258,6 +258,12 @@ class NrvRepository
         return $stmt->fetchColumn();
     }
 
+    public function getNbArtistesFromSpectacle(int $spectacleId): int {
+        $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM spectacle2artiste WHERE id_spectacle = ?");
+        $stmt->execute([$spectacleId]);
+        return $stmt->fetchColumn();
+    }
+
     /**
      * Ajouter un artiste
      * @param int $idArtiste ID de l'artiste
@@ -266,6 +272,17 @@ class NrvRepository
      */
     public function addArtisteToSpectacle(int $idArtiste, int $idSpectacle): void {
         $stmt = $this->pdo->prepare("INSERT INTO spectacle2artiste (id_spectacle, id_artiste) VALUES (?, ?)");
+        $stmt->execute([$idSpectacle, $idArtiste]);
+    }
+
+    /**
+     * Supprimer un artiste d'un spectacle
+     * @param int $idArtiste ID de l'artiste
+     * @param int $idSpectacle ID du spectacle
+     * @return void
+     */
+    public function deleteArtistFromSpectacle(int $idArtiste, int $idSpectacle): void {
+        $stmt = $this->pdo->prepare("DELETE FROM spectacle2artiste WHERE id_spectacle = ? AND id_artiste = ?");
         $stmt->execute([$idSpectacle, $idArtiste]);
     }
 

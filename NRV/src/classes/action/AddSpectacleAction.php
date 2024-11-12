@@ -126,7 +126,6 @@ class AddSpectacleAction extends Action {
 
         // Ajout des artistes
         foreach($artistes as $id => $artiste) {
-            var_dump($artiste);
             $repo->addArtisteToSpectacle($id, $spectacleId);
         }
 

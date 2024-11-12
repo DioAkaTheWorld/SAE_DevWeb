@@ -7,6 +7,7 @@ use nrv\auth\User;
 use nrv\exception\InvalidPropertyNameException;
 use nrv\exception\InvalidPropertyValueException;
 use nrv\festivale\Spectacle;
+use nrv\renderer\ArtistsListRenderer;
 use nrv\repository\NrvRepository;
 
 class ModifySpectacleAction extends Action {
@@ -39,6 +40,8 @@ class ModifySpectacleAction extends Action {
             $spectacleDetails = $repository->getSpectacleDetails($spectacleId);
             $artistes = $repository->getArtistsFromSpectacle($spectacleId);
             $images = $repository->getSpectacleImages($spectacleId);
+            $artistesRenderer = new ArtistsListRenderer();
+
 
             $horaire = substr($spectacleDetails['horaire'], 0, 5);
             $duree = substr($spectacleDetails['duree'], 0, 5);
@@ -77,7 +80,11 @@ class ModifySpectacleAction extends Action {
                 <label for="fichier">Modifier la vidéo: </label>
                 <input type="file" name="fichier" id="fichier">
             </div>
-            <button type="submit" class="btn btn-primary">Ajouter</button>
+            <div>
+                <label for="artiste" class="form-label">Artiste(s) (cocher pour supprimer)</label><br>
+                {$artistesRenderer->render(NrvRepository::getInstance()->getArtistsFromSpectacle($spectacleId))}
+            </div>
+            <button type="submit" class="btn btn-primary">Modifier</button>
         FIN;
     }
 
@@ -96,6 +103,13 @@ class ModifySpectacleAction extends Action {
         $horaire = filter_var($_POST['horaire'], FILTER_SANITIZE_STRING);
         $duree = filter_var($_POST['duree'], FILTER_SANITIZE_STRING);
         $style = filter_var($_POST['style'], FILTER_SANITIZE_STRING);
+        $artistes = [];
+        foreach ($_POST as $key => $value) {
+            if (str_starts_with($key, 'artiste')) {
+                $artisteId = (int)substr($key, 7); // l'id de l'artiste est après 'artiste' dans le nom de la clé
+                $artistes[] = $artisteId;
+            }
+        }
 
         try {
             if (empty($titre)) {
@@ -124,6 +138,11 @@ class ModifySpectacleAction extends Action {
             $repo->modifierSpectacle($spectacle);
         } catch (Exception $e) {
             return "<p>Erreur lors de la modification du spectacle : {$e->getMessage()}</p>";
+        }
+
+        // Suppression des artistes
+        foreach($artistes as $id) {
+            $repo->deleteArtistFromSpectacle($id, $_GET['id']);
         }
 
         // Gestion du fichier
