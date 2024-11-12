@@ -34,9 +34,9 @@ class AddSpectacleAction extends Action {
                 <label for="style" class="form-label">Style*</label>
                 <input type="text" class="form-control" id="style" name="style" required>
             </div>
-            <div class="col-md-6">
-                <label class="form-label" for="fichier">Ajouter une vidéo: </label>
-                <input class="form-control" type="file" name="fichier" id="fichier">
+            <div>
+                <label for="fichier">Ajouter une vidéo: </label>
+                <input type="file" name="fichier" id="fichier">
             </div>
             <button type="submit" class="btn btn-primary">Ajouter</button>
         FIN;
@@ -77,7 +77,7 @@ class AddSpectacleAction extends Action {
         // Gestion du fichier
         try {
             if ($_FILES["fichier"]["error"] === UPLOAD_ERR_OK) {
-                $nomFichier = $this->uploadFile();
+                $nomFichier = UploadAction::uploadFile("video", "mp4");
                 $repo->updateVideoPathForSpectacle($nomFichier, $spectacle->__get('id'));
                 $spectacle->setCheminVideo($nomFichier);
             }
@@ -87,32 +87,15 @@ class AddSpectacleAction extends Action {
                 {$e->getMessage()}
             </div>
             FIN;
-
         }
 
-        // Gestion des erreurs et validation des données
         return <<<FIN
-        <div>
-            Spectacle ajouté avec succès.
-        </div>
+            <div>
+                <h2>Spectacle ajouté</h2>
+                <a href="?action=display-spectacle&id={$spectacle->__get('id')}">Voir le spectacle</a>
+                <a href="?action=add-image-to-spectacle">Ajouter une image</a>
+            </div>
         FIN;
 
-    }
-
-    /**
-     * Upload le fichier audio
-     * @return string Le nom du fichier
-     * @throws Exception
-     */
-    private function uploadFile(): string {
-        $upload_dir = __DIR__ . "/../../../../medias/videos/";
-        $file_name = uniqid() . ".mp4";
-        $tmp = $_FILES["fichier"]["tmp_name"];
-        $dest = $upload_dir . $file_name;
-        // Vérifie si le fichier est une vidéo mp4 et si sa taille est inférieure à 10 Mo
-        if ($_FILES["fichier"]["type"] === "video/mp4" && $_FILES["fichier"]["size"] < 10485760 && move_uploaded_file($tmp, $dest)) {
-            return $file_name;
-        }
-        throw new Exception("Échec de l'upload ou format audio incorrect");
     }
 }

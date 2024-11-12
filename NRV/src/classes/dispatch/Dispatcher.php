@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace nrv\dispatch;
 
+use nrv\action\AddImageToSpecacleAction;
 use nrv\action\AddSoireeAction;
 use nrv\action\AddSpectacleAction;
 use nrv\action\AddSpectacleToSoireeAction;
@@ -52,6 +53,7 @@ class Dispatcher {
             'add-spectacle' => new AddSpectacleAction(),
             'add-soiree' => new AddSoireeAction(),
             'display-spectacle' => new DisplayDetailSpectacleAction(),
+            'add-image-to-spectacle' => new AddImageToSpecacleAction(),
             'add-user' => new AddUserAction(),
             'sign-in' => new SignInAction(),
             'sign-out' => new SignOutAction(),

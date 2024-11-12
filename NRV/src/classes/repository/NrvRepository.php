@@ -235,7 +235,10 @@ class NrvRepository
      * @return array liste des chemin_fichiers d'images
      */
     public function getSpectacleImages(int $spectacleId): array {
-        $stmt = $this->pdo->prepare("SELECT i.chemin_fichier FROM Image i INNER JOIN spectacle2image si ON i.id = si.id_image WHERE si.id_image = ?");
+        $stmt = $this->pdo->prepare("SELECT i.chemin_fichier 
+                                            FROM image i 
+                                            JOIN spectacle2image si ON i.id = si.id_image 
+                                            WHERE si.id_spectacle = ?");
         $stmt->execute([$spectacleId]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
