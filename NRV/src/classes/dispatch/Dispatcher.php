@@ -8,6 +8,7 @@ use nrv\action\AddSpectacleAction;
 use nrv\action\AddUserAction;
 use nrv\action\DefaultAction;
 use nrv\action\DisplayAllSpectaclesAction;
+use nrv\action\DisplayDetailSoireeAction;
 use nrv\action\DisplayDetailSpectacleAction;
 use nrv\action\DisplaySpectacleByStyleAction;
 use nrv\action\DisplaySpectaclesByDatesAction;
@@ -50,6 +51,7 @@ class Dispatcher {
             'add-spectacle' => new AddSpectacleAction(),
             'add-soiree' => new AddSoireeAction(),
             'display-spectacle' => new DisplayDetailSpectacleAction(),
+            'display-detail-soiree' => new DisplayDetailSoireeAction(),
             'add-user' => new AddUserAction(),
             'sign-in' => new SignInAction(),
             'sign-out' => new SignOutAction(),

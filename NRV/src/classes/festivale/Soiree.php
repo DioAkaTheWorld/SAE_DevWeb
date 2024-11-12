@@ -14,13 +14,16 @@ class Soiree {
     private string $horaire_fin;
     private int $id_lieu;
 
-    public function __construct(string $nom, string $thematique, string $date, string $horaire_debut, string $horaire_fin, int $id_lieu) {
+    private int $tarif;
+
+    public function __construct(string $nom, string $thematique, string $date, string $horaire_debut, string $horaire_fin, int $id_lieu, int $tarif) {
         $this->nom = $nom;
         $this->thematique = $thematique;
         $this->date = $date;
         $this->horaire_debut = $horaire_debut;
         $this->horaire_fin = $horaire_fin;
         $this->id_lieu = $id_lieu;
+        $this->tarif = $tarif;
     }
 
     public function setId(int $id): void {
