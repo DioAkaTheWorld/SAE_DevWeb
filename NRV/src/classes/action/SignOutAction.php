@@ -2,6 +2,9 @@
 
 namespace nrv\action;
 
+use nrv\auth\User;
+use nrv\exception\InvalidPropertyNameException;
+
 /**
  * Action permettant de se déconnecter
  */
@@ -10,11 +13,12 @@ class SignOutAction extends Action {
     /**
      * Méthode exécutée lors d'une requête GET
      * @return string le formulaire de déconnexion
+     * @throws InvalidPropertyNameException
      */
     public function executeGet(): string {
-        // Vérification de l'authentification
-        if ($this->checkAuthentication() !== "") {
-            return $this->checkAuthentication();
+        $check = $this->checkUser(User::STANDARD_USER);
+        if ($check !== "") {
+            return $check;
         }
 
         // Formulaire de déconnexion
@@ -33,11 +37,12 @@ class SignOutAction extends Action {
     /**
      * Méthode exécutée lors d'une requête POST
      * @return string le message de déconnexion
+     * @throws InvalidPropertyNameException
      */
     public function executePost(): string {
-        // Vérification de l'authentification
-        if ($this->checkAuthentication() !== "") {
-            return $this->checkAuthentication();
+        $check = $this->checkUser(User::STANDARD_USER);
+        if ($check !== "") {
+            return $check;
         }
 
         // Déconnexion

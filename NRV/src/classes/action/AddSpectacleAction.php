@@ -3,13 +3,35 @@
 namespace nrv\action;
 
 use Exception;
+use nrv\auth\AuthnProvider;
+use nrv\auth\Authz;
+use nrv\auth\User;
+use nrv\exception\AuthnException;
+use nrv\exception\AuthzException;
+use nrv\exception\InvalidPropertyNameException;
 use nrv\exception\InvalidPropertyValueException;
 use nrv\festivale\Spectacle;
 use nrv\repository\NrvRepository;
 
 class AddSpectacleAction extends Action {
 
+    /**
+     * @throws InvalidPropertyNameException
+     */
     public function executeGet(): string {
+        $check = $this->checkUser(User::STAFF);
+        if ($check !== "") {
+            return $check;
+        }
+
+        // Test des droits
+        try {
+            $authz = new Authz(AuthnProvider::getSignedInUser());
+            $authz->checkRole(User::STAFF);
+        } catch (AuthzException|AuthnException $e) {
+            return "<div class='container'>{$e->getMessage()}</div>";
+        }
+
         return <<<FIN
         <h2 class="p-2">Ajouter un spectacle</h2>
         <hr>
@@ -43,7 +65,16 @@ class AddSpectacleAction extends Action {
 
     }
 
+    /**
+     * @return string
+     * @throws InvalidPropertyNameException
+     */
     public function executePost(): string {
+        $check = $this->checkUser(User::STAFF);
+        if ($check !== "") {
+            return $check;
+        }
+
         // Récupérer les données du formulaire et les valider
         $titre = filter_var($_POST['titre'], FILTER_SANITIZE_STRING);
         $description = filter_var($_POST['description'], FILTER_SANITIZE_STRING);
@@ -77,7 +108,7 @@ class AddSpectacleAction extends Action {
         // Gestion du fichier
         try {
             if ($_FILES["fichier"]["error"] === UPLOAD_ERR_OK) {
-                $nomFichier = UploadAction::uploadFile("video", "mp4");
+                $nomFichier = UploadFile::uploadFile("video", "mp4");
                 $repo->updateVideoPathForSpectacle($nomFichier, $spectacle->__get('id'));
                 $spectacle->setCheminVideo($nomFichier);
             }

@@ -4,6 +4,11 @@ declare(strict_types=1);
 namespace nrv\action;
 
 use nrv\auth\AuthnProvider;
+use nrv\auth\Authz;
+use nrv\auth\User;
+use nrv\exception\AuthnException;
+use nrv\exception\AuthzException;
+use nrv\exception\InvalidPropertyNameException;
 
 /**
  * Classe absraite Action qui gère les actions GET et POST
@@ -47,10 +52,13 @@ abstract class Action {
     }
 
     /**
-     * Vérifie si l'utilisateur est authentifié et renvoie une réponse HTTP 401 si ce n'est pas le cas
+     * Vérifie si l'utilisateur est authentifié et a le rôle nécessaire
+     * @param int $role rôle nécessaire
      * @return string message d'erreur ou message vide
+     * @throws InvalidPropertyNameException
      */
-    public function checkAuthentication(): string {
+    protected function checkUser(int $role) : string {
+        // Test de la connexion
         if (!AuthnProvider::isSignedIn()) {
             http_response_code(401);
             return <<<FIN
@@ -60,6 +68,25 @@ abstract class Action {
                     </div>
             FIN;
         }
+
+        // Test du rôle
+        if ($role !== User::STANDARD_USER && $role !== User::STAFF && $role !== User::ADMIN) {
+            http_response_code(500);
+            return <<<FIN
+            <div class="container d-flex flex-column justify-content-center align-items-center h3">
+                        <h2 class="h1">Erreur
+                        Rôle invalide
+                    </div>  
+            FIN;
+        }
+
+        try {
+            $authz = new Authz(AuthnProvider::getSignedInUser());
+            $authz->checkRole($role);
+        } catch (AuthzException|AuthnException $e) {
+            return "<div class='container'>Erreur : {$e->getMessage()}</div>";
+        }
+
         return "";
     }
 

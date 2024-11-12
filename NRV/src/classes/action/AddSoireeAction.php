@@ -2,12 +2,22 @@
 
 namespace nrv\action;
 
+use nrv\auth\User;
+use nrv\exception\InvalidPropertyNameException;
 use nrv\festivale\Soiree;
 use nrv\repository\NrvRepository;
 
 class AddSoireeAction extends Action {
 
+    /**
+     * @throws InvalidPropertyNameException
+     */
     public function executeGet(): string {
+        $check = $this->checkUser(User::STAFF);
+        if ($check !== "") {
+            return $check;
+        }
+
         return <<<FIN
         <h2 class="p-2">Ajouter une soirée</h2>
         <hr>
@@ -43,7 +53,15 @@ class AddSoireeAction extends Action {
 
     }
 
+    /**
+     * @throws InvalidPropertyNameException
+     */
     public function executePost(): string {
+        $check = $this->checkUser(User::STAFF);
+        if ($check !== "") {
+            return $check;
+        }
+
         // Récupérer les données du formulaire et les valider
         $nom = trim($_POST['nom']);
         $thematique = trim($_POST['thematique']);

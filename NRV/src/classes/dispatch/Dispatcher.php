@@ -15,6 +15,7 @@ use nrv\action\DisplaySpectaclesByDatesAction;
 use nrv\action\DisplaySpectaclesByLocation;
 use nrv\action\SignInAction;
 use nrv\action\SignOutAction;
+use nrv\auth\User;
 
 /**
  * Classe Dispatcher
@@ -104,23 +105,48 @@ class Dispatcher {
     }
 
     /**
-     * Renvoie le contenu HTML des éléments de la barre de navigation en fonction de l'état de connexion de l'utilisateur.
+     * Renvoie le contenu HTML des éléments de la barre de navigation en fonction
+     * de l'état de connexion de l'utilisateur et de son rôle.
      *
      * @param bool $connected état de connexion de l'utilisateur
      * @return string contenu HTML des éléments de la barre de navigation
      */
     private function renderNavBarItems(bool $connected): string {
-        if (!$connected) {
-            return <<<FIN
-            <li class="nav-item p-1">
-                                <a class="nav-link" href="?action=add-user">S'inscrire</a>
-                            </li>
-                            <li class="nav-item p-1 pe-5">
-                                <a class="nav-link" href="?action=sign-in">Se connecter</a>
-                            </li>
-            FIN;
-        } else {
-            return <<<FIN
+        if ($connected) {
+            $user = $_SESSION['user'];
+            $role = $user->__get('role');
+            return match ($role) {
+                User::STANDARD_USER => $this->renderNavBarItemsStandardUser(),
+                User::STAFF => $this->renderNavBarItemsStaffUser(),
+                User::ADMIN => $this->renderNavBarItemsAdminUser(),
+                default => $this->renderNavBarItemsNotConnected(),
+            };
+        }
+
+        return $this->renderNavBarItemsNotConnected();
+    }
+
+    /**
+     * Fais le rendu de la barre de navigation pour un utilisateur standard.
+     * @return string contenu HTML des éléments de la barre de navigation
+     */
+    private function renderNavBarItemsStandardUser(): string {
+        return <<<FIN
+        <li class="nav-item p-1">
+                            <a class="nav-link" href="?action=display-all-spectacles">Les spectacles</a>
+                        </li>
+                        <li class="nav-item p-1 d-flex align-items-center">
+                            <a class="btn btn-danger text-dark my-0 p-2" href="?action=sign-out"><strong>Se déconnecter</strong></a>
+                        </li>
+        FIN;
+    }
+
+    /**
+     * Fais le rendu de la barre de navigation pour un utilisateur staff.
+     * @return string contenu HTML des éléments de la barre de navigation
+     */
+    private function renderNavBarItemsStaffUser() : string {
+        return <<<FIN
             <li class="nav-item p-1">
                                 <a class="nav-link" href="?action=display-all-spectacles">Les spectacles</a>
                             </li>
@@ -134,7 +160,47 @@ class Dispatcher {
                                 <a class="btn btn-danger text-dark my-0 p-2" href="?action=sign-out"><strong>Se déconnecter</strong></a>
                             </li>
             FIN;
-        }
+    }
+
+    /**
+     * Fais le rendu de la barre de navigation pour un utilisateur admin.
+     * @return string contenu HTML des éléments de la barre de navigation
+     */
+    private function renderNavBarItemsAdminUser() : string {
+        return <<<FIN
+            <li class="nav-item p-1">
+                                <a class="nav-link" href="?action=display-all-spectacles">Les spectacles</a>
+                            </li>
+                            <li class="nav-item p-1">
+                                <a class="nav-link" href="?action=add-spectacle">Ajouter un spectacle</a>
+                            </li>
+                            <li class="nav-item p-1">
+                                <a class="nav-link" href="?action=add-soiree">Ajouter une soirée</a>
+                            </li>
+                            <!--    Nom implémenté     -->
+                            <li class="nav-item p-1">
+                                <a class="nav-link" href="?action=add-staff-user">Créer un compte staff (non implémenté)</a>
+                            </li>
+                            <!--    Nom implémenté     -->
+                            <li class="nav-item p-1 d-flex align-items-center">
+                                <a class="btn btn-danger text-dark my-0 p-2" href="?action=sign-out"><strong>Se déconnecter</strong></a>
+                            </li>
+            FIN;
+    }
+
+    /**
+     * Fais le rendu de la barre de navigation pour un utilisateur non connecté.
+     * @return string contenu HTML des éléments de la barre de navigation
+     */
+    private function renderNavBarItemsNotConnected() : string {
+        return <<<FIN
+            <li class="nav-item p-1">
+                                <a class="nav-link" href="?action=add-user">S'inscrire</a>
+                            </li>
+                            <li class="nav-item p-1 pe-5">
+                                <a class="nav-link" href="?action=sign-in">Se connecter</a>
+                            </li>
+            FIN;
     }
 
 }
