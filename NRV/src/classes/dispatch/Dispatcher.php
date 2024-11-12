@@ -15,6 +15,7 @@ use nrv\action\DisplayDetailSpectacleAction;
 use nrv\action\DisplaySpectacleByStyleAction;
 use nrv\action\DisplaySpectaclesByDatesAction;
 use nrv\action\DisplaySpectaclesByLocation;
+use nrv\action\ModifySpectacleAction;
 use nrv\action\SignInAction;
 use nrv\action\SignOutAction;
 use nrv\auth\User;
@@ -52,6 +53,7 @@ class Dispatcher {
         $actionObjet = match ($this->action) {
             'display-all-spectacles' => new DisplayAllSpectaclesAction(),
             'add-spectacle' => new AddSpectacleAction(),
+            'modify-spectacle' => new ModifySpectacleAction(),
             'add-soiree' => new AddSoireeAction(),
             'display-spectacle' => new DisplayDetailSpectacleAction(),
             'add-image-to-spectacle' => new AddImageToSpecacleAction(),

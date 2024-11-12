@@ -32,7 +32,7 @@ class DisplayDetailSpectacleAction extends Action {
             $images = $repository->getSpectacleImages($spectacleId);
 
             // Récupérer l'ID de la soirée associée à ce spectacle
-            $soireeId = $repository->getSoireeIdBySpectacleId($spectacleId); // Nouvelle méthode SQL à créer
+            $soireeId = $repository->getSoireeIdBySpectacleId($spectacleId);
         } catch (Exception $e) {
             return "<p>Erreur lors de la récupération des informations du spectacle : {$e->getMessage()}</p>";
         }
@@ -41,20 +41,8 @@ class DisplayDetailSpectacleAction extends Action {
         $spectacleObjet->setId($spectacleId);
         $spectacleRenderer = new SpectacleRenderer($spectacleObjet);
 
-        // Créer le lien vers la soirée associée au spectacle
-        $soireeLink = "";
-        if ($soireeId) {
-            $soireeLink = "<a href='?action=display-detail-soiree&id={$soireeId}'>Voir la soirée associée</a>";
-        }
-
-        $html = <<<FIN
-            <div>
-                <a href="?action=add-image-to-spectacle">Ajouter une image</a>
-            </div>
-        FIN;
-
         // Affichage détaillé du spectacle avec le lien vers la soirée
-        return $spectacleRenderer->renderAsLong($artistes, $images) . $soireeLink . $html;
+        return $spectacleRenderer->renderAsLong($artistes, $images) . "<a href='?action=modify-spectacle&id={$spectacleId}'>Modifier ce spectacle</a>";
     }
 
     public function executePost(): string {

@@ -171,6 +171,22 @@ class NrvRepository
     }
 
     /**
+     * @throws Exception
+     */
+    function modifierSpectacle(Spectacle $s) : Spectacle {
+        $stmt = $this->pdo->prepare("SELECT * FROM spectacle WHERE id = ?");
+        $stmt->execute([$s->__get('id')]);
+        $spectacle = $stmt->fetch();
+        if (!$spectacle) {
+            throw new Exception("Spectacle non trouvé");
+        }
+
+        $stmt = $this->pdo->prepare("UPDATE spectacle SET titre = ?, description = ?, horaire = ?, duree = ?, style = ? WHERE id = ?");
+        $stmt->execute([$s->__get('titre'), $s->__get('description'), $s->__get('horaire'), $s->__get('duree'), $s->__get('style'), $s->__get('id')]);
+        return $s;
+    }
+
+    /**
      * Ajoute une soirée
      * @param Soiree $s soirée à ajouter
      * @return Soiree soirée ajoutée
