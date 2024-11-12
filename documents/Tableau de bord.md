@@ -1,3 +1,5 @@
+#### Groupe: Andrieu Paul, Ozen Burak, Unternehr David
+
 # Tableau de bord
 
 ## Fonctionnalités
@@ -44,8 +46,8 @@
 - [ ] **17**. Annuler un spectacle : le spectacle est conservé dans les affichages mais est marqué
   comme annulé
   - Fait par :
-- [ ] **18**. Modifier un spectacle existant
-  - Fait par :
+- [X] **18**. Modifier un spectacle existant
+  - Fait par : **David**
 - [ ] **19**. Modifier les spectacles d’une soirée existante
   - Fait par :
 - [ ] **20**. Créer un compte staff : créer un compte utilisateur permettant de gérer le programme

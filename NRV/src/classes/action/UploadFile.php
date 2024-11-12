@@ -40,8 +40,8 @@ abstract class UploadFile {
         $file_name = uniqid() . "." . $format;
         $tmp = $_FILES["fichier"]["tmp_name"];
         $dest = $upload_dir . $file_name;
-        // Vérifie si le fichier est dans le bon format et si sa taille est inférieure à 10 Mo
-        if ($_FILES["fichier"]["type"] === $fichierType && $_FILES["fichier"]["size"] < 10485760 && move_uploaded_file($tmp, $dest)) {
+        // Vérifie si le fichier est dans le bon format et si sa taille est inférieure à 15 Mo
+        if ($_FILES["fichier"]["type"] === $fichierType && $_FILES["fichier"]["size"] < 15728640 && move_uploaded_file($tmp, $dest)) {
             return $file_name;
         }
         throw new Exception("Échec de l'upload ou format audio incorrect");

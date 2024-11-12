@@ -317,6 +317,17 @@ class NrvRepository
     }
 
     /**
+     * Méthode permettant de récupérer le chemin de la vidéo d'un spectacle
+     * @param int $idSpectacle id du spectacle
+     * @return string chemin de la vidéo
+     */
+    public function getVideoPathFromSpectacle(int $idSpectacle): string {
+        $stmt = $this->pdo->prepare("SELECT chemin_video FROM spectacle WHERE id = ?");
+        $stmt->execute([$idSpectacle]);
+        return $stmt->fetchColumn();
+    }
+
+    /**
      * Fonction permettant de récupérer les spectacles par style
      * @param string $style style de musique
      * @return array spectacles filtrés par style

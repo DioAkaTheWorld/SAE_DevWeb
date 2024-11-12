@@ -36,9 +36,12 @@ class ModifySpectacleAction extends Action {
         // Obtenir les détails du spectacle depuis le dépôt
         try {
             $repository = NrvRepository::getInstance();
-            $spectacleDetails = $repository->getSpectacleDetails($spectacleId );
+            $spectacleDetails = $repository->getSpectacleDetails($spectacleId);
             $artistes = $repository->getArtistsFromSpectacle($spectacleId);
             $images = $repository->getSpectacleImages($spectacleId);
+
+            $horaire = substr($spectacleDetails['horaire'], 0, 5);
+            $duree = substr($spectacleDetails['duree'], 0, 5);
 
             // Récupérer l'ID de la soirée associée à ce spectacle
             $soireeId = $repository->getSoireeIdBySpectacleId($spectacleId);
@@ -60,11 +63,11 @@ class ModifySpectacleAction extends Action {
             </div>
             <div>
                 <label for="horaire" class="form-label">Horaire*</label>
-                <input type="time" class="form-control" id="horaire" name="horaire" value="{$spectacleDetails['horaire']}" required>
+                <input type="time" class="form-control" id="horaire" name="horaire" value="$horaire" required>
             </div>
             <div>
                 <label for="duree" class ="form-label">Durée*</label>
-                <input type="time" class="form-control" id="duree" name="duree" value="{$spectacleDetails['duree']}" required>
+                <input type="time" class="form-control" id="duree" name="duree" value="$duree" required>
             </div>
             <div>
                 <label for="style" class="form-label">Style*</label>
@@ -127,8 +130,12 @@ class ModifySpectacleAction extends Action {
         try {
             if ($_FILES["fichier"]["error"] === UPLOAD_ERR_OK) {
                 $nomFichier = UploadFile::uploadFile("video", "mp4");
+                $previousVideoPath = $repo->getVideoPathFromSpectacle($spectacle->__get('id'));
                 $repo->updateVideoPathForSpectacle($nomFichier, $spectacle->__get('id'));
                 $spectacle->setCheminVideo($nomFichier);
+                if ($previousVideoPath !== "Pas d'image") {
+                    unlink(__DIR__ . "/../../../../medias/videos/" . $previousVideoPath);
+                }
             }
         } catch (Exception $e) {
             return $this->executeGet() . <<<FIN
