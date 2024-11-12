@@ -10,6 +10,7 @@ use nrv\action\AddSpectacleToSoireeAction;
 use nrv\action\AddUserAction;
 use nrv\action\DefaultAction;
 use nrv\action\DisplayAllSpectaclesAction;
+use nrv\action\DisplayDetailSoireeAction;
 use nrv\action\DisplayDetailSpectacleAction;
 use nrv\action\DisplaySpectacleByStyleAction;
 use nrv\action\DisplaySpectaclesByDatesAction;
@@ -17,6 +18,7 @@ use nrv\action\DisplaySpectaclesByLocation;
 use nrv\action\ModifySpectacleAction;
 use nrv\action\SignInAction;
 use nrv\action\SignOutAction;
+use nrv\auth\User;
 
 /**
  * Classe Dispatcher
@@ -74,7 +76,7 @@ class Dispatcher {
      * @param string $html contenu de la page à afficher selon l'action demandée
      */
     private function renderPage(string $html): void {
-        $connected = isset($_SESSION['user']);
+        isset($_SESSION['user']) ? $connected = true : $connected = false;
 
         echo <<<FIN
         <!DOCTYPE html>
@@ -83,14 +85,13 @@ class Dispatcher {
             <meta charset='utf-8'>
             <meta name="viewport" content="width=device-width, initial-scale=1">
             <title>NRV</title>
-            <link rel="stylesheet" href="../style.css">
             <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
         </head>
         <body data-bs-theme="dark">
-            <nav class="navbar navbar-expand-lg navbar-dark bg-dark p-3">
+            <nav class="navbar navbar-expand-sm bg-success bg-gradient">
                 <div class="container-fluid">
-                    <a class="navbar-brand" href="index.php">NRV Festival</a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                    <a class="navbar-brand ps-5" href="./index.php">NRV</a>
+                    <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#menu">
                         <span class="navbar-toggler-icon"></span>
                     </button>
                     <div class="collapse navbar-collapse flex-row-reverse" id="menu">
@@ -100,13 +101,9 @@ class Dispatcher {
                     </div>
                 </div>
             </nav>
-            {$this->renderHeroSection()}
-            <div class="container my-4 page-content">
+            <div class="container my-4 ">
                 $html
             </div>
-            <footer>
-                <p>&copy; 2024 NRV Festival. Tous droits réservés.</p>
-            </footer>
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
         </body>
         </html>
@@ -114,55 +111,108 @@ class Dispatcher {
     }
 
     /**
-     * Renvoie le contenu HTML des éléments de la barre de navigation en fonction de l'état de connexion de l'utilisateur.
+     * Renvoie le contenu HTML des éléments de la barre de navigation en fonction
+     * de l'état de connexion de l'utilisateur et de son rôle.
      *
      * @param bool $connected état de connexion de l'utilisateur
      * @return string contenu HTML des éléments de la barre de navigation
      */
     private function renderNavBarItems(bool $connected): string {
-        if (!$connected) {
-            return <<<FIN
-            <li class="nav-item p-1">
-                <a class="nav-link" href="?action=add-user">S'inscrire</a>
-            </li>
-            <li class="nav-item p-1 pe-5">
-                <a class="nav-link" href="?action=sign-in">Se connecter</a>
-            </li>
-            FIN;
-        } else {
-            return <<<FIN
-            <li class="nav-item p-1">
-                <a class="nav-link" href="?action=display-all-spectacles">Les spectacles</a>
-            </li>
-            <li class="nav-item p-1">
-                <a class="nav-link" href="?action=add-spectacle">Ajouter un spectacle</a>
-            </li>
-            <li class="nav-item p-1">
-                <a class="nav-link" href="?action=add-soiree">Ajouter une soirée</a>
-            </li>
-            <li class="nav-item p-1">
-                <a class="nav-link" href="?action=add-spectacle-to-soiree">Ajouter un spectacle à une soirée</a>
-            </li>
-            <li class="nav-item p-1 d-flex align-items-center">
-                <a class="btn btn-danger text-dark my-0 p-2" href="?action=sign-out"><strong>Se déconnecter</strong></a>
-            </li>
-            FIN;
+        if ($connected) {
+            $user = $_SESSION['user'];
+            $role = $user->__get('role');
+            return match ($role) {
+                User::STANDARD_USER => $this->renderNavBarItemsStandardUser(),
+                User::STAFF => $this->renderNavBarItemsStaffUser(),
+                User::ADMIN => $this->renderNavBarItemsAdminUser(),
+                default => $this->renderNavBarItemsNotConnected(),
+            };
         }
+
+        return $this->renderNavBarItemsNotConnected();
     }
 
-
-    private function renderHeroSection(): string {
-        if ($this->action === 'default') {
-            return <<<HTML
-            <section class="hero" id="home">
-                <div class="hero-content">
-                    <h1>NRV Rock Festival</h1>
-                    <p>Bienvenue à Nancy pour le festival de rock NRV ! Un événement épique qui célèbre la passion du rock et de la musique live dans les lieux les plus emblématiques de la ville. Rejoignez-nous pour deux semaines inoubliables de performances puissantes, avec des artistes de renommée et des groupes locaux qui feront vibrer les rues de Nancy.</p>
-                    <button onclick="window.location.href='?action=display-all-spectacles'">Découvrir le programme</button>
-                </div>
-            </section>
-            HTML;
-        }
-        return '';
+    /**
+     * Fais le rendu de la barre de navigation pour un utilisateur standard.
+     * @return string contenu HTML des éléments de la barre de navigation
+     */
+    private function renderNavBarItemsStandardUser(): string {
+        return <<<FIN
+        <li class="nav-item p-1">
+                            <a class="nav-link" href="?action=display-all-spectacles">Les spectacles</a>
+                        </li>
+                        <li class="nav-item p-1 d-flex align-items-center">
+                            <a class="btn btn-danger text-dark my-0 p-2" href="?action=sign-out"><strong>Se déconnecter</strong></a>
+                        </li>
+        FIN;
     }
+
+    /**
+     * Fais le rendu de la barre de navigation pour un utilisateur staff.
+     * @return string contenu HTML des éléments de la barre de navigation
+     */
+    private function renderNavBarItemsStaffUser() : string {
+        return <<<FIN
+            <li class="nav-item p-1">
+                                <a class="nav-link" href="?action=display-all-spectacles">Les spectacles</a>
+                            </li>
+                            <li class="nav-item p-1">
+                                <a class="nav-link" href="?action=add-spectacle">Ajouter un spectacle</a>
+                            </li>
+                            <li class="nav-item p-1">
+                                <a class="nav-link" href="?action=add-soiree">Ajouter une soirée</a>
+                            </li>
+                            <li class="nav-item p-1">
+                                <a class="nav-link" href="?action=add-spectacle-to-soiree">Ajouter un spectacle à une soirée</a>
+                            </li>
+                            <li class="nav-item p-1 d-flex align-items-center">
+                                <a class="btn btn-danger text-dark my-0 p-2" href="?action=sign-out"><strong>Se déconnecter</strong></a>
+                            </li>
+            FIN;
+    }
+
+    /**
+     * Fais le rendu de la barre de navigation pour un utilisateur admin.
+     * @return string contenu HTML des éléments de la barre de navigation
+     */
+    private function renderNavBarItemsAdminUser() : string {
+        return <<<FIN
+            <li class="nav-item p-1">
+                                <a class="nav-link" href="?action=display-all-spectacles">Les spectacles</a>
+                            </li>
+                            <li class="nav-item p-1">
+                                <a class="nav-link" href="?action=add-spectacle">Ajouter un spectacle</a>
+                            </li>
+                            <li class="nav-item p-1">
+                                <a class="nav-link" href="?action=add-soiree">Ajouter une soirée</a>
+                            </li>
+                            <li class="nav-item p-1">
+                                <a class="nav-link" href="?action=add-spectacle-to-soiree">Ajouter un spectacle à une soirée</a>
+                            </li>
+                            <!--    Nom implémenté     -->
+                            <li class="nav-item p-1">
+                                <a class="nav-link" href="?action=add-staff-user">Créer un compte staff (non implémenté)</a>
+                            </li>
+                            <!--    Nom implémenté     -->
+                            <li class="nav-item p-1 d-flex align-items-center">
+                                <a class="btn btn-danger text-dark my-0 p-2" href="?action=sign-out"><strong>Se déconnecter</strong></a>
+                            </li>
+            FIN;
+    }
+
+    /**
+     * Fais le rendu de la barre de navigation pour un utilisateur non connecté.
+     * @return string contenu HTML des éléments de la barre de navigation
+     */
+    private function renderNavBarItemsNotConnected() : string {
+        return <<<FIN
+            <li class="nav-item p-1">
+                                <a class="nav-link" href="?action=add-user">S'inscrire</a>
+                            </li>
+                            <li class="nav-item p-1 pe-5">
+                                <a class="nav-link" href="?action=sign-in">Se connecter</a>
+                            </li>
+            FIN;
+    }
+
 }
