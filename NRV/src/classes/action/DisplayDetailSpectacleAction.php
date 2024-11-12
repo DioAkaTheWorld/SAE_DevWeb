@@ -28,7 +28,7 @@ class DisplayDetailSpectacleAction extends Action {
         try {
             $repository = NrvRepository::getInstance();
             $spectacleDetails = $repository->getSpectacleDetails($spectacleId );
-            $artistes = $repository->getSpectacleArtists($spectacleId);
+            $artistes = $repository->getArtistsFromSpectacle($spectacleId);
             $images = $repository->getSpectacleImages($spectacleId);
 
             // Récupérer l'ID de la soirée associée à ce spectacle

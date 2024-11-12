@@ -229,10 +229,44 @@ class NrvRepository
      * @param int $spectacleId ID du spectacle
      * @return array liste des artistes
      */
-    public function getSpectacleArtists(int $spectacleId): array {
-        $stmt = $this->pdo->prepare("SELECT DISTINCT a.nom FROM artiste a INNER JOIN spectacle2artiste sa ON a.id = sa.id_spectacle WHERE sa.id_spectacle = ?");
+    public function getArtistsFromSpectacle(int $spectacleId): array {
+        $stmt = $this->pdo->prepare("SELECT DISTINCT a.nom 
+                                            FROM artiste a 
+                                            JOIN spectacle2artiste sa ON a.id = sa.id_artiste 
+                                            WHERE sa.id_spectacle = ?");
         $stmt->execute([$spectacleId]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Récupérer les artistes
+     * @return array liste des artistes
+     */
+    public function getAllArtists(): array {
+        $stmt = $this->pdo->prepare("SELECT * FROM artiste");
+        $stmt->execute();
+        return $stmt->fetchAll();
+    }
+
+    /**
+     * Récupérer le nombre d'artistes
+     * @return int nombre d'artistes
+     */
+    public function getNbArtistes(): int {
+        $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM artiste");
+        $stmt->execute();
+        return $stmt->fetchColumn();
+    }
+
+    /**
+     * Ajouter un artiste
+     * @param int $idArtiste ID de l'artiste
+     * @param int $idSpectacle ID du spectacle
+     * @return void
+     */
+    public function addArtisteToSpectacle(int $idArtiste, int $idSpectacle): void {
+        $stmt = $this->pdo->prepare("INSERT INTO spectacle2artiste (id_spectacle, id_artiste) VALUES (?, ?)");
+        $stmt->execute([$idSpectacle, $idArtiste]);
     }
 
     /**

@@ -11,6 +11,7 @@ use nrv\exception\AuthzException;
 use nrv\exception\InvalidPropertyNameException;
 use nrv\exception\InvalidPropertyValueException;
 use nrv\festivale\Spectacle;
+use nrv\renderer\ArtistsListRenderer;
 use nrv\repository\NrvRepository;
 
 class AddSpectacleAction extends Action {
@@ -31,6 +32,8 @@ class AddSpectacleAction extends Action {
         } catch (AuthzException|AuthnException $e) {
             return "<div class='container'>{$e->getMessage()}</div>";
         }
+
+        $artistesRenderer = new ArtistsListRenderer();
 
         return <<<FIN
         <h2 class="p-2">Ajouter un spectacle</h2>
@@ -57,6 +60,10 @@ class AddSpectacleAction extends Action {
                 <input type="text" class="form-control" id="style" name="style" required>
             </div>
             <div>
+                <label for="artiste" class="form-label">Artiste(s)</label><br>
+                {$artistesRenderer->render(NrvRepository::getInstance()->getAllArtists())}
+            </div>
+            <div>
                 <label for="fichier">Ajouter une vidéo: </label>
                 <input type="file" name="fichier" id="fichier">
             </div>
@@ -81,6 +88,15 @@ class AddSpectacleAction extends Action {
         $horaire = filter_var($_POST['horaire'], FILTER_SANITIZE_STRING);
         $style = filter_var($_POST['style'], FILTER_SANITIZE_STRING);
         $duree = filter_var($_POST['duree'],FILTER_SANITIZE_STRING);
+        $artistes = array();
+        $repo = NrvRepository::getInstance();
+        $nbArtistes = $repo->getNbArtistes();
+        for ($i = 1; $i <= $nbArtistes; $i++) {
+            if (isset($_POST["artiste$i"])) {
+                $artistes[$i] = filter_var($_POST["artiste$i"], FILTER_SANITIZE_STRING);
+            }
+        }
+
         try {
             if (empty($titre)) {
                 throw new InvalidPropertyValueException("Titre manquant.");
@@ -97,13 +113,22 @@ class AddSpectacleAction extends Action {
             if (empty($duree)){
                 throw new InvalidPropertyValueException("Durée non valide");
             }
+            if (empty($artistes)) {
+                throw new InvalidPropertyValueException("Il faut au moins 1 artiste.");
+            }
         } catch (InvalidPropertyValueException $e) {
             return $this->executeGet() . $e->getMessage();
         }
 
         $spectacle = new Spectacle($titre, $description, $horaire, $duree, $style, "Pas d'image");
-        $repo = NrvRepository::getInstance();
         $spectacle = $repo->ajouterSpectacle($spectacle);
+        $spectacleId = $spectacle->__get('id');
+
+        // Ajout des artistes
+        foreach($artistes as $id => $artiste) {
+            var_dump($artiste);
+            $repo->addArtisteToSpectacle($id, $spectacleId);
+        }
 
         // Gestion du fichier
         try {

@@ -29,7 +29,7 @@ class DisplayDetailSoireeAction extends Action {
             $repository = NrvRepository::getInstance();
             $soireeDetails = $repository->getSoireeDetails($soireeId);
             $lieuDetails = $repository->getLieuDetails($soireeDetails['id_lieu']);
-            $artistes = $repository->getSpectacleArtists($soireeId);
+            $artistes = $repository->getArtistsFromSpectacle($soireeId);
             $spectacles = $repository->getSoireeSpectacles($soireeId);
         } catch (Exception $e) {
             return "<p>Erreur lors de la récupération des informations de la soirée : {$e->getMessage()}</p>";
