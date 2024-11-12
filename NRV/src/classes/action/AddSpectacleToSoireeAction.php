@@ -25,21 +25,7 @@ class AddSpectacleToSoireeAction extends Action
         <hr>
         <form method="POST" action="?action=add-spectacle-to-soiree">
             <div>
-                <label for="id_soiree" class="form-label">Sélectionnez une Soirée*</label>
-                <select name="id_soiree" id="id_soiree" class="form-control" required>
-                    <option value="">-- Choisir une soirée --</option>
-        FIN;
-
-        // Ajoute les options pour les soirées
-        foreach ($soirees as $soiree) {
-            $res .= "<option value='{$soiree['id']}'>{$soiree['nom']} - {$soiree['date']}</option>";
-        }
-
-        $res .= <<<FIN
-                </select>
-            </div>
-            <div>
-                <label for="id_spectacle" class="form-label">Sélectionnez un Spectacle*</label>
+                <label for="id_spectacle" class="form-label">Sélectionnez un spectacle*</label>
                 <select name="id_spectacle" id="id_spectacle" class="form-control" required>
                     <option value="">-- Choisir un spectacle --</option>
         FIN;
@@ -47,6 +33,20 @@ class AddSpectacleToSoireeAction extends Action
         // Ajoute les options pour les spectacles
         foreach ($spectacles as $spectacle) {
             $res .= "<option value='{$spectacle['id']}'>{$spectacle['titre']}</option>";
+        }
+
+        $res .= <<<FIN
+                </select>
+            </div>
+            <div>
+                <label for="id_soiree" class="form-label">Sélectionnez une soirée*</label>
+                <select name="id_soiree" id="id_soiree" class="form-control" required>
+                    <option value="">-- Choisir une soirée --</option>
+        FIN;
+
+        // Ajoute les options pour les soirées
+        foreach ($soirees as $soiree) {
+            $res .= "<option value='{$soiree['id']}'>{$soiree['nom']} - {$soiree['date']}</option>";
         }
 
         $res .= <<<FIN

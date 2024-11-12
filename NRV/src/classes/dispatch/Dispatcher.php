@@ -16,6 +16,7 @@ use nrv\action\DisplaySpectaclesByDatesAction;
 use nrv\action\DisplaySpectaclesByLocation;
 use nrv\action\SignInAction;
 use nrv\action\SignOutAction;
+use nrv\action\AddSpectacleToSoiree;
 
 /**
  * Classe Dispatcher
@@ -71,46 +72,40 @@ class Dispatcher {
      *
      * @param string $html contenu de la page à afficher selon l'action demandée
      */
-    public function renderPage(string $html): void {
-        $connected = isset($_SESSION['user']);
+    private function renderPage(string $html): void {
+        isset($_SESSION['user']) ? $connected = true : $connected = false;
 
         echo <<<FIN
-    <!DOCTYPE html>
-    <html lang='fr'>
-    <head>
-        <meta charset='utf-8'>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>NRV</title>
-        <link rel="stylesheet" href="../style.css">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    </head>
-    <body data-bs-theme="dark">
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark p-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="index.php">NRV Festival</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse flex-row-reverse" id="menu">
-                    <ul class="navbar-nav d-flex flex-sm-row flex-column align-items-center text-center my-2">
-                        {$this->renderNavBarItems($connected)}
-                    </ul>
+        <!DOCTYPE html>
+        <html lang='fr'>
+        <head>
+            <meta charset='utf-8'>
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <title>NRV</title>
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+        </head>
+        <body data-bs-theme="dark">
+            <nav class="navbar navbar-expand-sm bg-success bg-gradient">
+                <div class="container-fluid">
+                    <a class="navbar-brand ps-5" href="./index.php">NRV</a>
+                    <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#menu">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse flex-row-reverse" id="menu">
+                        <ul class="navbar-nav d-flex flex-sm-row flex-column align-items-center text-center my-2">
+                            {$this->renderNavBarItems($connected)}
+                        </ul>
+                    </div>
                 </div>
+            </nav>
+            <div class="container my-4 ">
+                $html
             </div>
-        </nav>
-        {$this->renderHeroSection()}
-        <div class="container my-4 page-content">
-            $html
-        </div>
-        <footer>
-            <p>&copy; 2024 NRV Festival</p>
-        </footer>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    </body>
-    </html>
-    FIN;
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+        </body>
+        </html>
+        FIN;
     }
-
 
     /**
      * Renvoie le contenu HTML des éléments de la barre de navigation en fonction de l'état de connexion de l'utilisateur.
@@ -148,21 +143,5 @@ class Dispatcher {
             FIN;
         }
     }
-    private function renderHeroSection(): string {
-        if ($this->action === 'default') {
-            return <<<HTML
-        <section class="hero" id="home">
-            <div class="hero-content">
-                <h1>NRV Rock Festival</h1>
-                <p>Bienvenue à Nancy pour le festival de rock NRV ! Un événement épique qui célèbre la passion du rock et de la musique live dans les lieux les plus emblématiques de la ville. Rejoignez-nous pour deux semaines inoubliables de performances puissantes, avec des artistes de renommée et des groupes locaux qui feront vibrer les rues de Nancy.</p>
-                <button onclick="window.location.href='?action=display-all-spectacles'">Découvrir le programme</button>
-            </div>
-        </section>
-        HTML;
-        }
-        return '';
-    }
-
-
 
 }

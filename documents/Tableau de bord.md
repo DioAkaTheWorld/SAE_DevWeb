@@ -23,15 +23,15 @@
   - Fait par : **Burak**, **David**
 - [X] **4**. Filtrage de la liste des spectacles par lieu.
   - Fait par : **David**
-- [ ] **6**. Affichage du détail d’une soirée : nom de la soirée, thématique, date et horaire, lieu,
+- [X] **6**. Affichage du détail d’une soirée : nom de la soirée, thématique, date et horaire, lieu,
   tarifs, ainsi que la liste des spectacles : titre, artistes, description, style de musique, vidéo
-  - Fait par :
-- [ ] **7**. En cliquant sur un spectacle dans la liste, le détail de la soirée correspondante est affiché
-  - Fait par :
+  - Fait par : **Burak**
+- [X] **7**. En cliquant sur un spectacle dans la liste, le détail de la soirée correspondante est affiché
+  - Fait par : **Burak**
 - [X] **15**. Créer une soirée : saisir les données et les valider
   - Fait par : **Paul**
-- [ ] **16**. Ajouter un spectacle à une soirée
-  - Fait par :
+- [X] **16**. Ajouter un spectacle à une soirée
+  - Fait par : **Paul**
 
 ### Fonctionnalités étendues
 

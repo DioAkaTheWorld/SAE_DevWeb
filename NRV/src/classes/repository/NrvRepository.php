@@ -104,17 +104,6 @@ class NrvRepository
     }
 
     /**
-     * Fonction permettant de vérifier si un utilisateur existe à partir de son id
-     * @param int $id id de l'utilisateur
-     * @return bool true si l'utilisateur existe, false sinon
-     */
-    public function userExistsId(int $id) : bool {
-        $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM user WHERE id = ?");
-        $stmt->execute([$id]);
-        return $stmt->fetch()[0] > 0;
-    }
-
-    /**
      * Fonction permettant de récupérer le hash du mot de passe d'un utilisateur
      * @param string $email email de l'utilisateur
      * @return string hash du mot de passe
@@ -187,8 +176,8 @@ class NrvRepository
      * @return Soiree soirée ajoutée
      */
     function ajouterSoiree(Soiree $s) : Soiree {
-        $sql = "INSERT INTO soiree (nom, thematique, date, horaire_debut, horaire_fin, id_lieu) 
-            VALUES (:nom, :thematique, :date, :horaire_debut, :horaire_fin, :id_lieu)";
+        $sql = "INSERT INTO soiree (nom, thematique, date, horaire_debut, horaire_fin, id_lieu, tarif) 
+            VALUES (:nom, :thematique, :date, :horaire_debut, :horaire_fin, :id_lieu, :tarif)";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([
             'nom' => $s->__get('nom'),
@@ -196,7 +185,8 @@ class NrvRepository
             'date' => $s->__get('date'),
             'horaire_debut' => $s->__get('horaire_debut'),
             'horaire_fin' => $s->__get('horaire_fin'),
-            'id_lieu' => $s->__get('id_lieu')
+            'id_lieu' => $s->__get('id_lieu'),
+            'tarif' => $s->__get('tarif')
         ]);
         $s->setId((int)$this->pdo->lastInsertId());
         return $s;

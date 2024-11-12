@@ -21,6 +21,8 @@ class User {
 
     /** @var int constante définissant le role standard */
     const STANDARD_USER = 1;
+    /** @var int constante définissant le role staff */
+    const STAFF = 50;
     /** @var int constante définissant le role administrateur */
     const ADMIN = 100;
 

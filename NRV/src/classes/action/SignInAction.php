@@ -22,7 +22,6 @@ class SignInAction extends Action {
             <div class="alert alert-info my-5" role="alert">
                     Vous êtes déjà connecté
             FIN;
-
         }
 
         // Formulaire de connexion
@@ -50,6 +49,14 @@ class SignInAction extends Action {
      * @return string le message de connexion ou le formulaire de connexion avec un message d'erreur
      */
     public function executePost(): string{
+        // Vérification de l'authentification
+        if (AuthnProvider::isSignedIn()) {
+            return <<<FIN
+            <div class="alert alert-info my-5" role="alert">
+                    Vous êtes déjà connecté
+            FIN;
+        }
+
         // Traitement de la connexion
         $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
         $mdp = filter_var($_POST['mdp'], FILTER_SANITIZE_STRING);

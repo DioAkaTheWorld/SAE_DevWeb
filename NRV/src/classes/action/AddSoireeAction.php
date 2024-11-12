@@ -2,55 +2,78 @@
 
 namespace nrv\action;
 
+use nrv\auth\User;
+use nrv\exception\InvalidPropertyNameException;
 use nrv\festivale\Soiree;
 use nrv\repository\NrvRepository;
 
 class AddSoireeAction extends Action {
 
+    /**
+     * @throws InvalidPropertyNameException
+     */
     public function executeGet(): string {
+        $check = $this->checkUser(User::STAFF);
+        if ($check !== "") {
+            return $check;
+        }
+
         return <<<FIN
         <h2 class="p-2">Ajouter une soirée</h2>
         <hr>
         <form action="?action=add-soiree" method="post">
             <div>
                 <label for="nom" class="form-label">Nom*</label>
-                <input type="text" class="form-control" id="nom" name="nom">
+                <input type="text" class="form-control" id="nom" name="nom" required>
             </div>
             <div>
                 <label for="thematique" class="form-label">Thématique*</label>
-                <input type="text" class="form-control" id="thematique" name="thematique">
+                <input type="text" class="form-control" id="thematique" name="thematique" required>
             </div>
             <div>
                 <label for="date" class="form-label">Date*</label>
-                <input type="date" class="form-control" id="date" name="date">
+                <input type="date" class="form-control" id="date" name="date" required>
             </div>
             <div>
                 <label for="horaire_debut" class="form-label">Horaire de début*</label>
-                <input type="time" class="form-control" id="horaire_debut" name="horaire_debut">
+                <input type="time" class="form-control" id="horaire_debut" name="horaire_debut" required>
             </div>
             <div>
                 <label for="horaire_fin" class="form-label">Horaire de fin*</label>
-                <input type="time" class="form-control" id="horaire_fin" name="horaire_fin">
+                <input type="time" class="form-control" id="horaire_fin" name="horaire_fin" required>
             </div>
             <!--            à implémenter-->
             <div>
                 <label for="id_lieu" class="form-label">ID lieu*</label>
-                <input type="number" class="form-control" id="id_lieu" name="id_lieu">
+                <input type="number" class="form-control" id="id_lieu" name="id_lieu" required>
             </div>
             <!--            à implémenter-->
+            <div>
+                <label for="tarif" class="form-label">Tarif*</label>
+                <input type="number" class="form-control" id="tarif" name="tarif" required>
+            </div>
             <button type="submit" class="btn btn-primary">Ajouter</button>
         FIN;
 
     }
 
+    /**
+     * @throws InvalidPropertyNameException
+     */
     public function executePost(): string {
+        $check = $this->checkUser(User::STAFF);
+        if ($check !== "") {
+            return $check;
+        }
+
         // Récupérer les données du formulaire et les valider
-        $nom = trim($_POST['nom']);
-        $thematique = trim($_POST['thematique']);
-        $date = trim($_POST['date']);
-        $horaire_debut = trim($_POST['horaire_debut']);
-        $horaire_fin = trim($_POST['horaire_fin']);
-        $id_lieu = trim($_POST['id_lieu']);
+        $nom = filter_var($_POST['nom'], FILTER_SANITIZE_STRING);
+        $thematique = filter_var($_POST['thematique'], FILTER_SANITIZE_STRING);
+        $date = filter_var($_POST['date'], FILTER_SANITIZE_STRING);
+        $horaire_debut = filter_var($_POST['horaire_debut'], FILTER_SANITIZE_STRING);
+        $horaire_fin = filter_var($_POST['horaire_fin'], FILTER_SANITIZE_STRING);
+        $id_lieu = filter_var($_POST['id_lieu'], FILTER_VALIDATE_INT);
+        $tarif = filter_var($_POST['tarif'], FILTER_VALIDATE_FLOAT);
 
         $errors = [];
 
@@ -75,8 +98,12 @@ class AddSoireeAction extends Action {
             $errors[] = "Le lieu est requis et doit être un identifiant valide.";
         }
 
+        if (empty($tarif)) {
+            $errors[] = "Le tarif est requis.";
+        }
+
         if (empty($errors)) {
-            $soiree = new Soiree($nom, $thematique, $date, $horaire_debut, $horaire_fin, $id_lieu);
+            $soiree = new Soiree($nom, $thematique, $date, $horaire_debut, $horaire_fin, $id_lieu, $tarif);
             $repo = NrvRepository::getInstance();
             $repo->ajouterSoiree($soiree);
         }

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : sam. 09 nov. 2024 à 20:40
+-- Généré le : mar. 12 nov. 2024 à 16:21
 -- Version du serveur : 10.4.32-MariaDB
 -- Version de PHP : 8.0.30
 
@@ -28,7 +28,7 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `artiste` (
-                           `id` int(5) NOT NULL,
+                           `id` int(200) NOT NULL,
                            `nom` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
@@ -56,7 +56,7 @@ INSERT INTO `artiste` (`id`, `nom`) VALUES
 --
 
 CREATE TABLE `image` (
-                         `id` int(5) NOT NULL,
+                         `id` int(200) NOT NULL,
                          `chemin_fichier` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
@@ -112,7 +112,7 @@ INSERT INTO `image2lieu` (`id_image`, `id_lieu`) VALUES
 --
 
 CREATE TABLE `lieu` (
-                        `id` int(5) NOT NULL,
+                        `id` int(200) NOT NULL,
                         `nom` varchar(50) NOT NULL,
                         `adresse` varchar(50) NOT NULL,
                         `nbPlaceAssises` int(10) DEFAULT NULL,
@@ -137,24 +137,24 @@ INSERT INTO `lieu` (`id`, `nom`, `adresse`, `nbPlaceAssises`, `nbPlacesDebout`) 
 --
 
 CREATE TABLE `soiree` (
-                          `id` int(5) NOT NULL,
+                          `id` int(200) NOT NULL,
                           `nom` varchar(50) NOT NULL,
                           `thematique` varchar(50) DEFAULT NULL,
                           `date` date DEFAULT NULL,
                           `horaire_debut` time DEFAULT NULL,
                           `horaire_fin` time DEFAULT NULL,
                           `id_lieu` int(5) DEFAULT NULL,
-			  `tarif` int(5) DEFAULT NULL
+                          `tarif` int(5) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Déchargement des données de la table `soiree`
 --
 
-INSERT INTO `soiree` (`id`, `nom`, `thematique`, `date`, `horaire_debut`, `horaire_fin`, `id_lieu`) VALUES
-                                                                                                        (1, 'Best of rock', 'Rock', '2024-11-27', '22:00:00', '00:30:00', 1, 7),
-                                                                                                        (2, 'Best of country music', 'Country', '2024-11-26', '19:20:00', '23:30:00', 2,10),
-                                                                                                        (3, 'Best of Reggae', 'Reggae', '2024-11-25', '21:00:00', '22:00:00', 3,9);
+INSERT INTO `soiree` (`id`, `nom`, `thematique`, `date`, `horaire_debut`, `horaire_fin`, `id_lieu`, `tarif`) VALUES
+                                                                                                                 (1, 'Best of rock', 'Rock', '2024-11-27', '22:00:00', '00:30:00', 1, 7),
+                                                                                                                 (2, 'Best of country music', 'Country', '2024-11-26', '19:20:00', '23:30:00', 2, 10),
+                                                                                                                 (3, 'Best of Reggae', 'Reggae', '2024-11-25', '21:00:00', '22:00:00', 3, 9);
 
 -- --------------------------------------------------------
 
@@ -186,7 +186,7 @@ INSERT INTO `soiree2spectacle` (`id_soiree`, `id_spectacle`) VALUES
 --
 
 CREATE TABLE `spectacle` (
-                             `id` int(5) NOT NULL,
+                             `id` int(200) NOT NULL,
                              `titre` varchar(50) NOT NULL,
                              `description` varchar(200) DEFAULT NULL,
                              `chemin_video` varchar(100) DEFAULT NULL,
@@ -200,17 +200,17 @@ CREATE TABLE `spectacle` (
 --
 
 INSERT INTO `spectacle` (`id`, `titre`, `description`, `chemin_video`, `horaire`, `duree`, `style`) VALUES
-                                                                                                          (1, 'Jazz Band Live', 'A famous jazz band live in concert.', 'jazzlive.mp4', '20:00:00', '02:00:00', 'Jazz'),
-                                                                                                          (2, 'Acoustic Jazz Trio', 'Smooth acoustic jazz trio.', 'acousticjazz.mp4', '21:00:00', '03:30:00', 'Jazz'),
-                                                                                                          (3, 'Jazz Solo Piano', 'Relaxing solo piano jazz.', 'solopiano.mp4', '22:30:00', '01:00:00', 'Jazz'),
-                                                                                                          (4, 'Rock Legends', 'Classic rock covers.', 'rocklegends.mp4', '20:30:00', '01:00:00', 'Rock'),
-                                                                                                          (5, 'Indie Rock Band', 'Local indie rock band performance.', 'indierock.mp4', '22:00:00', '00:45:00', 'Rock'),
-                                                                                                          (6, 'Blues Guitar', 'Blues guitar solo performance.', 'bluesguitar.mp4', '19:00:00', '02:20:00', 'Blues'),
-                                                                                                          (7, 'Soulful Blues', 'Deep, soulful blues.', 'soulblues.mp4', '20:30:00', '00:30:00', 'Blues'),
-                                                                                                          (8, 'Classical Quartet', 'String quartet performance.', 'classicalquartet.mp4', '19:45:00', '01:20:00', 'Classical'),
-                                                                                                          (9, 'Electro DJ Set', 'Dance to electronic beats.', 'electro.mp4', '21:30:00', '02:00:00', 'Electronic'),
-                                                                                                          (10, 'Techno Night', 'Non-stop techno music.', 'techno.mp4', '23:00:00', '1:05:00', 'Electronic'),
-                                                                                                          (11, 'House Party', 'House music by top DJs.', 'house.mp4', '01:00:00', '04:00:00', 'Electronic');
+                                                                                                        (1, 'Jazz Band Live', 'A famous jazz band live in concert.', 'jazzlive.mp4', '20:00:00', '02:00:00', 'Jazz'),
+                                                                                                        (2, 'Acoustic Jazz Trio', 'Smooth acoustic jazz trio.', 'acousticjazz.mp4', '21:00:00', '03:30:00', 'Jazz'),
+                                                                                                        (3, 'Jazz Solo Piano', 'Relaxing solo piano jazz.', 'solopiano.mp4', '22:30:00', '01:00:00', 'Jazz'),
+                                                                                                        (4, 'Rock Legends', 'Classic rock covers.', 'rocklegends.mp4', '20:30:00', '01:00:00', 'Rock'),
+                                                                                                        (5, 'Indie Rock Band', 'Local indie rock band performance.', 'indierock.mp4', '22:00:00', '00:45:00', 'Rock'),
+                                                                                                        (6, 'Blues Guitar', 'Blues guitar solo performance.', 'bluesguitar.mp4', '19:00:00', '02:20:00', 'Blues'),
+                                                                                                        (7, 'Soulful Blues', 'Deep, soulful blues.', 'soulblues.mp4', '20:30:00', '00:30:00', 'Blues'),
+                                                                                                        (8, 'Classical Quartet', 'String quartet performance.', 'classicalquartet.mp4', '19:45:00', '01:20:00', 'Classical'),
+                                                                                                        (9, 'Electro DJ Set', 'Dance to electronic beats.', 'electro.mp4', '21:30:00', '02:00:00', 'Electronic'),
+                                                                                                        (10, 'Techno Night', 'Non-stop techno music.', 'techno.mp4', '23:00:00', '01:05:00', 'Electronic'),
+                                                                                                        (11, 'House Party', 'House music by top DJs.', 'house.mp4', '01:00:00', '04:00:00', 'Electronic');
 
 -- --------------------------------------------------------
 
@@ -276,7 +276,7 @@ INSERT INTO `spectacle2image` (`id_spectacle`, `id_image`) VALUES
 --
 
 CREATE TABLE `user` (
-                        `id` int(5) NOT NULL,
+                        `id` int(200) NOT NULL,
                         `email` varchar(50) NOT NULL,
                         `hash` varchar(256) NOT NULL,
                         `role` int(5) NOT NULL
@@ -289,7 +289,9 @@ CREATE TABLE `user` (
 INSERT INTO `user` (`id`, `email`, `hash`, `role`) VALUES
                                                        (1, 'user1@mail.com', '$2y$12$FSUq4wa9exgiHC/58tbpo.IGJ/1BxLLR54txC/GZhhbF.SOJqa8Qq', 1),
                                                        (2, 'user2@mail.com', '$2y$12$SZDTxmdvrvEBR4ynZ/OqveQkiJK3ySVcZhvZBiOpNfjFpseBdf4VS', 1),
-                                                       (3, 'user3@mail.com', '$2y$12$WFClWVtZkGOvS3zIOKEDYOqImLUpEpiGyrmRShIvTsaJRoPTsqu0q', 1);
+                                                       (3, 'user3@mail.com', '$2y$12$WFClWVtZkGOvS3zIOKEDYOqImLUpEpiGyrmRShIvTsaJRoPTsqu0q', 1),
+                                                       (4, 'staff1@mail.com', '$2y$12$0CrM3aprwss8D498m4Dcq.h3ABfeoJpth2Y3TPRGV.bwF0R8sz5IW', 50),
+                                                       (5, 'admin1@mail.com', '$2y$12$Lx0F4AGW4u0wyoHr6KCXQ.8QzBnP1Uj/4vTcf0Xn2n5uex3diU6Cq', 100);
 
 --
 -- Index pour les tables déchargées
@@ -397,7 +399,7 @@ ALTER TABLE `spectacle`
 -- AUTO_INCREMENT pour la table `user`
 --
 ALTER TABLE `user`
-    MODIFY `id` int(200) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+    MODIFY `id` int(200) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- Contraintes pour les tables déchargées

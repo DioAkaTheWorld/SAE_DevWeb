@@ -3,12 +3,22 @@
 namespace nrv\action;
 
 use Exception;
+use nrv\auth\User;
+use nrv\exception\InvalidPropertyNameException;
 use nrv\renderer\SpectaclesListRenderer;
 use nrv\repository\NrvRepository;
 
 class AddImageToSpecacleAction extends Action {
 
+    /**
+     * @throws InvalidPropertyNameException
+     */
     public function executeGet(): string {
+        $check = $this->checkUser(User::STAFF);
+        if ($check !== "") {
+            return $check;
+        }
+
         $list = new SpectaclesListRenderer();
         return <<<FIN
         <h1>Ajouter une image à un spectacle</h1>
@@ -28,7 +38,15 @@ class AddImageToSpecacleAction extends Action {
 
     }
 
+    /**
+     * @throws InvalidPropertyNameException
+     */
     public function executePost(): string {
+        $check = $this->checkUser(User::STAFF);
+        if ($check !== "") {
+            return $check;
+        }
+
         // Validation des données
         $id_spectacle = filter_var($_POST['id_spectacle'], FILTER_SANITIZE_NUMBER_INT);
 
@@ -42,7 +60,7 @@ class AddImageToSpecacleAction extends Action {
         try {
             if ($_FILES["fichier"]["error"] === UPLOAD_ERR_OK) {
                 $extension =strrchr($_FILES["fichier"]["type"], "/");
-                $nomFichier = UploadAction::uploadFile("image", substr($extension, 1));
+                $nomFichier = UploadFile::uploadFile("image", substr($extension, 1));
                 $idImage = $repo->addImage($nomFichier);
                 $repo->addImageToSpectacle($idImage, $id_spectacle);
             }
