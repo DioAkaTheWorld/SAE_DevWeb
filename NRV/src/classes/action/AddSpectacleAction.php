@@ -39,37 +39,37 @@ class AddSpectacleAction extends Action {
         <h2 class="p-2">Ajouter un spectacle</h2>
         <hr>
         <form action="?action=add-spectacle" method="post" enctype="multipart/form-data">
-            <div>
-                <label for="titre" class="form-label">Titre*</label>
+            <div class="mb-3">
+                <label for="titre" class="form-label">Titre<span class="text-danger">*</span></label>
                 <input type="text" class="form-control" id="titre" name="titre" required>
             </div>
-            <div>
-                <label for="description" class="form-label">Description*</label>
+            <div class="mb-3">
+                <label for="description" class="form-label">Description<span class="text-danger">*</span></label>
                 <textarea class="form-control" id="description" name="description" required></textarea>
             </div>
-            <div>
-                <label for="horaire" class="form-label">Horaire*</label>
+            <div class="mb-3">
+                <label for="horaire" class="form-label">Horaire<span class="text-danger">*</span></label>
                 <input type="time" class="form-control" id="horaire" name="horaire" required>
             </div>
-            <div>
-                <label for="duree" class ="form-label">Durée*</label>
+            <div class="mb-3">
+                <label for="duree" class ="form-label">Durée<span class="text-danger">*</span></label>
                 <input type="time" class="form-control" id="duree" name="duree" required>
             </div>
-            <div>
-                <label for="style" class="form-label">Style*</label>
+            <div class="mb-3">
+                <label for="style" class="form-label">Style<span class="text-danger">*</span></label>
                 <input type="text" class="form-control" id="style" name="style" required>
             </div>
-            <div>
-                <label for="artiste" class="form-label">Artiste(s)</label><br>
+            <div class="mb-3">
+                <label for="artiste" class="form-label">Artiste(s)<span class="text-danger">*</span></label><br>
                 {$artistesRenderer->render(NrvRepository::getInstance()->getAllArtists())}
             </div>
-            <div>
-                <label for="video" class="form-label">Ajouter une vidéo: </label><br>
-                <input type="file" name="video" id="video">
+            <div class="mb-3">
+                <label for="video" class="form-label">Ajouter une vidéo:<span class="text-danger">*</span></label>
+                <input class="form-control" type="file" name="video" id="video">
             </div>
-            <div>
-                <label for="image" class="form-label">Ajouter une image</label><br>
-                <input type="file" name="image" id="image">
+            <div class="mb-3">
+                <label for="image" class="form-label">Ajouter une image<span class="text-danger">*</span></label>
+                <input class="form-control" type="file" name="image" id="image">
             </div>
             <button type="submit" class="btn btn-primary">Ajouter</button>
         FIN;

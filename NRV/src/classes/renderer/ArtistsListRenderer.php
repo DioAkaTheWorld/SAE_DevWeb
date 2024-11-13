@@ -14,8 +14,8 @@ class ArtistsListRenderer {
             $artistName = $artist['nom'];
             $artistId = $artist['id'];
             $artistList .= <<<FIN
-            <label for="artiste$artistId">$artistName</label>
-            <input type="checkbox" id="artiste$artistId" name="artiste$artistId" value="$artistName">
+            <label class="form-check-label" for="artiste$artistId">$artistName</label>
+            <input class="form-check-input" type="checkbox" id="artiste$artistId" name="artiste$artistId" value="$artistName">
 
             FIN;
         }

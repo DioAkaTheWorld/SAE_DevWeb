@@ -14,7 +14,7 @@ class DisplayAllSpectaclesAction extends Action {
         // Liste des filtres
         $res = <<<FIN
         <h2 class="p-2">Liste des spectacles</h2>
-        <div>
+        <div class="col-3">
             {$filtersRenderer->render()}
         </div>
         <hr>

@@ -22,34 +22,34 @@ class AddSoireeAction extends Action {
         <h2 class="p-2">Ajouter une soirée</h2>
         <hr>
         <form action="?action=add-soiree" method="post">
-            <div>
-                <label for="nom" class="form-label">Nom*</label>
+            <div class="mb-3">
+                <label for="nom" class="form-label">Nom<span class="text-danger">*</span></label>
                 <input type="text" class="form-control" id="nom" name="nom" required>
-            </div>
+            </div class="mb-3">
             <div>
-                <label for="thematique" class="form-label">Thématique*</label>
+                <label for="thematique" class="form-label">Thématique<span class="text-danger">*</span></label>
                 <input type="text" class="form-control" id="thematique" name="thematique" required>
-            </div>
+            </div class="mb-3">
             <div>
-                <label for="date" class="form-label">Date*</label>
+                <label for="date" class="form-label">Date<span class="text-danger">*</span></label>
                 <input type="date" class="form-control" id="date" name="date" required>
             </div>
-            <div>
-                <label for="horaire_debut" class="form-label">Horaire de début*</label>
+            <div class="mb-3">
+                <label for="horaire_debut" class="form-label">Horaire de début<span class="text-danger">*</span></label>
                 <input type="time" class="form-control" id="horaire_debut" name="horaire_debut" required>
             </div>
-            <div>
-                <label for="horaire_fin" class="form-label">Horaire de fin*</label>
+            <div class="mb-3">
+                <label for="horaire_fin" class="form-label">Horaire de fin<span class="text-danger">*</span></label>
                 <input type="time" class="form-control" id="horaire_fin" name="horaire_fin" required>
             </div>
             <!--            à implémenter-->
-            <div>
-                <label for="id_lieu" class="form-label">ID lieu*</label>
+            <div class="mb-3">
+                <label for="id_lieu" class="form-label">ID lieu<span class="text-danger">*</span></label>
                 <input type="number" class="form-control" id="id_lieu" name="id_lieu" required>
             </div>
             <!--            à implémenter-->
-            <div>
-                <label for="tarif" class="form-label">Tarif*</label>
+            <div class="mb-3">
+                <label for="tarif" class="form-label">Tarif<span class="text-danger">*</span></label>
                 <input type="number" class="form-control" id="tarif" name="tarif" required>
             </div>
             <button type="submit" class="btn btn-primary">Ajouter</button>

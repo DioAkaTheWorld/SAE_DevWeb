@@ -19,19 +19,22 @@ class SpectacleRenderer {
         }
 
         if ($image === "pas d'image") {
-            $img = "<p>Pas d'image pour ce spectacle</p>";
+            $img = "<img src='/SAE_DevWeb/medias/images/ppp.jpg' alt='image spectacle'>";
         } else {
             $img = "<img src='/SAE_DevWeb/medias/images/$image' alt='image spectacle'>";
         }
 
         return <<<FIN
-            <li>
-                <div>
-                    <a href='?action=display-spectacle&id={$this->spectacle->__get('id')}'>{$this->spectacle->__get('titre')}</a>
+            <li class="list-inline-item m-3">
+                <div class="card border border-secondary border-4 rounded" style="width: 18rem;">
+                    $img
+                    <div class="card-body">
+                        <h5 class="card-title">{$this->spectacle->__get('titre')}</h5>
+                        <p class="card-text">Date: $date</p>
+                        <p class="card-text">Horaire: {$this->spectacle->__get('horaire')}</p>
+                        <a href="?action=display-spectacle&id={$this->spectacle->__get('id')}" class="btn btn-primary">Afficher</a>
+                    </div>
                 </div>
-                <span>Date: $date</span>
-                <span>Horaire: {$this->spectacle->__get('horaire')}</span>
-                $img
             </li>
         FIN;
     }

@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace nrv\action;
 
+use nrv\auth\User;
+use nrv\exception\InvalidPropertyNameException;
 use nrv\festivale\Spectacle;
 use nrv\renderer\SpectacleRenderer;
 use nrv\repository\NrvRepository;
@@ -10,6 +12,9 @@ use Exception;
 
 class DisplayDetailSpectacleAction extends Action {
 
+    /**
+     * @throws InvalidPropertyNameException
+     */
     public function executeGet(): string {
         // Vérifier si l'ID du spectacle est spécifié
         if (!isset($_GET['id'])) {
@@ -42,10 +47,25 @@ class DisplayDetailSpectacleAction extends Action {
         $spectacleObjet->setId($spectacleId);
         $spectacleRenderer = new SpectacleRenderer($spectacleObjet);
 
-        // Affichage détaillé du spectacle avec le lien vers la soirée
-        return $spectacleRenderer->renderAsLong($artistes, $images) . "<a href='?action=modify-spectacle&id={$spectacleId}'>Modifier ce spectacle</a>";
+        // Créer le lien vers la soirée associée au spectacle
+        $soireeLink = "";
+        if ($soireeId) {
+            $soireeLink = "<a href='?action=display-detail-soiree&id={$soireeId}'>Voir la soirée associée</a>";
+        }
+
+        // Vérifier si l'utilisateur est connecté
+        $check = $this->checkUser(User::STANDARD_USER);
+        if ($check !== "") {
+            return $spectacleRenderer->renderAsLong($artistes, $images);
+        }
+
+        // Affichage détaillé du spectacle avec le lien vers la soirée avec lien de modification si connecté
+        return $spectacleRenderer->renderAsLong($artistes, $images) . "<a href='?action=modify-spectacle&id={$spectacleId}'>Modifier ce spectacle</a>" . $soireeLink;
     }
 
+    /**
+     * @throws InvalidPropertyNameException
+     */
     public function executePost(): string {
         return $this->executeGet();
     }

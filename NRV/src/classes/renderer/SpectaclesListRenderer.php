@@ -10,7 +10,7 @@ class SpectaclesListRenderer {
     public function render() : string {
         $repo = NrvRepository::getInstance();
         $spectacles = $repo->findAllSpectacles();
-        $res = "<ol class='list-group list-group-numbered'>";
+        $res = "<ol class='list-inline'>";
 
         // Liste des spectacles
         foreach ($spectacles as $spectacle) {
@@ -27,23 +27,6 @@ class SpectaclesListRenderer {
         }
 
         $res .= "</ol>";
-        return $res;
-    }
-
-    public function renderAsSelectForHtml() : string {
-        $repo = NrvRepository::getInstance();
-        $spectacles = $repo->findAllSpectacles();
-
-        // Liste des spectacles
-        $res = "<select name='id_spectacle' id='id_spectacle' required>";
-        foreach ($spectacles as $spectacle) {
-            $res .= <<<FIN
-                <option value='{$spectacle['id']}'>{$spectacle['titre']}</option>
-                
-            FIN;
-        }
-        $res .= "</select>";
-        
         return $res;
     }
 }

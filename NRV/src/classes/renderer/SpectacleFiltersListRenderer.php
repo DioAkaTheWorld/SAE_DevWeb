@@ -15,7 +15,7 @@ class SpectacleFiltersListRenderer {
 
         $html = <<<FIN
             <h5>Filtrer les spectacles</h5>
-            <select name="filtre" onchange="location = this.value;">;
+            <select class="form-select" name="filtre" onchange="location = this.value;">;
             <option value="?action=display-all-spectacles">Ne pas filtrer</option>
 
         FIN;

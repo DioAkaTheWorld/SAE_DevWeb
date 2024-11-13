@@ -24,9 +24,9 @@ class AddSpectacleToSoireeAction extends Action
         <h2 class="p-2">Ajouter un Spectacle à une Soirée</h2>
         <hr>
         <form method="POST" action="?action=add-spectacle-to-soiree">
-            <div>
-                <label for="id_spectacle" class="form-label">Sélectionnez un spectacle*</label>
-                <select name="id_spectacle" id="id_spectacle" class="form-control" required>
+            <div class="mb-3 col-3">
+                <label for="id_spectacle" class="form-label">Sélectionnez un spectacle<span class="text-danger">*</span></label>
+                <select name="id_spectacle" id="id_spectacle" class="form-select" required>
                     <option value="">-- Choisir un spectacle --</option>
         FIN;
 
@@ -38,9 +38,9 @@ class AddSpectacleToSoireeAction extends Action
         $res .= <<<FIN
                 </select>
             </div>
-            <div>
-                <label for="id_soiree" class="form-label">Sélectionnez une soirée*</label>
-                <select name="id_soiree" id="id_soiree" class="form-control" required>
+            <div class="mb-3 col-3">
+                <label for="id_soiree" class="form-label">Sélectionnez une soirée<span class="text-danger">*</span></label>
+                <select name="id_soiree" id="id_soiree" class="form-select" required>
                     <option value="">-- Choisir une soirée --</option>
         FIN;
 
