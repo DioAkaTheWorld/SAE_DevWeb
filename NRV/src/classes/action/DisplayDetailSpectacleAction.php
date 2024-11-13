@@ -22,6 +22,7 @@ class DisplayDetailSpectacleAction extends Action {
             FIN;
         }
 
+        // Vérifier si l'ID du spectacle est spécifié
         $spectacleId = (int)$_GET['id'];
 
         // Obtenir les détails du spectacle depuis le dépôt
@@ -41,8 +42,14 @@ class DisplayDetailSpectacleAction extends Action {
         $spectacleObjet->setId($spectacleId);
         $spectacleRenderer = new SpectacleRenderer($spectacleObjet);
 
+        // Créer le lien vers la soirée associée au spectacle
+        $soireeLink = "";
+        if ($soireeId) {
+            $soireeLink = "<a href='?action=display-detail-soiree&id={$soireeId}'>Voir la soirée associée</a>";
+        }
+
         // Affichage détaillé du spectacle avec le lien vers la soirée
-        return $spectacleRenderer->renderAsLong($artistes, $images) . "<a href='?action=modify-spectacle&id={$spectacleId}'>Modifier ce spectacle</a>";
+        return $spectacleRenderer->renderAsLong($artistes, $images) . "<a href='?action=modify-spectacle&id={$spectacleId}'>Modifier ce spectacle</a>" . $soireeLink;
     }
 
     public function executePost(): string {
