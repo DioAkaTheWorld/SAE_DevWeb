@@ -95,7 +95,7 @@ class Dispatcher {
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
-                    <div class="collapse navbar-collapse flex-row-reverse" id="menu">
+                    <div class="collapse navbar-collapse flex-row-reverse" id="navbarNavDropdown">
                         <ul class="navbar-nav d-flex flex-sm-row flex-column align-items-center text-center my-2">
                             {$this->renderNavBarItems($connected)}
                         </ul>
