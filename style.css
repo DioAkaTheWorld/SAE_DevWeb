@@ -1,0 +1,124 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #1a1a1a;
+    color: #e5e5e5;
+    line-height: 1.6;
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #2b2b2b;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+
+nav.navbar {
+    background-color: #0c0c0c;
+    padding: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.navbar .navbar-brand {
+    color: #e50914;
+    font-weight: bold;
+    font-size: 1.5rem;
+    text-transform: uppercase;
+}
+
+
+.hero {
+    background: url('images/ppp.jpg') no-repeat center center/cover;
+    color: #f5f5f5;
+    padding: 120px 20px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 80vh;
+    position: relative;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 800px;
+    text-align: center;
+}
+
+.hero h1 {
+    font-family: 'Rock Salt', cursive;
+    font-size: 3.5rem;
+    font-weight: bold;
+    color: #e50914;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+}
+
+.hero p {
+    font-size: 1.25rem;
+    margin-bottom: 30px;
+    line-height: 1.6;
+    color: whitesmoke;
+}
+
+.hero button {
+    background-color: #e50914;
+    color: #f5f5f5;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.hero button:hover {
+    background-color: #c40811;
+}
+
+
+
+.page-content {
+    background-color: #2c2c2c;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.page-content h2 {
+    color: #e50914;
+    font-weight: bold;
+    font-size: 2rem;
+    margin-bottom: 20px;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.page-content p, .page-content .form-label {
+    color: #cccccc;
+    margin-bottom: 20px;
+    font-size: 1.1rem;
+}
+
+.page-content .btn {
+    background-color: #e50914;
+    color: #fff;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 5px;
+    transition: background 0.3s;
+}
+
+.page-content .btn:hover {
+    background-color: #c40811;
+}
