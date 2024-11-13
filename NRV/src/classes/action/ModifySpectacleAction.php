@@ -87,12 +87,12 @@ class ModifySpectacleAction extends Action {
                 {$artistesRenderer->render($artistes)}
             </div>
             <div>
-                <label for="image" class="form-label">Image(s) (cocher pour supprimer)</label><br>
+                <label for="deleteImage" class="form-label">Image(s) (cocher pour supprimer)</label><br>
                 {$imagesRenderer->render($images)}
             </div>
             <div>
-                <label for="uploadImage" class="form-label">Ajouter une image</label>
-                <input type="file" name="uploadImage" id="uploadImage">
+                <label for="image" class="form-label">Ajouter une image</label>
+                <input type="file" name="image" id="image">
             </div>
             <button type="submit" class="btn btn-primary">Modifier</button>
         FIN;
@@ -164,26 +164,30 @@ class ModifySpectacleAction extends Action {
 
         // Suppression des images
         foreach($images as $id) {
-            $repo->deleteImagesFromSpectacle($id, $_GET['id']);
+            $path = $repo->getImagePath($id);
+            if($repo->deleteImagesFromSpectacle($id, $_GET['id'])) {
+                unlink(__DIR__ . "/../../../../medias/images/" . $path);
+            }
+
         }
 
         // Gestion des fichier
         try {
             // Gestion de la vidéo
             if ($_FILES["video"]["error"] === UPLOAD_ERR_OK) {
-                $nomFichier = UploadFile::uploadFile("video", "mp4", "video");
+                $nomFichier = UploadFile::uploadVideo();
                 $previousVideoPath = $repo->getVideoPathFromSpectacle($spectacle->__get('id'));
                 $repo->updateVideoPathForSpectacle($nomFichier, $spectacle->__get('id'));
                 $spectacle->setCheminVideo($nomFichier);
-                if ($previousVideoPath !== "aucune image") {
+                if (!empty($previousVideoPath)) {
                     unlink(__DIR__ . "/../../../../medias/videos/" . $previousVideoPath);
                 }
             }
 
             // Gestion de l'image
-            if ($_FILES["uploadImage"]["error"] === UPLOAD_ERR_OK) {
-                $extension =strrchr($_FILES["uploadImage"]["type"], "/");
-                $nomFichier = UploadFile::uploadFile("image", substr($extension, 1), "uploadImage");
+            if ($_FILES["image"]["error"] === UPLOAD_ERR_OK) {
+                $extension =strrchr($_FILES["image"]["type"], "/");
+                $nomFichier = UploadFile::uploadImage(substr($extension, 1));
                 $idImage = $repo->addImage($nomFichier);
                 $repo->addImageToSpectacle($idImage, $spectacle->__get('id'));
             }

@@ -137,7 +137,7 @@ class AddSpectacleAction extends Action {
         try {
             // Gestion de la vidéo
             if ($_FILES["video"]["error"] === UPLOAD_ERR_OK) {
-                $nomFichier = UploadFile::uploadFile("video", "mp4", "video");
+                $nomFichier = UploadFile::uploadVideo();
                 $repo->updateVideoPathForSpectacle($nomFichier, $spectacle->__get('id'));
                 $spectacle->setCheminVideo($nomFichier);
             }
@@ -145,7 +145,7 @@ class AddSpectacleAction extends Action {
             // Gestion de l'image
             if ($_FILES["image"]["error"] === UPLOAD_ERR_OK) {
                 $extension =strrchr($_FILES["image"]["type"], "/");
-                $nomFichier = UploadFile::uploadFile("image", substr($extension, 1), "image");
+                $nomFichier = UploadFile::uploadImage(substr($extension, 1));
                 $idImage = $repo->addImage($nomFichier);
                 $repo->addImageToSpectacle($idImage, $spectacle->__get('id'));
             }

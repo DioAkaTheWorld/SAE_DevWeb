@@ -157,6 +157,14 @@ class NrvRepository
         return $stmt->fetchAll();
     }
 
+    public function getImagePath(int $id) : string {
+        $stmt = $this->pdo->prepare("SELECT I.chemin_fichier
+                                            FROM image I
+                                            WHERE I.id = ?");
+        $stmt->execute([$id]);
+        return $stmt->fetchColumn();
+    }
+
     /**
      * Fonction permettant d'ajouter un spectacle
      * @param Spectacle $s spectacle à ajouter
@@ -258,12 +266,6 @@ class NrvRepository
         return $stmt->fetchColumn();
     }
 
-    public function getNbArtistesFromSpectacle(int $spectacleId): int {
-        $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM spectacle2artiste WHERE id_spectacle = ?");
-        $stmt->execute([$spectacleId]);
-        return $stmt->fetchColumn();
-    }
-
     /**
      * Ajouter un artiste
      * @param int $idArtiste ID de l'artiste
@@ -290,9 +292,9 @@ class NrvRepository
      * Supprimer une image d'un spectacle
      * @param int $idImage ID de l'image
      * @param int $idSpectacle ID du spectacle
-     * @return void
+     * @return bool true si l'image a été complétement supprimée, false sinon
      */
-    public function deleteImagesFromSpectacle(int $idImage, int $idSpectacle): void {
+    public function deleteImagesFromSpectacle(int $idImage, int $idSpectacle): bool {
         // Delete la liaison
         $stmt = $this->pdo->prepare("DELETE FROM spectacle2image WHERE id_spectacle = ? AND id_image = ?");
         $stmt->execute([$idSpectacle, $idImage]);
@@ -304,7 +306,9 @@ class NrvRepository
         if ($count === 0) {
             $stmt = $this->pdo->prepare("DELETE FROM image WHERE id = ?");
             $stmt->execute([$idImage]);
+            return true;
         }
+        return false;
     }
 
     /**
