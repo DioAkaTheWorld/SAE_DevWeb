@@ -50,17 +50,17 @@ class DisplayDetailSpectacleAction extends Action {
         // Créer le lien vers la soirée associée au spectacle
         $soireeLink = "";
         if ($soireeId) {
-            $soireeLink = "<a href='?action=display-detail-soiree&id={$soireeId}'>Voir la soirée associée</a>";
+            $soireeLink = "<a class='btn btn-primary' href='?action=display-detail-soiree&id={$soireeId}'>Voir la soirée associée</a>";
         }
 
-        // Vérifier si l'utilisateur est connecté
+        // Vérifier si l'utilisateur est connecté pour savoir s'il peut voir le bouton modifier spectacle
         $check = $this->checkUser(User::STANDARD_USER);
         if ($check !== "") {
             return $spectacleRenderer->renderAsLong($artistes, $images);
         }
 
         // Affichage détaillé du spectacle avec le lien vers la soirée avec lien de modification si connecté
-        return $spectacleRenderer->renderAsLong($artistes, $images) . "<a href='?action=modify-spectacle&id={$spectacleId}'>Modifier ce spectacle</a>" . $soireeLink;
+        return $spectacleRenderer->renderAsLong($artistes, $images) . "<a class='btn btn-primary m-3' href='?action=modify-spectacle&id={$spectacleId}'>Modifier ce spectacle</a>" . $soireeLink;
     }
 
     /**

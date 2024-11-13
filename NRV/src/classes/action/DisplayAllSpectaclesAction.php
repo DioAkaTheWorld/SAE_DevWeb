@@ -21,7 +21,7 @@ class DisplayAllSpectaclesAction extends Action {
         FIN;
 
         // Liste des spectacles
-        return $res . $spectaclesListRenderer->render();
+        return $res . $spectaclesListRenderer->render() . "</div>";
 
     }
 

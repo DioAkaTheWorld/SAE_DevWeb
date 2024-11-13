@@ -19,7 +19,7 @@ class DefaultAction extends Action {
                 <div class="hero-content">
                     <h1>NRV Rock Festival</h1>
                     <p>Bienvenue à Nancy pour le festival de rock NRV ! Un événement épique qui célèbre la passion du rock et de la musique live dans les lieux les plus emblématiques de la ville. Rejoignez-nous pour deux semaines inoubliables de performances puissantes, avec des artistes de renommée et des groupes locaux qui feront vibrer les rues de Nancy.</p>
-                    <a class="btn" href="?action=display-all-spectacles">Découvrir le programme</a>
+                    <a class="btn btn-danger" href="?action=display-all-spectacles">Découvrir le programme</a>
                 </div>
             </section>
             HTML;

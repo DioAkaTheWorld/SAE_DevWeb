@@ -14,10 +14,11 @@ class SpectacleRenderer {
 
     public function renderAsCompact(string $date, string $image): string {
         // Condition pour éviter d'afficher 01/01/1970
-        if($date !== "Pas de date") {
+        if($date !== "Date inconnue") {
             $date = date('d/m/Y', strtotime($date));
         }
 
+        // Utilise une image par défaut si aucune image ne correspond au spectacle
         if ($image === "pas d'image") {
             $img = "<img src='/SAE_DevWeb/medias/images/ppp.jpg' alt='image spectacle'>";
         } else {
@@ -25,7 +26,7 @@ class SpectacleRenderer {
         }
 
         return <<<FIN
-            <li class="list-inline-item m-3">
+            <li class="list-inline-item text-center m-3">
                 <div class="card border border-secondary border-4 rounded" style="width: 18rem;">
                     $img
                     <div class="card-body">
@@ -43,9 +44,13 @@ class SpectacleRenderer {
         // En-tête
         $html = <<<FIN
             <h1>{$this->spectacle->__get('titre')}</h1>
-            <p><strong>Style :</strong> {$this->spectacle->__get('style')}</p>
-            <p><strong>Description :</strong> {$this->spectacle->__get('description')}</p>
-            <p><strong>Durée :</strong> {$this->spectacle->__get('duree')}</p>
+            <hr>
+            <h2>Style</h2>
+            <p>{$this->spectacle->__get('style')}</p>
+            <h2>Description</h2>
+            <p>{$this->spectacle->__get('description')}</p>
+            <h2>Durée</h2>
+            <p>{$this->spectacle->__get('duree')}</p>
 
         FIN;
 
@@ -62,15 +67,22 @@ class SpectacleRenderer {
         // Images du spectacle
         $html .= <<<FIN
                 <h2>Images</h2>
-                <div>
+                <ul class="list-inline">
             FIN;
         if (!empty($images)) {
             foreach ($images as $image) {
-                $html .= "<img src='/SAE_DevWeb/medias/images/{$image['chemin_fichier']}' alt='Image du spectacle' style='width: 150px; margin: 5px;'>";
+                $html .= <<<FIN
+                    <li class="list-inline-item m-3">
+                        <div class="card text-center" style="width: 18rem;">
+                            <img src='/SAE_DevWeb/medias/images/{$image['chemin_fichier']}' alt='Image du spectacle' class="img-thumbnail">
+                        </div>
+                    </li>
+
+                FIN;
             }
-            $html .= "</div>";
+            $html .= "</ul>";
         } else {
-            $html .= "<p>Pas d'images pour ce spectacle</p></div>";
+            $html .= "<p>Pas d'images pour ce spectacle</p>";
         }
 
         // Extrait vidéo
@@ -80,7 +92,6 @@ class SpectacleRenderer {
             FIN;
         if (!empty($this->spectacle->__get('chemin_video')) && $this->spectacle->__get('chemin_video') !== "aucune video") {
             $html .= <<<FIN
-                <h2>Extrait Vidéo</h2>
                 <video width='320' height='240' controls>
                     <source src='/SAE_DevWeb/medias/videos/{$this->spectacle->__get('chemin_video')}' type='video/mp4'>
                 </video>

@@ -58,41 +58,43 @@ class ModifySpectacleAction extends Action {
         <h2 class="p-2">Modifier un spectacle</h2>
         <hr>
         <form action="?action=modify-spectacle&id=$spectacleId" method="post" enctype="multipart/form-data">
-            <div>
-                <label for="titre" class="form-label">Titre*</label>
+            <div class="mb-3">
+                <label for="titre" class="form-label">Titre<span class="text-danger">*</span></label>
                 <input type="text" class="form-control" id="titre" name="titre" value="{$spectacleDetails['titre']}" required>
             </div>
-            <div>
-                <label for="description" class="form-label">Description*</label>
+            <div class="mb-3">
+                <label for="description" class="form-label">Description<span class="text-danger">*</span></label>
                 <input class="form-control" id="description" name="description" value="{$spectacleDetails['description']}" required></input>
             </div>
-            <div>
-                <label for="horaire" class="form-label">Horaire*</label>
+            <div class="mb-3">
+                <label for="horaire" class="form-label">Horaire<span class="text-danger">*</span></label>
                 <input type="time" class="form-control" id="horaire" name="horaire" value="$horaire" required>
             </div>
-            <div>
-                <label for="duree" class ="form-label">Durée*</label>
+            <div class="mb-3">
+                <label for="duree" class ="form-label">Durée<span class="text-danger">*</span></label>
                 <input type="time" class="form-control" id="duree" name="duree" value="$duree" required>
             </div>
-            <div>
-                <label for="style" class="form-label">Style*</label>
+            <div class="mb-3">
+                <label for="style" class="form-label">Style<span class="text-danger">*</span></label>
                 <input type="text" class="form-control" id="style" name="style" value="{$spectacleDetails['style']}" required>
             </div>
-            <div>
-                <label for="video">Modifier la vidéo: </label>
-                <input type="file" name="video" id="video">
+            <div class="mb-3">
+                <label for="video" class="form-label">Modifier la vidéo</label>
+                <input type="file" class="form-control" name="video" id="video">
             </div>
-            <div>
+            <div class="mb-3">
                 <label for="artiste" class="form-label">Artiste(s) (cocher pour supprimer)</label><br>
                 {$artistesRenderer->render($artistes)}
             </div>
-            <div>
+            <div class="mb-3" >
                 <label for="deleteImage" class="form-label">Image(s) (cocher pour supprimer)</label><br>
-                {$imagesRenderer->render($images)}
+                <div class="d-flex justify-content-start flex-row">
+                    {$imagesRenderer->render($images)}
+                </div>
             </div>
-            <div>
+            <div class="mb-3">
                 <label for="image" class="form-label">Ajouter une image</label>
-                <input type="file" name="image" id="image">
+                <input type="file" class="form-control" name="image" id="image">
             </div>
             <button type="submit" class="btn btn-primary">Modifier</button>
         FIN;
@@ -179,7 +181,7 @@ class ModifySpectacleAction extends Action {
                 $previousVideoPath = $repo->getVideoPathFromSpectacle($spectacle->__get('id'));
                 $repo->updateVideoPathForSpectacle($nomFichier, $spectacle->__get('id'));
                 $spectacle->setCheminVideo($nomFichier);
-                if (!empty($previousVideoPath)) {
+                if (!empty($previousVideoPath) && $previousVideoPath !== "aucune video") {
                     unlink(__DIR__ . "/../../../../medias/videos/" . $previousVideoPath);
                 }
             }
