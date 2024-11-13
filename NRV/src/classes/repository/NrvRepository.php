@@ -129,19 +129,18 @@ class NrvRepository
      * @param int $id id du spectacle
      * @return string date du spectacle
      */
-    public function getDateSpectacle(int $id) : string {
+    public function getDateSpectacle(int $id) : ?string {
         $stmt = $this->pdo->prepare("SELECT S.date 
-                                            FROM soiree S
-                                            JOIN soiree2spectacle S2P ON S.id = S2P.id_soiree
-                                            JOIN spectacle SP ON S2P.id_spectacle = SP.id
-                                            WHERE SP.id = ?");
+                                 FROM soiree S
+                                 JOIN soiree2spectacle S2P ON S.id = S2P.id_soiree
+                                 JOIN spectacle SP ON S2P.id_spectacle = SP.id
+                                 WHERE SP.id = ? LIMIT 1");
         $stmt->execute([$id]);
         $date = $stmt->fetch();
-        if (empty($date)) {
-            return "Pas de date";
-        }
-        return $date['date'];
+        return $date ? $date['date'] : "Date inconnue";
     }
+
+
 
     /**
      * Fonction permettant de récupérer les images d'un spectacle à partir de son id
@@ -509,18 +508,17 @@ class NrvRepository
         return $spectacles;
     }
 
-    // Dans NrvRepository
     public function getSoireeIdBySpectacleId(int $spectacleId): ?int {
-        // Exemple de requête SQL pour récupérer l'ID de la soirée
-        $sql = 'SELECT id FROM spectacle WHERE id = :spectacleId';
+        $sql = 'SELECT id_lieu FROM soiree 
+            JOIN soiree2spectacle ON soiree.id = soiree2spectacle.id_soiree 
+            WHERE soiree2spectacle.id_spectacle = ? LIMIT 1';
         $stmt = $this->pdo->prepare($sql);
-        $stmt->bindValue(':spectacleId', $spectacleId, \PDO::PARAM_INT);
-        $stmt->execute();
+        $stmt->execute([$spectacleId]);
         $result = $stmt->fetch(\PDO::FETCH_ASSOC);
 
-        // Retourner l'ID de la soirée ou null si aucune soirée associée
-        return $result ? (int)$result['id'] : null;
+        return $result ? (int)$result['id_lieu'] : null;
     }
+
 
 
 }
