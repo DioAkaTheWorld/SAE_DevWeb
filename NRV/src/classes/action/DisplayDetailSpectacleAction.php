@@ -16,9 +16,9 @@ class DisplayDetailSpectacleAction extends Action {
             http_response_code(400);
             return <<<FIN
             <div class="container d-flex flex-column justify-content-center align-items-center h3">
-                        <h2 class="h1">Erreur 400</h2>
-                        ID du spectacle manquant
-                    </div>
+                <h2 class="h1">Erreur 400</h2>
+                ID du spectacle manquant
+            </div>
             FIN;
         }
 
@@ -42,14 +42,8 @@ class DisplayDetailSpectacleAction extends Action {
         $spectacleObjet->setId($spectacleId);
         $spectacleRenderer = new SpectacleRenderer($spectacleObjet);
 
-        // Créer le lien vers la soirée associée au spectacle
-        $soireeLink = "";
-        if ($soireeId) {
-            $soireeLink = "<a href='?action=display-detail-soiree&id={$soireeId}'>Voir la soirée associée</a>";
-        }
-
         // Affichage détaillé du spectacle avec le lien vers la soirée
-        return $spectacleRenderer->renderAsLong($artistes, $images) . "<a href='?action=modify-spectacle&id={$spectacleId}'>Modifier ce spectacle</a>" . $soireeLink;
+        return $spectacleRenderer->renderAsLong($artistes, $images) . "<a href='?action=modify-spectacle&id={$spectacleId}'>Modifier ce spectacle</a>";
     }
 
     public function executePost(): string {

@@ -88,37 +88,137 @@ nav.navbar {
 
 
 
-.page-content {
+/* Page de filtrage des spectacles */
+.page-spectacles {
     background-color: #2c2c2c;
     padding: 40px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    margin-top: 20px;
 }
 
-.page-content h2 {
+.page-spectacles h2 {
     color: #e50914;
-    font-weight: bold;
     font-size: 2rem;
-    margin-bottom: 20px;
+    font-weight: bold;
     text-align: center;
+    margin-bottom: 20px;
     text-transform: uppercase;
 }
 
-.page-content p, .page-content .form-label {
-    color: #cccccc;
+.page-spectacles .filters {
+    display: flex;
+    justify-content: center;
     margin-bottom: 20px;
-    font-size: 1.1rem;
+    gap: 15px;
 }
 
-.page-content .btn {
-    background-color: #e50914;
-    color: #fff;
-    padding: 10px 20px;
-    font-size: 1rem;
+.filters .filter-item {
+    background-color: #333;
+    color: #e5e5e5;
+    padding: 8px 15px;
     border-radius: 5px;
+    cursor: pointer;
     transition: background 0.3s;
 }
 
-.page-content .btn:hover {
+.filters .filter-item:hover {
+    background-color: #e50914;
+}
+
+.liste-spectacles {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    list-style: none;
+    padding: 0;
+}
+
+.spectacle-item {
+    background-color: #292929;
+    width: 280px;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    transition: transform 0.3s, box-shadow 0.3s;
+    text-align: center;
+}
+
+.spectacle-item:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.7);
+}
+
+.spectacle-item h3 {
+    font-size: 1.5rem;
+    color: #e50914;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+.spectacle-item p {
+    font-size: 0.9rem;
+    color: #cccccc;
+    margin-bottom: 10px;
+    line-height: 1.4;
+}
+
+.spectacle-item .btn-view-details {
+    background-color: #e50914;
+    color: #fff;
+    padding: 8px 15px;
+    border-radius: 5px;
+    text-align: center;
+    display: inline-block;
+    font-size: 0.9rem;
+    transition: background 0.3s;
+    text-decoration: none;
+}
+
+.spectacle-item .btn-view-details:hover {
+    background-color: #c40811;
+}
+
+.related-links a:hover {
+    color: #c40811;
+}
+
+
+
+.spectacle-detail {
+    background-color: #1a1a1a;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    margin-top: 20px;
+}
+
+.spectacle-detail h2 {
+    color: #e50914;
+    font-size: 2rem;
+    margin-bottom: 15px;
+}
+
+.spectacle-detail p {
+    color: #cccccc;
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+.spectacle-detail .btn-modify {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #e50914;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.spectacle-detail .btn-modify:hover {
     background-color: #c40811;
 }
