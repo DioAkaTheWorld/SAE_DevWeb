@@ -17,6 +17,13 @@ class SpectacleRenderer {
         if($date !== "Pas de date") {
             $date = date('d/m/Y', strtotime($date));
         }
+
+        if ($image === "pas d'image") {
+            $img = "<p>Pas d'image pour ce spectacle</p>";
+        } else {
+            $img = "<img src='/SAE_DevWeb/medias/images/$image' alt='image spectacle'>";
+        }
+
         return <<<FIN
             <li>
                 <div>
@@ -24,7 +31,7 @@ class SpectacleRenderer {
                 </div>
                 <span>Date: $date</span>
                 <span>Horaire: {$this->spectacle->__get('horaire')}</span>
-                <img src="/SAE_DevWeb/medias/images/$image" alt="image spectacle">
+                $img
             </li>
         FIN;
     }
@@ -54,7 +61,7 @@ class SpectacleRenderer {
                 <h2>Images</h2>
                 <div>
             FIN;
-        if (!empty($images) && $images[0]['chemin_fichier'] !== "aucune image") {
+        if (!empty($images)) {
             foreach ($images as $image) {
                 $html .= "<img src='/SAE_DevWeb/medias/images/{$image['chemin_fichier']}' alt='Image du spectacle' style='width: 150px; margin: 5px;'>";
             }

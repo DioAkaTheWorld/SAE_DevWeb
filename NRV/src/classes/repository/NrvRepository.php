@@ -286,12 +286,33 @@ class NrvRepository
     }
 
     /**
+     * Supprimer une image d'un spectacle
+     * @param int $idImage ID de l'image
+     * @param int $idSpectacle ID du spectacle
+     * @return void
+     */
+    public function deleteImagesFromSpectacle(int $idImage, int $idSpectacle): void {
+        // Delete la liaison
+        $stmt = $this->pdo->prepare("DELETE FROM spectacle2image WHERE id_spectacle = ? AND id_image = ?");
+        $stmt->execute([$idSpectacle, $idImage]);
+
+        // Delete l'image si elle n'est plus liée à aucun spectacle
+        $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM spectacle2image WHERE id_image = ?");
+        $stmt->execute([$idImage]);
+        $count = $stmt->fetchColumn();
+        if ($count === 0) {
+            $stmt = $this->pdo->prepare("DELETE FROM image WHERE id = ?");
+            $stmt->execute([$idImage]);
+        }
+    }
+
+    /**
      * Récupérer les images d'un spectacle
      * @param int $spectacleId ID du spectacle
      * @return array liste des chemin_fichiers d'images
      */
     public function getSpectacleImages(int $spectacleId): array {
-        $stmt = $this->pdo->prepare("SELECT i.chemin_fichier 
+        $stmt = $this->pdo->prepare("SELECT * 
                                             FROM image i 
                                             JOIN spectacle2image si ON i.id = si.id_image 
                                             WHERE si.id_spectacle = ?");

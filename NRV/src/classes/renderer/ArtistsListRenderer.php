@@ -5,6 +5,10 @@ namespace nrv\renderer;
 class ArtistsListRenderer {
 
     public function render(array $artists) : string {
+        if (empty($artists)) {
+            return "<p>Aucun artiste n'est associé à ce spectacle</p>";
+        }
+
         $artistList = "";
         foreach ($artists as $artist) {
             $artistName = $artist['nom'];

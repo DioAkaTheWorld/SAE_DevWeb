@@ -19,7 +19,7 @@ class SpectaclesListRenderer {
             $spectacleRenderer = new SpectacleRenderer($spectacleObjet);
             $date = $repo->getDateSpectacle($spectacle['id']);
             $image = $repo->getImagesSpectacle($spectacle['id']);
-            if($image){
+            if(!empty($image)) {
                 $res .= $spectacleRenderer->renderAsCompact($date, $image[0]['chemin_fichier']); // On prend la première image
             } else {
                 $res .= $spectacleRenderer->renderAsCompact($date, "pas d'image");

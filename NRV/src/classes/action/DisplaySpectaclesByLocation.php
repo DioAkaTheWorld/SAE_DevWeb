@@ -37,10 +37,10 @@ class DisplaySpectaclesByLocation extends Action {
             $s->setId($spectacle['id_spectacle']);
             $image = $repository->getImagesSpectacle($spectacle['id_spectacle']);
             $spectacleRenderer = new SpectacleRenderer($s);
-            if($image){
+            if(!empty($image)) {
                 $html .= $spectacleRenderer->renderAsCompact($lieu, $image[0]['chemin_fichier']); // On prend la première image
             } else {
-                $html .= $spectacleRenderer->renderAsCompact($lieu, "aucune image");
+                $html .= $spectacleRenderer->renderAsCompact($lieu, "pas d'image");
             }
         }
         $html .= "</ul>";

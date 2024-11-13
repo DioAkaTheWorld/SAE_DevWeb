@@ -60,23 +60,6 @@ CREATE TABLE `image` (
                          `chemin_fichier` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
---
--- Déchargement des données de la table `image`
---
-
-INSERT INTO `image` (`id`, `chemin_fichier`) VALUES
-                                                 (1, 'aucune image'),
-                                                 (2, 'aucune image'),
-                                                 (3, 'aucune image'),
-                                                 (4, 'aucune image'),
-                                                 (5, 'aucune image'),
-                                                 (6, 'aucune image'),
-                                                 (7, 'aucune image'),
-                                                 (8, 'aucune image'),
-                                                 (9, 'aucune image'),
-                                                 (10, 'aucune image'),
-                                                 (11, 'aucune image');
-
 -- --------------------------------------------------------
 
 --
@@ -255,19 +238,6 @@ CREATE TABLE `spectacle2image` (
 --
 -- Déchargement des données de la table `spectacle2image`
 --
-
-INSERT INTO `spectacle2image` (`id_spectacle`, `id_image`) VALUES
-                                                               (1, 1),
-                                                               (2, 2),
-                                                               (3, 3),
-                                                               (4, 4),
-                                                               (5, 5),
-                                                               (6, 6),
-                                                               (7, 7),
-                                                               (8, 8),
-                                                               (9, 9),
-                                                               (10, 10),
-                                                               (11, 11);
 
 -- --------------------------------------------------------
 
