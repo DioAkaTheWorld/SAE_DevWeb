@@ -14,12 +14,15 @@ class DefaultAction extends Action {
      */
     public function executeGet(): string {
         // Message de bienvenue
-        return <<<FIN
-        <h2 class="h3 text-center" >Bienvenue sur NRV !</h2>
-                <div class="text-center my-4">
-                    
+        return <<<HTML
+            <section class="hero" id="home">
+                <div class="hero-content">
+                    <h1>NRV Rock Festival</h1>
+                    <p>Bienvenue à Nancy pour le festival de rock NRV ! Un événement épique qui célèbre la passion du rock et de la musique live dans les lieux les plus emblématiques de la ville. Rejoignez-nous pour deux semaines inoubliables de performances puissantes, avec des artistes de renommée et des groupes locaux qui feront vibrer les rues de Nancy.</p>
+                    <button onclick="window.location.href='?action=display-all-spectacles'">Découvrir le programme</button>
                 </div>
-        FIN;
+            </section>
+            HTML;
 
     }
 
