@@ -38,10 +38,10 @@ class DisplaySpectaclesByDatesAction extends Action {
             $s->setId($spectacle['id_spectacle']);
             $image = $repository->getImagesSpectacle($spectacle['id_spectacle']);
             $spectacleRenderer = new SpectacleRenderer($s);
-            if($image){
+            if(!empty($image)) {
                 $html .= $spectacleRenderer->renderAsCompact($date, $image[0]['chemin_fichier']); // On prend la première image
             } else {
-                $html .= $spectacleRenderer->renderAsCompact($date, "aucune image");
+                $html .= $spectacleRenderer->renderAsCompact($date, "pas d'image");
             }
         }
         $html .= "</ul>";

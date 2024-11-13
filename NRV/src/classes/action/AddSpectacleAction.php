@@ -64,8 +64,12 @@ class AddSpectacleAction extends Action {
                 {$artistesRenderer->render(NrvRepository::getInstance()->getAllArtists())}
             </div>
             <div>
-                <label for="fichier">Ajouter une vidéo: </label>
-                <input type="file" name="fichier" id="fichier">
+                <label for="video" class="form-label">Ajouter une vidéo: </label><br>
+                <input type="file" name="video" id="video">
+            </div>
+            <div>
+                <label for="image" class="form-label">Ajouter une image</label><br>
+                <input type="file" name="image" id="image">
             </div>
             <button type="submit" class="btn btn-primary">Ajouter</button>
         FIN;
@@ -129,12 +133,21 @@ class AddSpectacleAction extends Action {
             $repo->addArtisteToSpectacle($id, $spectacleId);
         }
 
-        // Gestion du fichier
+        // Gestion des fichier
         try {
-            if ($_FILES["fichier"]["error"] === UPLOAD_ERR_OK) {
-                $nomFichier = UploadFile::uploadFile("video", "mp4");
+            // Gestion de la vidéo
+            if ($_FILES["video"]["error"] === UPLOAD_ERR_OK) {
+                $nomFichier = UploadFile::uploadFile("video", "mp4", "video");
                 $repo->updateVideoPathForSpectacle($nomFichier, $spectacle->__get('id'));
                 $spectacle->setCheminVideo($nomFichier);
+            }
+
+            // Gestion de l'image
+            if ($_FILES["image"]["error"] === UPLOAD_ERR_OK) {
+                $extension =strrchr($_FILES["image"]["type"], "/");
+                $nomFichier = UploadFile::uploadFile("image", substr($extension, 1), "image");
+                $idImage = $repo->addImage($nomFichier);
+                $repo->addImageToSpectacle($idImage, $spectacle->__get('id'));
             }
         } catch (Exception $e) {
             return $this->executeGet() . <<<FIN

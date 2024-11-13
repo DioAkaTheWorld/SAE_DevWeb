@@ -13,7 +13,7 @@ abstract class UploadFile {
      * @return string Le nom du fichier
      * @throws Exception
      */
-    public static function uploadFile(string $type, string $format): string {
+    public static function uploadFile(string $type, string $format, string $label): string {
         // Vérification des paramètres
         if ($type !== "image" && $type !== "video") {
             throw new Exception("Type de fichier incorrect");
@@ -38,10 +38,10 @@ abstract class UploadFile {
 
         $upload_dir = $dir;
         $file_name = uniqid() . "." . $format;
-        $tmp = $_FILES["fichier"]["tmp_name"];
+        $tmp = $_FILES[$label]["tmp_name"];
         $dest = $upload_dir . $file_name;
         // Vérifie si le fichier est dans le bon format et si sa taille est inférieure à 15 Mo
-        if ($_FILES["fichier"]["type"] === $fichierType && $_FILES["fichier"]["size"] < 15728640 && move_uploaded_file($tmp, $dest)) {
+        if ($_FILES[$label]["type"] === $fichierType && $_FILES[$label]["size"] < 15728640 && move_uploaded_file($tmp, $dest)) {
             return $file_name;
         }
         throw new Exception("Échec de l'upload ou format audio incorrect");

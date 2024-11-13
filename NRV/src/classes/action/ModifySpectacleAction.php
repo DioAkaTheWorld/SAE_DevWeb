@@ -8,6 +8,7 @@ use nrv\exception\InvalidPropertyNameException;
 use nrv\exception\InvalidPropertyValueException;
 use nrv\festivale\Spectacle;
 use nrv\renderer\ArtistsListRenderer;
+use nrv\renderer\ImageListRenderer;
 use nrv\repository\NrvRepository;
 
 class ModifySpectacleAction extends Action {
@@ -41,8 +42,9 @@ class ModifySpectacleAction extends Action {
             $artistes = $repository->getArtistsFromSpectacle($spectacleId);
             $images = $repository->getSpectacleImages($spectacleId);
             $artistesRenderer = new ArtistsListRenderer();
+            $imagesRenderer = new ImageListRenderer();
 
-
+            // Evite de récupérer les secondes causant une erreur lors de la modification
             $horaire = substr($spectacleDetails['horaire'], 0, 5);
             $duree = substr($spectacleDetails['duree'], 0, 5);
 
@@ -77,12 +79,20 @@ class ModifySpectacleAction extends Action {
                 <input type="text" class="form-control" id="style" name="style" value="{$spectacleDetails['style']}" required>
             </div>
             <div>
-                <label for="fichier">Modifier la vidéo: </label>
-                <input type="file" name="fichier" id="fichier">
+                <label for="video">Modifier la vidéo: </label>
+                <input type="file" name="video" id="video">
             </div>
             <div>
                 <label for="artiste" class="form-label">Artiste(s) (cocher pour supprimer)</label><br>
-                {$artistesRenderer->render(NrvRepository::getInstance()->getArtistsFromSpectacle($spectacleId))}
+                {$artistesRenderer->render($artistes)}
+            </div>
+            <div>
+                <label for="image" class="form-label">Image(s) (cocher pour supprimer)</label><br>
+                {$imagesRenderer->render($images)}
+            </div>
+            <div>
+                <label for="uploadImage" class="form-label">Ajouter une image</label>
+                <input type="file" name="uploadImage" id="uploadImage">
             </div>
             <button type="submit" class="btn btn-primary">Modifier</button>
         FIN;
@@ -108,6 +118,13 @@ class ModifySpectacleAction extends Action {
             if (str_starts_with($key, 'artiste')) {
                 $artisteId = (int)substr($key, 7); // l'id de l'artiste est après 'artiste' dans le nom de la clé
                 $artistes[] = $artisteId;
+            }
+        }
+        $images = [];
+        foreach ($_POST as $key => $value) {
+            if (str_starts_with($key, 'image')) {
+                $imageId = (int)substr($key, 5); // l'id de l'image est après 'image' dans le nom de la clé
+                $images[] = $imageId;
             }
         }
 
@@ -145,16 +162,30 @@ class ModifySpectacleAction extends Action {
             $repo->deleteArtistFromSpectacle($id, $_GET['id']);
         }
 
-        // Gestion du fichier
+        // Suppression des images
+        foreach($images as $id) {
+            $repo->deleteImagesFromSpectacle($id, $_GET['id']);
+        }
+
+        // Gestion des fichier
         try {
-            if ($_FILES["fichier"]["error"] === UPLOAD_ERR_OK) {
-                $nomFichier = UploadFile::uploadFile("video", "mp4");
+            // Gestion de la vidéo
+            if ($_FILES["video"]["error"] === UPLOAD_ERR_OK) {
+                $nomFichier = UploadFile::uploadFile("video", "mp4", "video");
                 $previousVideoPath = $repo->getVideoPathFromSpectacle($spectacle->__get('id'));
                 $repo->updateVideoPathForSpectacle($nomFichier, $spectacle->__get('id'));
                 $spectacle->setCheminVideo($nomFichier);
                 if ($previousVideoPath !== "aucune image") {
                     unlink(__DIR__ . "/../../../../medias/videos/" . $previousVideoPath);
                 }
+            }
+
+            // Gestion de l'image
+            if ($_FILES["uploadImage"]["error"] === UPLOAD_ERR_OK) {
+                $extension =strrchr($_FILES["uploadImage"]["type"], "/");
+                $nomFichier = UploadFile::uploadFile("image", substr($extension, 1), "uploadImage");
+                $idImage = $repo->addImage($nomFichier);
+                $repo->addImageToSpectacle($idImage, $spectacle->__get('id'));
             }
         } catch (Exception $e) {
             return $this->executeGet() . <<<FIN
@@ -168,7 +199,7 @@ class ModifySpectacleAction extends Action {
             <div>
                 <h2>Spectacle modifié</h2>
                 <a href="?action=display-spectacle&id={$spectacle->__get('id')}">Voir le spectacle</a>
-                <a href="?action=add-image-to-spectacle">Ajouter une image</a>
+                <a href="?action=add-image-to-spectacle">Ajouter une autre image</a>
             </div>
         FIN;
 
