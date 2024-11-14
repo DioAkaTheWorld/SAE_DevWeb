@@ -23,7 +23,7 @@ class LogOutAction extends Action {
         }
 
         return <<<FIN
-        <div class="container d-flex flex-column justify-content-center align-items-center h3">
+        <div class="d-flex flex-column justify-content-center align-items-center h3">
                 <h2 class="h1">Êtes-vous sûr ?</h2>
                 <form action="?action=log-out" method="POST">
                     <div class="submit">
