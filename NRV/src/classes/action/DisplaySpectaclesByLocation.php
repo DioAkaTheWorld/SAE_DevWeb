@@ -18,15 +18,22 @@ class DisplaySpectaclesByLocation extends Action {
         }
 
         $spectacles = $repository->findSpectaclesByLieu($lieu);
+        $filtersRenderer = new SpectacleFiltersListRenderer();
 
         if (empty($spectacles)) {
-            return "<p>Aucun spectacle trouvé pour le lieu $lieu.</p>";
+            return <<<FIN
+            <h2 class="p-2">Aucun spectacles pour le lieu : $lieu</h2>
+            <div class="col-3">
+                {$filtersRenderer->render()}
+            </div>
+            <hr>
+            <ul>
+        FIN;
         }
 
-        $filtersRenderer = new SpectacleFiltersListRenderer();
         $html = <<<FIN
-            <h2>Spectacles pour le lieu : $lieu</h2>
-            <div>
+            <h2 class="p-2">Spectacles pour le lieu : $lieu</h2>
+            <div class="col-3">
                 {$filtersRenderer->render()}
             </div>
             <hr>

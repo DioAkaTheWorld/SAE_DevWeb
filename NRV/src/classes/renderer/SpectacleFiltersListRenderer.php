@@ -14,9 +14,8 @@ class SpectacleFiltersListRenderer {
         $lieus = $repo->getListeLieuSpectacle();
 
         $html = <<<FIN
-            <h5>Filtrer les spectacles</h5>
-            <select class="form-select" name="filtre" onchange="location = this.value;">;
-            <option value="?action=display-all-spectacles">Ne pas filtrer</option>
+            <select class="form-select my-4" name="filtre" onchange="location = this.value;">;
+            <option value="?action=display-all-spectacles">Filtre</option>
 
         FIN;
 

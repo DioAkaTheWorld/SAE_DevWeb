@@ -19,15 +19,22 @@ class DisplaySpectaclesByDatesAction extends Action {
         }
 
         $spectacles = $repository->findSpectaclesByDate($date);
+        $filtersRenderer = new SpectacleFiltersListRenderer();
 
         if (empty($spectacles)) {
-            return "<p>Aucun spectacle trouvé pour la date $dateFormatted.</p>";
+            return <<<FIN
+            <h2 class="p-2">Aucun spectacles pour la date : $dateFormatted</h2>
+            <div class="col-3">
+                {$filtersRenderer->render()}
+            </div>
+            <hr>
+            <ul>
+        FIN;
         }
 
-        $filtersRenderer = new SpectacleFiltersListRenderer();
         $html = <<<FIN
-            <h2>Spectacles pour la date : $dateFormatted</h2>
-            <div>
+            <h2 class="p-2">Spectacles pour la date : $dateFormatted</h2>
+            <div class="col-3">
                 {$filtersRenderer->render()}
             </div>
             <hr>

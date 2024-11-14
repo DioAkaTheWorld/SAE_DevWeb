@@ -18,15 +18,22 @@ class DisplaySpectacleByStyleAction extends Action{
         }
 
         $spectacles = $repository->findSpectaclesByStyle($style);
+        $filtersRenderer = new SpectacleFiltersListRenderer();
 
         if (empty($spectacles)) {
-            return "<p>Aucun spectacle trouvé pour le style '$style'.</p>";
+            return <<<FIN
+            <h2 class="p-2">Aucun Spectacles pour le style : $style</h2>
+            <div class="col-3">
+                {$filtersRenderer->render()}
+            </div>
+            <hr>
+            <ul>
+        FIN;
         }
 
-        $filtersRenderer = new SpectacleFiltersListRenderer();
         $html = <<<FIN
-            <h2>Spectacles pour le style : $style</h2>
-            <div>
+            <h2 class="p-2">Spectacles pour le style : $style</h2>
+            <div class="col-3">
                 {$filtersRenderer->render()}
             </div>
             <hr>
