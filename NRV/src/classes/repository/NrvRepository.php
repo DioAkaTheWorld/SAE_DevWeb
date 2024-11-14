@@ -519,7 +519,7 @@ class NrvRepository
 
     public function getSoireeSpectacles(int $soireeId): array {
         $query = "
-        SELECT s.id, s.titre, s.description, s.horaire, s.style, s.chemin_video 
+        SELECT *
         FROM spectacle s 
         JOIN soiree2spectacle ON soiree2spectacle.id_spectacle = s.id 
         WHERE soiree2spectacle.id_soiree = :id_soiree";

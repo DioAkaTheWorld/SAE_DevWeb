@@ -43,7 +43,7 @@ class SpectacleRenderer {
     public function renderAsLong(array $artistes, array $images): string {
         // En-tête
         $html = <<<FIN
-            <h1>{$this->spectacle->__get('titre')}</h1>
+            <h1>Spectacle: {$this->spectacle->__get('titre')}</h1>
             <hr>
             <h2>Style</h2>
             <p>{$this->spectacle->__get('style')}</p>

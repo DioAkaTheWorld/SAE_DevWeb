@@ -18,10 +18,11 @@ class DisplayAllSpectaclesAction extends Action {
             {$filtersRenderer->render()}
         </div>
         <hr>
+
         FIN;
 
         // Liste des spectacles
-        return $res . $spectaclesListRenderer->render() . "</div>";
+        return $res . $spectaclesListRenderer->renderAllSpectacleList();
 
     }
 
