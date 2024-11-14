@@ -2,6 +2,7 @@
 
 namespace nrv\action;
 
+use nrv\exception\InvalidPropertyNameException;
 use nrv\renderer\SpectacleFiltersListRenderer;
 use nrv\renderer\SpectaclesListRenderer;
 
@@ -13,6 +14,7 @@ class DisplayAllSpectaclesAction extends Action {
     /**
      * Displays the list of all the spectacles
      * @return string The HTML code of the list
+     * @throws InvalidPropertyNameException
      */
     public function executeGet(): string {
         $filtersRenderer = new SpectacleFiltersListRenderer();
@@ -35,6 +37,7 @@ class DisplayAllSpectaclesAction extends Action {
     /**
      * Displays the list of all the spectacles
      * @return string The HTML code of the list
+     * @throws InvalidPropertyNameException
      */
     public function executePost(): string {
         return $this->executeGet();
