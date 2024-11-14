@@ -57,12 +57,27 @@ abstract class AuthnProvider {
             throw new AuthnException("Adresse email déjà utilisée");
         }
 
-        if (strlen($pass) < 10) {
-            throw new AuthnException("Mot de passe trop court: 10 caractères minimum");
+        if (self::checkPasswordStrength($pass) === false) {
+            throw new AuthnException("Mot de passe invalide");
         }
 
         $hash = password_hash($pass, PASSWORD_DEFAULT, ['cost' => 12]);
         $repo->addUser($email, $hash);
+    }
+
+    /**
+     * Vérifie la force du mot de passe
+     * @param string $pass mot de passe à vérifier
+     * @return bool true si le mot de passe est fort, false sinon
+     */
+    public static function checkPasswordStrength(string $pass): bool {
+        $length = (strlen($pass) >= 10); // longueur minimale
+        $digit = preg_match("#[\d]#", $pass); // au moins un digit
+        $special = preg_match("#[\W]#", $pass); // au moins un car. spécial
+        $lower = preg_match("#[a-z]#", $pass); // au moins une minuscule
+        $upper = preg_match("#[A-Z]#", $pass); // au moins une majuscule
+        if (!$length || !$digit || !$special || !$lower || !$upper) return false;
+        return true;
     }
 
 }

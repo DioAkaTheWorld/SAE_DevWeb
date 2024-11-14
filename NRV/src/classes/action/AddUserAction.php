@@ -29,7 +29,7 @@ class AddUserAction extends Action {
                     <label for="mdp" class="mb-2">Mot de passe<span class="text-danger">*</span>: </label>
                     <input class="form-control" type="password" placeholder="Mot de passe" name="mdp" id="mdp" required>
                     <small class="form-text text-muted">
-                        Le mot de passe doit contenir au moins 10 caractères.
+                        Au minimum 10 ćaractères, 1 majuscule, 1 minuscule, 1 chiffre, 1 caractère spécial
                     </small>
                 </div>
                 <div>
