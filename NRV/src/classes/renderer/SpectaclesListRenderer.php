@@ -33,7 +33,7 @@ class SpectaclesListRenderer {
      */
     private function createList(array $spectacles) : string {
         $repo = NrvRepository::getInstance();
-        $res = "<ol class='list-inline'>";
+        $res = "<div class='row row-cols-sm-1 row-cols-md-2 row-cols-lg-3 row-cols-xxl-4 g-4'>";
 
         // Liste des spectacles
         foreach ($spectacles as $spectacle) {
@@ -49,7 +49,7 @@ class SpectaclesListRenderer {
             }
         }
 
-        $res .= "</ol>";
+        $res .= "</div>";
         return $res;
     }
 }

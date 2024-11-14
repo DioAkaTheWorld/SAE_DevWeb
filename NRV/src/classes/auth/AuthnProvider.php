@@ -48,10 +48,11 @@ abstract class AuthnProvider {
      * Fonction d'incription
      * @param string $email email de l'utilisateur
      * @param string $pass mot de passe en clair
+     * @param int $role rôle du nouvel utilisateur
      * @return void
      * @throws AuthnException
      */
-    public static function register(string $email, string $pass): void {
+    public static function register(string $email, string $pass, int $role): void {
         $repo = NrvRepository::getInstance();
         if ($repo->userExistsEmail($email)) {
             throw new AuthnException("Adresse email déjà utilisée");
@@ -61,8 +62,12 @@ abstract class AuthnProvider {
             throw new AuthnException("Mot de passe invalide");
         }
 
+        if ($role != User::STANDARD_USER && $role != User::STAFF) {
+            throw new AuthnException("Rôle invalide");
+        }
+
         $hash = password_hash($pass, PASSWORD_DEFAULT, ['cost' => 12]);
-        $repo->addUser($email, $hash);
+        $repo->addUser($email, $hash, $role);
     }
 
     /**

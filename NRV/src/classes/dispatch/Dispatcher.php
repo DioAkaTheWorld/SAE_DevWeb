@@ -194,7 +194,7 @@ class Dispatcher {
                             </li>
                             <!--    Nom implémenté     -->
                             <li class="nav-item p-1">
-                                <a class="nav-link" href="?action=add-staff-user">Créer un compte staff (non implémenté)</a>
+                                <a class="nav-link" href="?action=register">Créer un compte staff</a>
                             </li>
                             <!--    Nom implémenté     -->
                             <li class="nav-item p-1 d-flex align-items-center">

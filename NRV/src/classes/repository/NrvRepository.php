@@ -87,9 +87,9 @@ class NrvRepository
      * @param string $hash hash du mot de passe
      * @return void
      */
-    public function addUser(string $email, string $hash) : void {
+    public function addUser(string $email, string $hash, int $role) : void {
         $stmt = $this->pdo->prepare("INSERT INTO user (email, hash, role) VALUES (?, ?, ?)");
-        $stmt->execute([$email, $hash, 1]);
+        $stmt->execute([$email, $hash, $role]);
     }
 
     /**

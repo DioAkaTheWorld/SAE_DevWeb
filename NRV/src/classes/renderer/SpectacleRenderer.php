@@ -26,7 +26,7 @@ class SpectacleRenderer {
         }
 
         return <<<FIN
-            <li class="list-inline-item text-center m-3">
+            <div class="col">
                 <div class="card border border-secondary border-4 rounded" style="width: 18rem;">
                     $img
                     <div class="card-body">
@@ -36,7 +36,7 @@ class SpectacleRenderer {
                         <a href="?action=display-spectacle&id={$this->spectacle->__get('id')}" class="btn btn-primary">Afficher</a>
                     </div>
                 </div>
-            </li>
+            </div>
         FIN;
     }
 

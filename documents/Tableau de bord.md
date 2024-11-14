@@ -50,8 +50,8 @@
   - Fait par : **David**
 - [ ] **19**. Modifier les spectacles d’une soirée existante
   - Fait par :
-- [ ] **20**. Créer un compte staff : créer un compte utilisateur permettant de gérer le programme
-  - Fait par :
+- [X] **20**. Créer un compte staff : créer un compte utilisateur permettant de gérer le programme
+  - Fait par : **David**
 - [ ] **11**. Ajouter un spectacle dans sa liste de préférence (sans authentification ni création de
   compte)
   - Fait par :
