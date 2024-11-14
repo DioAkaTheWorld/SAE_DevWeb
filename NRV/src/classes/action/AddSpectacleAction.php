@@ -97,6 +97,8 @@ class AddSpectacleAction extends Action {
         $description = filter_var($_POST['description'], FILTER_SANITIZE_STRING);
         $horaire = filter_var($_POST['horaire'], FILTER_SANITIZE_STRING);
         $style = filter_var($_POST['style'], FILTER_SANITIZE_STRING);
+        $style = trim($style);
+        $style = strtolower($style); // Avoid double entries in the database when fetching by style
         $duree = filter_var($_POST['duree'],FILTER_SANITIZE_STRING);
         $artistes = array();
         $repo = NrvRepository::getInstance();
