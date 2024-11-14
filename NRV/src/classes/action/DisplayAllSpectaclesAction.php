@@ -5,13 +5,20 @@ namespace nrv\action;
 use nrv\renderer\SpectacleFiltersListRenderer;
 use nrv\renderer\SpectaclesListRenderer;
 
+/**
+ * Action to display all the spectacles
+ */
 class DisplayAllSpectaclesAction extends Action {
 
+    /**
+     * Displays the list of all the spectacles
+     * @return string The HTML code of the list
+     */
     public function executeGet(): string {
         $filtersRenderer = new SpectacleFiltersListRenderer();
         $spectaclesListRenderer = new SpectaclesListRenderer();
 
-        // Liste des filtres
+        // Create the filters list
         $res = <<<FIN
         <h2 class="p-2">Liste des spectacles</h2>
         <div class="col-3">
@@ -21,11 +28,14 @@ class DisplayAllSpectaclesAction extends Action {
 
         FIN;
 
-        // Liste des spectacles
+        // Create the list of spectacles
         return $res . $spectaclesListRenderer->renderAllSpectacleList();
-
     }
 
+    /**
+     * Displays the list of all the spectacles
+     * @return string The HTML code of the list
+     */
     public function executePost(): string {
         return $this->executeGet();
     }

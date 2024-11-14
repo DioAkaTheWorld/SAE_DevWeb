@@ -14,9 +14,14 @@ use nrv\festival\Spectacle;
 use nrv\renderer\ArtistsFormRenderer;
 use nrv\repository\NrvRepository;
 
+/**
+ * Class to add a spectacle
+ */
 class AddSpectacleAction extends Action {
 
     /**
+     * Displays the form to add a spectacle
+     * @return string The HTML code of the form
      * @throws InvalidPropertyNameException
      */
     public function executeGet(): string {
@@ -25,7 +30,7 @@ class AddSpectacleAction extends Action {
             return $check;
         }
 
-        // Test des droits
+        // Test if the user is connected and has the right role
         try {
             $authz = new Authz(AuthnProvider::getSignedInUser());
             $authz->checkRole(User::STAFF);
@@ -77,7 +82,8 @@ class AddSpectacleAction extends Action {
     }
 
     /**
-     * @return string
+     * Processes the form submission to add a spectacle
+     * @return string The HTML code of the result
      * @throws InvalidPropertyNameException
      */
     public function executePost(): string {
@@ -86,7 +92,7 @@ class AddSpectacleAction extends Action {
             return $check;
         }
 
-        // Récupérer les données du formulaire et les valider
+        // Get the data from the form and sanitize it
         $titre = filter_var($_POST['titre'], FILTER_SANITIZE_STRING);
         $description = filter_var($_POST['description'], FILTER_SANITIZE_STRING);
         $horaire = filter_var($_POST['horaire'], FILTER_SANITIZE_STRING);
@@ -101,6 +107,7 @@ class AddSpectacleAction extends Action {
             }
         }
 
+        // Check the data
         try {
             if (empty($titre)) {
                 throw new InvalidPropertyValueException("Titre manquant.");
@@ -128,21 +135,21 @@ class AddSpectacleAction extends Action {
         $spectacle = $repo->ajouterSpectacle($spectacle);
         $spectacleId = $spectacle->__get('id');
 
-        // Ajout des artistes
+        // Add the artists to the spectacle
         foreach($artistes as $id => $artiste) {
             $repo->addArtisteToSpectacle($id, $spectacleId);
         }
 
-        // Gestion des fichier
+        // Upload the video and the image
         try {
-            // Gestion de la vidéo
+            // Upload the video
             if ($_FILES["video"]["error"] === UPLOAD_ERR_OK) {
                 $nomFichier = UploadFile::uploadVideo();
                 $repo->updateVideoPathForSpectacle($nomFichier, $spectacle->__get('id'));
                 $spectacle->setCheminVideo($nomFichier);
             }
 
-            // Gestion de l'image
+            // Upload the image
             if ($_FILES["image"]["error"] === UPLOAD_ERR_OK) {
                 $extension =strrchr($_FILES["image"]["type"], "/");
                 $nomFichier = UploadFile::uploadImage(substr($extension, 1));

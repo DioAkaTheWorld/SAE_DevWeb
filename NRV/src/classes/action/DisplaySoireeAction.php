@@ -8,10 +8,17 @@ use nrv\renderer\SoireeRenderer;
 use nrv\repository\NrvRepository;
 use Exception;
 
+/**
+ * Display a party
+ */
 class DisplaySoireeAction extends Action {
 
+    /**
+     * Displays the details of a party
+     * @return string The HTML code of the party
+     */
     public function executeGet(): string {
-        // Vérifier si l'ID de la soirée est spécifié
+        // Check if the party ID is set
         if (!isset($_GET['id'])) {
             http_response_code(400);
             return <<<FIN
@@ -24,27 +31,30 @@ class DisplaySoireeAction extends Action {
 
         $soireeId = (int)$_GET['id'];
 
-        // Obtenir les détails de la soirée depuis le dépôt
+        // Get the details of the party
         try {
             $repository = NrvRepository::getInstance();
             $soireeDetails = $repository->getSoireeDetails($soireeId);
             $lieuDetails = $repository->getLieuDetails($soireeDetails['id_lieu']);
             $artistes = $repository->getArtistsFromSpectacle($soireeId);
-            $spectacles = $repository->getSoireeSpectacles($soireeId);
+            $spectacles = $repository->getSpectaclesFromSoiree($soireeId);
         } catch (Exception $e) {
             return "<p>Erreur lors de la récupération des informations de la soirée : {$e->getMessage()}</p>";
         }
 
-        // Créer un objet Soiree avec les détails récupérés
+        // Create a party object
         $soireeObjet = new Soiree($soireeDetails['nom'], $soireeDetails['thematique'], $soireeDetails['date'], $soireeDetails['horaire_debut'], $soireeDetails['horaire_fin'], $soireeDetails['id_lieu'], $soireeDetails['tarif']);
         $soireeObjet->setId($soireeId);
 
-        // Créer un renderer pour la soirée et générer le contenu HTML détaillé
+        // Render the party
         $soireeRenderer = new SoireeRenderer($soireeObjet);
-
         return $soireeRenderer->renderAsLong($lieuDetails, $spectacles,$artistes);
     }
 
+    /**
+     * Displays the details of a party
+     * @return string The HTML code of the party
+     */
     public function executePost(): string {
         return $this->executeGet();
     }

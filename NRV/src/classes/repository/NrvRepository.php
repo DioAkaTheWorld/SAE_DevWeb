@@ -5,26 +5,27 @@ namespace nrv\repository;
 
 use Exception;
 use nrv\auth\User;
+use nrv\exception\InvalidPropertyNameException;
 use nrv\festival\Soiree;
 use nrv\festival\Spectacle;
 use PDO;
 
 /**
- * Classe permettant de gérer les accès à la base de données
+ * NrvRepository class
+ * Manage the data access
  */
-class NrvRepository
-{
+class NrvRepository {
 
-    /** @var PDO connexion avec la BD */
+    /** @var PDO Connexion with the DB */
     private PDO $pdo;
-    /** @var NrvRepository|null instance unique de la classe */
+    /** @var NrvRepository|null unique instance */
     private static ?NrvRepository $instance = null;
-    /** @var array configuration de la connexion à la BD */
+    /** @var array configuration of the connexion */
     private static array $config = [];
 
     /**
-     * Constructeur privé
-     * @param array $conf configuration de la connexion à la BD
+     * Private constructor
+     * @param array $conf configuration of the connexion
      */
     private function __construct(array $conf) {
         $this->pdo = new PDO($conf['dsn'], $conf['user'], $conf['pass'], [
@@ -36,8 +37,8 @@ class NrvRepository
     }
 
     /**
-     * Méthode permettant de récupérer l'instance unique de la classe
-     * @return NrvRepository instance unique de la classe
+     * Get the unique instance of the class
+     * @return NrvRepository|null the unique instance
      */
     public static function getInstance(): ?NrvRepository {
         if (is_null(self::$instance)) {
@@ -47,8 +48,8 @@ class NrvRepository
     }
 
     /**
-     * Méthode permettant de définir la configuration de la connexion à la BD
-     * @param string $file fichier de configuration
+     * Set the configuration of the connexion
+     * @param string $file path of the configuration file
      * @return void
      * @throws Exception
      */
@@ -67,9 +68,9 @@ class NrvRepository
     }
 
     /**
-     * Fonction permettant de récupérer un utilisateur à partir de son email
-     * @param string $email email de l'utilisateur
-     * @return User utilisateur
+     * Get the user from the database
+     * @param string $email email of the user
+     * @return User the user
      */
     public function getUser(string $email) : User {
         $stmt = $this->pdo->prepare("SELECT id, role FROM user WHERE email = ?");
@@ -82,9 +83,10 @@ class NrvRepository
     }
 
     /**
-     * Fonction permettant d'ajouter un utilisateur
-     * @param string $email email de l'utilisateur
-     * @param string $hash hash du mot de passe
+     * Add a user to the database
+     * @param string $email email of the user
+     * @param string $hash hash of the password
+     * @param int $role role of the user
      * @return void
      */
     public function addUser(string $email, string $hash, int $role) : void {
@@ -93,9 +95,9 @@ class NrvRepository
     }
 
     /**
-     * Fonction permettant de vérifier si un utilisateur existe à partir de son email
-     * @param string $email email de l'utilisateur
-     * @return bool true si l'utilisateur existe, false sinon
+     * Check if a user exists in the database
+     * @param string $email email of the user
+     * @return bool true if the user exists, false otherwise
      */
     public function userExistsEmail(string $email) : bool {
         $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM user WHERE email = ?");
@@ -104,9 +106,9 @@ class NrvRepository
     }
 
     /**
-     * Fonction permettant de récupérer le hash du mot de passe d'un utilisateur
-     * @param string $email email de l'utilisateur
-     * @return string hash du mot de passe
+     * Get the hash of the password
+     * @param string $email email of the user
+     * @return string hash of the password
      */
     public function getHash(string $email) : string {
         $stmt = $this->pdo->prepare("SELECT hash FROM user WHERE email = ?");
@@ -115,8 +117,8 @@ class NrvRepository
     }
 
     /**
-     * Fonction permettant de récupérer tous les spectacles
-     * @return array spectacles
+     * Get all spectacles
+     * @return array list of all spectacles
      */
     public function findAllSpectacles() : array {
         $stmt = $this->pdo->prepare("SELECT * FROM spectacle");
@@ -125,9 +127,9 @@ class NrvRepository
     }
 
     /**
-     * Fonction permettant de récupérer une date de spectacle à partir de son id
-     * @param int $id id du spectacle
-     * @return string date du spectacle
+     * Get the date of a spectacle
+     * @param int $id id of the spectacle
+     * @return string|null date of the spectacle
      */
     public function getDateSpectacle(int $id) : ?string {
         $stmt = $this->pdo->prepare("SELECT S.date 
@@ -143,9 +145,9 @@ class NrvRepository
 
 
     /**
-     * Fonction permettant de récupérer les images d'un spectacle à partir de son id
-     * @param int $id id du spectacle
-     * @return array images du spectacle
+     * Get images of a spectacle
+     * @param int $id id of the spectacle
+     * @return array list of images
      */
     public function getImagesSpectacle(int $id) : array {
         $stmt = $this->pdo->prepare("SELECT I.chemin_fichier
@@ -156,6 +158,11 @@ class NrvRepository
         return $stmt->fetchAll();
     }
 
+    /**
+     * Get the path of an image
+     * @param int $id id of the image
+     * @return string path of the image
+     */
     public function getImagePath(int $id) : string {
         $stmt = $this->pdo->prepare("SELECT I.chemin_fichier
                                             FROM image I
@@ -165,9 +172,10 @@ class NrvRepository
     }
 
     /**
-     * Fonction permettant d'ajouter un spectacle
-     * @param Spectacle $s spectacle à ajouter
-     * @return Spectacle spectacle ajouté
+     * Add a spectacle
+     * @param Spectacle $s spectacle to add
+     * @return Spectacle added spectacle
+     * @throws InvalidPropertyNameException
      */
     function ajouterSpectacle(Spectacle $s) : Spectacle {
         $sql = "INSERT INTO spectacle (titre, description, chemin_video, horaire, duree, style) VALUES (?, ?, ?, ?, ?, ?)";
@@ -178,6 +186,9 @@ class NrvRepository
     }
 
     /**
+     * Modify a spectacle
+     * @param Spectacle $s spectacle to modify
+     * @return Spectacle modified spectacle
      * @throws Exception
      */
     function modifierSpectacle(Spectacle $s) : Spectacle {
@@ -194,9 +205,10 @@ class NrvRepository
     }
 
     /**
-     * Ajoute une soirée
-     * @param Soiree $s soirée à ajouter
-     * @return Soiree soirée ajoutée
+     * Add a party
+     * @param Soiree $s party to add
+     * @return Soiree added party
+     * @throws InvalidPropertyNameException
      */
     function ajouterSoiree(Soiree $s) : Soiree {
         $sql = "INSERT INTO soiree (nom, thematique, date, horaire_debut, horaire_fin, id_lieu, tarif) 
@@ -216,9 +228,9 @@ class NrvRepository
     }
 
     /**
-     * Récupérer les détails d'un spectacle par son ID
-     * @param int $spectacleId ID du spectacle
-     * @return array informations du spectacle
+     * Get a spectacle details
+     * @param int $spectacleId spectacle ID
+     * @return array spectacle details
      * @throws Exception
      */
     public function getSpectacleDetails(int $spectacleId): array {
@@ -232,9 +244,9 @@ class NrvRepository
     }
 
     /**
-     * Récupérer les artistes d'un spectacle
-     * @param int $spectacleId ID du spectacle
-     * @return array liste des artistes
+     * Get the artists of a spectacle
+     * @param int $spectacleId spectacle ID
+     * @return array list of artists
      */
     public function getArtistsFromSpectacle(int $spectacleId): array {
         $stmt = $this->pdo->prepare("SELECT DISTINCT a.nom, a.id
@@ -246,8 +258,8 @@ class NrvRepository
     }
 
     /**
-     * Récupérer les artistes
-     * @return array liste des artistes
+     * Get all artists
+     * @return array list of all artists
      */
     public function getAllArtists(): array {
         $stmt = $this->pdo->prepare("SELECT * FROM artiste");
@@ -256,8 +268,8 @@ class NrvRepository
     }
 
     /**
-     * Récupérer le nombre d'artistes
-     * @return int nombre d'artistes
+     * Get the number of artists
+     * @return int number of artists
      */
     public function getNbArtistes(): int {
         $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM artiste");
@@ -266,9 +278,9 @@ class NrvRepository
     }
 
     /**
-     * Ajouter un artiste
-     * @param int $idArtiste ID de l'artiste
-     * @param int $idSpectacle ID du spectacle
+     * Add an artist to a spectacle
+     * @param int $idArtiste artist ID
+     * @param int $idSpectacle spectacle ID
      * @return void
      */
     public function addArtisteToSpectacle(int $idArtiste, int $idSpectacle): void {
@@ -277,9 +289,9 @@ class NrvRepository
     }
 
     /**
-     * Supprimer un artiste d'un spectacle
-     * @param int $idArtiste ID de l'artiste
-     * @param int $idSpectacle ID du spectacle
+     * Delete an artist from a spectacle
+     * @param int $idArtiste artist ID
+     * @param int $idSpectacle spectacle ID
      * @return void
      */
     public function deleteArtistFromSpectacle(int $idArtiste, int $idSpectacle): void {
@@ -288,17 +300,17 @@ class NrvRepository
     }
 
     /**
-     * Supprimer une image d'un spectacle
-     * @param int $idImage ID de l'image
-     * @param int $idSpectacle ID du spectacle
-     * @return bool true si l'image a été complétement supprimée, false sinon
+     * Delete an image from a spectacle
+     * @param int $idImage image ID
+     * @param int $idSpectacle spectacle ID
+     * @return bool true if the image is deleted, false otherwise
      */
     public function deleteImagesFromSpectacle(int $idImage, int $idSpectacle): bool {
-        // Delete la liaison
+        // Delete the link between the spectacle and the image
         $stmt = $this->pdo->prepare("DELETE FROM spectacle2image WHERE id_spectacle = ? AND id_image = ?");
         $stmt->execute([$idSpectacle, $idImage]);
 
-        // Delete l'image si elle n'est plus liée à aucun spectacle
+        // Delete the image if it is not linked to any spectacle
         $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM spectacle2image WHERE id_image = ?");
         $stmt->execute([$idImage]);
         $count = $stmt->fetchColumn();
@@ -311,9 +323,9 @@ class NrvRepository
     }
 
     /**
-     * Récupérer les images d'un spectacle
-     * @param int $spectacleId ID du spectacle
-     * @return array liste des chemin_fichiers d'images
+     * Get the images of a spectacle
+     * @param int $spectacleId spectacle ID
+     * @return array list of images
      */
     public function getSpectacleImages(int $spectacleId): array {
         $stmt = $this->pdo->prepare("SELECT * 
@@ -325,9 +337,9 @@ class NrvRepository
     }
 
     /**
-     * Méthode permettant d'ajouter une image
-     * @param string $chemin chemin de l'image
-     * @return int id de l'image ajoutée
+     * Add an image
+     * @param string $chemin path of the image
+     * @return int image ID
      */
     public function addImage(string $chemin) : int {
         $stmt = $this->pdo->prepare("INSERT INTO image (chemin_fichier) VALUES (?)");
@@ -336,9 +348,9 @@ class NrvRepository
     }
 
     /**
-     * Méthode permettant d'ajouter une image à un spectacle
-     * @param int $idImage id de l'image
-     * @param int $idSpectacle id du spectacle
+     * Add an image to a spectacle
+     * @param int $idImage image ID
+     * @param int $idSpectacle spectacle ID
      * @return void
      */
     public function addImageToSpectacle(int $idImage, int $idSpectacle) : void {
@@ -347,9 +359,9 @@ class NrvRepository
     }
 
     /**
-     * Méthode permettant de mettre à jour le chemin d'une image pour un spectacle
-     * @param string $chemin chemin de la vidéo
-     * @param int $idSpectacle id du spectacle
+     * Update the path of the video of a spectacle
+     * @param string $chemin path of the video
+     * @param int $idSpectacle spectacle ID
      * @return void
      */
     public function updateVideoPathForSpectacle(string $chemin, int $idSpectacle) : void {
@@ -358,9 +370,9 @@ class NrvRepository
     }
 
     /**
-     * Méthode permettant de récupérer le chemin de la vidéo d'un spectacle
-     * @param int $idSpectacle id du spectacle
-     * @return string chemin de la vidéo
+     * Get the path of the video of a spectacle
+     * @param int $idSpectacle spectacle ID
+     * @return string path of the video
      */
     public function getVideoPathFromSpectacle(int $idSpectacle): string {
         $stmt = $this->pdo->prepare("SELECT chemin_video FROM spectacle WHERE id = ?");
@@ -369,9 +381,9 @@ class NrvRepository
     }
 
     /**
-     * Fonction permettant de récupérer les spectacles par style
-     * @param string $style style de musique
-     * @return array spectacles filtrés par style
+     * Get all the spectacle from a given style
+     * @param string $style style of the spectacle
+     * @return array list of spectacles
      */
     public function findSpectaclesByStyle(string $style) : array {
         $stmt = $this->pdo->prepare("SELECT * FROM spectacle WHERE style = ?");
@@ -380,8 +392,8 @@ class NrvRepository
     }
 
     /**
-     * Fonction permettant de récupérer la liste des styles de spectacle
-     * @return array liste des styles de spectacle
+     * Get the list of styles
+     * @return array list of styles
      */
     public function getListeStyleSpectacle() : array {
         $stmt = $this->pdo->prepare("SELECT DISTINCT style FROM spectacle");
@@ -390,9 +402,9 @@ class NrvRepository
     }
 
     /**
-     * Fonction permettant de récupérer les spectacles par date
-     * @param string $date date du spectacle
-     * @return array spectacles filtrés par date
+     * Get the spectacle from a given date
+     * @param string $date date of the spectacle
+     * @return array list of spectacles
      */
     public function findSpectaclesByDate(string $date) : array {
         $stmt = $this->pdo->prepare("SELECT * 
@@ -405,8 +417,8 @@ class NrvRepository
     }
 
     /**
-     * Fonction permettant de récupérer la liste des dates de soirée (et donc de spectacle)
-     * @return array liste des dates de spectacle
+     * Get the list of dates
+     * @return array list of dates
      */
     public function getListeDateSpectacle() : array {
         $stmt = $this->pdo->prepare("SELECT DISTINCT date FROM soiree");
@@ -415,9 +427,9 @@ class NrvRepository
     }
 
     /**
-     * Fonction permettant de récupérer les spectacles par lieu
-     * @param string $lieu lieu du spectacle
-     * @return array spectacles filtrés par lieu
+     * Get the spectacle from a given location
+     * @param string $lieu location of the spectacle
+     * @return array list of spectacles
      */
     public function findSpectaclesByLieu(string $lieu) : array {
         $stmt = $this->pdo->prepare("SELECT *
@@ -431,8 +443,8 @@ class NrvRepository
     }
 
     /**
-     * Fonction permettant de récupérer la liste des lieux de spectacle
-     * @return array liste des lieux de spectacle
+     * Get the list of locations
+     * @return array list of locations
      */
     public function getListeLieuSpectacle() :array {
         $stmt = $this->pdo->prepare("SELECT DISTINCT nom FROM lieu");
@@ -441,8 +453,8 @@ class NrvRepository
     }
 
     /**
-     * Fonction permettant de récupérer les soirées existantes
-     * @return array
+     * Get the list of all the parties
+     * @return array list of all the parties
      */
     public function findAllSoirees(): array {
         $sql = "SELECT id, nom, date FROM soiree ORDER BY date";
@@ -451,31 +463,32 @@ class NrvRepository
     }
 
     /**
-     * Fonction permettant d'ajouter un spectacle à une soirée
-     * @param int $id_soiree
-     * @param int $id_spectacle
-     * @return bool
+     * Add a spectacle to a party
+     * @param int $id_soiree party ID
+     * @param int $id_spectacle spectacle ID
+     * @return bool true if the spectacle is added, false otherwise
      */
     public function addSpectacleToSoiree(int $id_soiree, int $id_spectacle): bool {
-        // Vérifie si l'association existe déjà
+        // Check if the association already exists
         $checkSql = "SELECT COUNT(*) FROM soiree2spectacle WHERE id_soiree = :id_soiree AND id_spectacle = :id_spectacle";
         $stmt = $this->pdo->prepare($checkSql);
         $stmt->execute(['id_soiree' => $id_soiree, 'id_spectacle' => $id_spectacle]);
         $exists = $stmt->fetchColumn() > 0;
 
         if ($exists) {
-            // Retourne false pour signaler qu'il y a un doublon
             return false;
         }
 
-        // Si l'association n'existe pas, insérer la nouvelle entrée
+        // Add the association if it does not exist
         $sql = "INSERT INTO soiree2spectacle (id_soiree, id_spectacle) VALUES (:id_soiree, :id_spectacle)";
         $stmt = $this->pdo->prepare($sql);
         return $stmt->execute(['id_soiree' => $id_soiree, 'id_spectacle' => $id_spectacle]);
     }
 
-
-
+    /**
+     * Get all the parties with their associated spectacles
+     * @return array list of all the parties with their associated spectacles
+     */
     public function findAllSoireesWithSpectacles(): array {
         $sql = "
         SELECT s.id AS soiree_id, s.nom AS soiree_nom, s.date, s.thematique, 
@@ -489,9 +502,12 @@ class NrvRepository
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 
-
-
-
+    /**
+     * Get the details of a party
+     * @param int $soireeId party ID
+     * @return array party details
+     * @throws Exception
+     */
     public function getSoireeDetails(int $soireeId): array {
         $query = "SELECT nom, thematique, date, horaire_debut, horaire_fin, id_lieu, tarif FROM soiree WHERE id = :id";
         $stmt = $this->pdo->prepare($query);
@@ -504,7 +520,12 @@ class NrvRepository
         return $soireeDetails;
     }
 
-
+    /**
+     * Get the details of a location
+     * @param int $lieuId location ID
+     * @return array location details
+     * @throws Exception
+     */
     public function getLieuDetails(int $lieuId): array {
         $query = "SELECT nom, adresse FROM lieu WHERE id = :id";
         $stmt = $this->pdo->prepare($query);
@@ -517,7 +538,13 @@ class NrvRepository
         return $lieuDetails;
     }
 
-    public function getSoireeSpectacles(int $soireeId): array {
+    /**
+     * Get the list of spectacle for a party
+     * @param int $soireeId
+     * @return array list of spectacles
+     * @throws Exception
+     */
+    public function getSpectaclesFromSoiree(int $soireeId): array {
         $query = "
         SELECT *
         FROM spectacle s 
@@ -533,6 +560,11 @@ class NrvRepository
         return $spectacles;
     }
 
+    /**
+     * Get the party ID from a spectacle ID
+     * @param int $spectacleId spectacle ID
+     * @return int|null party ID
+     */
     public function getSoireeIdBySpectacleId(int $spectacleId): ?int {
         $sql = 'SELECT id_lieu FROM soiree 
             JOIN soiree2spectacle ON soiree.id = soiree2spectacle.id_soiree 
@@ -543,7 +575,4 @@ class NrvRepository
 
         return $result ? (int)$result['id_lieu'] : null;
     }
-
-
-
 }

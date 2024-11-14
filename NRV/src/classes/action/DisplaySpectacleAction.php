@@ -10,13 +10,18 @@ use nrv\renderer\SpectacleRenderer;
 use nrv\repository\NrvRepository;
 use Exception;
 
+/**
+ * Class to display a spectacle
+ */
 class DisplaySpectacleAction extends Action {
 
     /**
+     * Displays the details of a spectacle
+     * @return string The HTML code of the spectacle
      * @throws InvalidPropertyNameException
      */
     public function executeGet(): string {
-        // Vérifier si l'ID du spectacle est spécifié
+        // Check if the spectacle ID is specified
         if (!isset($_GET['id'])) {
             http_response_code(400);
             return <<<FIN
@@ -27,43 +32,43 @@ class DisplaySpectacleAction extends Action {
             FIN;
         }
 
-        // Vérifier si l'ID du spectacle est spécifié
         $spectacleId = (int)$_GET['id'];
 
-        // Obtenir les détails du spectacle depuis le dépôt
+        // Get the details of the spectacle
         try {
             $repository = NrvRepository::getInstance();
             $spectacleDetails = $repository->getSpectacleDetails($spectacleId );
             $artistes = $repository->getArtistsFromSpectacle($spectacleId);
             $images = $repository->getSpectacleImages($spectacleId);
 
-            // Récupérer l'ID de la soirée associée à ce spectacle
+            // Get the ID of the party associated with the spectacle
             $soireeId = $repository->getSoireeIdBySpectacleId($spectacleId);
         } catch (Exception $e) {
-            return "<p>Erreur lors de la récupération des informations du spectacle : {$e->getMessage()}</p>";
+            return "<p>Erreur lors de la récupération des informations du spectacle: {$e->getMessage()}</p>";
         }
 
         $spectacleObjet = new Spectacle($spectacleDetails['titre'], $spectacleDetails['description'], $spectacleDetails['horaire'], $spectacleDetails['duree'], $spectacleDetails['style'], $spectacleDetails['chemin_video']);
         $spectacleObjet->setId($spectacleId);
         $spectacleRenderer = new SpectacleRenderer($spectacleObjet);
 
-        // Créer le lien vers la soirée associée au spectacle
+        // Create the link to the party
         $soireeLink = "";
         if ($soireeId) {
             $soireeLink = "<a class='btn btn-primary my-3' href='?action=display-soiree&id=$soireeId'>Voir la soirée associée</a>";
         }
 
-        // Vérifier si l'utilisateur est connecté pour savoir s'il peut voir le bouton modifier spectacle
-        $check = $this->checkUser(User::STANDARD_USER);
-        if ($check !== "") {
+        // Check if the user is connected and has the right role to display the button to modify the spectacle
+        if ($this->checkUser(User::STANDARD_USER) !== "") {
             return $spectacleRenderer->renderAsLong($artistes, $images) . $soireeLink;
         }
 
-        // Affichage détaillé du spectacle avec le lien vers la soirée avec lien de modification si connecté
+        // Display the spectacle with the button to modify it
         return $spectacleRenderer->renderAsLong($artistes, $images) . "<a class='btn btn-primary m-3' href='?action=modify-spectacle&id=$spectacleId'>Modifier ce spectacle</a>" . $soireeLink;
     }
 
     /**
+     * Displays the details of a spectacle
+     * @return string The HTML code of the spectacle
      * @throws InvalidPropertyNameException
      */
     public function executePost(): string {

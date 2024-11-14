@@ -2,31 +2,42 @@
 
 namespace nrv\renderer;
 
+use nrv\exception\InvalidPropertyNameException;
 use nrv\festival\Soiree;
 
+/**
+ * SoireeRenderer class
+ *
+ * Generates HTML for displaying a Soiree object
+ */
 class SoireeRenderer {
 
+    /** @var Soiree object to display */
     private Soiree $soiree;
 
+    /**
+     * Constructor
+     * @param Soiree $soiree Soiree object to display
+     */
     public function __construct(Soiree $soiree) {
         $this->soiree = $soiree;
     }
 
     /**
-     * Affiche les détails complets de la soirée, incluant les informations sur le lieu et les spectacles associés.
-     *
-     * @param array $lieuDetails Tableau contenant les informations sur le lieu.
-     * @param array $spectacles Tableau d'objets de type spectacle associés à cette soirée.
-     * @param array $artistes Tableau d'objets de type artiste associés à cette soirée.
-     * @return string Le HTML généré pour l'affichage des détails de la soirée.
+     * Renders the Soiree object as a long HTML string
+     * @param array $lieuDetails Array of the location details associated with this party.
+     * @param array $spectacles Array of spectacle objects associated with this party.
+     * @param array $artistes Array of artist objects associated with this party.
+     * @return string The HTML code of the Soiree object
+     * @throws InvalidPropertyNameException
      */
     public function renderAsLong(array $lieuDetails, array $spectacles, array $artistes): string {
-        // Condition pour éviter d'afficher 01/01/1970
+        // Format the date, the condition is necessary to avoid 01/01/1970 when the date is unknown
         $date = $this->soiree->__get('date');
         if($date !== "Date inconnue") {
             $date = date('d/m/Y', strtotime($date));
         }
-        // Détails de base de la soirée
+
         $html = <<<HTML
             <h1>Soirée: {$this->soiree->__get('nom')}</h1>
             <hr>
@@ -47,13 +58,13 @@ class SoireeRenderer {
             <ul>
         HTML;
 
-        // Liste des artistes
+        // Artists associated with the party
         foreach ($artistes as $artist) {
             $html .= "<li>{$artist['nom']}</li>";
         }
         $html .= "</ul>";
 
-        // Liste des spectacles associés à la soirée
+        // Spectacles associated with the party
         $html .= <<<FIN
             <div>
                 <h2>Spectacles</h2>

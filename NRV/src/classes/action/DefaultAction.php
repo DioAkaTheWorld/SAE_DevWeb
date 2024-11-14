@@ -4,16 +4,15 @@ declare(strict_types=1);
 namespace nrv\action;
 
 /**
- * Action par défaut
+ * Default action
  */
 class DefaultAction extends Action {
 
     /**
-     * Méthode exécutée en cas de requête GET
-     * @return string HTML de la page d'accueil
+     * Home page
+     * @return string HTML of the home page
      */
     public function executeGet(): string {
-        // Message de bienvenue
         return <<<HTML
             <section class="hero" id="home">
                 <div class="hero-content">
@@ -27,8 +26,8 @@ class DefaultAction extends Action {
     }
 
     /**
-     * Méthode exécutée en cas de requête POST
-     * @return string HTML de la page d'accueil
+     * Home page
+     * @return string HTML of the home page
      */
     public function executePost(): string{
         return $this->executeGet();

@@ -6,14 +6,14 @@ use nrv\exception\AuthnException;
 use nrv\repository\NrvRepository;
 
 /**
- * Classe abstraite pour la gestion de l'authentification
+ * Abstract class to manage the authentication
  */
 abstract class AuthnProvider {
 
     /**
-     * Fonction de connexion
-     * @param string $email email de l'utilisateur
-     * @param string $passwd2check mot de passe en clair à vérifier
+     * Function to connect an user
+     * @param string $email email of the user
+     * @param string $passwd2check password to check
      * @return void
      * @throws AuthnException
      */
@@ -29,8 +29,8 @@ abstract class AuthnProvider {
     }
 
     /**
-     * Fonction qui retourne l'utilisateur connecté
-     * @return User l'utilisateur connecté
+     * Function to get the connected user
+     * @return User the connected user
      * @throws AuthnException
      */
     public static function getSignedInUser() : User {
@@ -40,15 +40,19 @@ abstract class AuthnProvider {
         return $_SESSION['user'];
     }
 
+    /**
+     * Function to test if the user is connected
+     * @return bool true if the user is connected, false otherwise
+     */
     public static function isSignedIn() : bool {
         return isset($_SESSION['user']);
     }
 
     /**
-     * Fonction d'incription
-     * @param string $email email de l'utilisateur
-     * @param string $pass mot de passe en clair
-     * @param int $role rôle du nouvel utilisateur
+     * Function to register a new user
+     * @param string $email email of the new user
+     * @param string $pass password of the new user
+     * @param int $role role of the new user
      * @return void
      * @throws AuthnException
      */
@@ -71,16 +75,16 @@ abstract class AuthnProvider {
     }
 
     /**
-     * Vérifie la force du mot de passe
-     * @param string $pass mot de passe à vérifier
-     * @return bool true si le mot de passe est fort, false sinon
+     * Function to check the strength of a password
+     * @param string $pass password to check
+     * @return bool true if the password is strong enough, false otherwise
      */
     public static function checkPasswordStrength(string $pass): bool {
-        $length = (strlen($pass) >= 10); // longueur minimale
-        $digit = preg_match("#[\d]#", $pass); // au moins un digit
-        $special = preg_match("#[\W]#", $pass); // au moins un car. spécial
-        $lower = preg_match("#[a-z]#", $pass); // au moins une minuscule
-        $upper = preg_match("#[A-Z]#", $pass); // au moins une majuscule
+        $length = (strlen($pass) >= 10); // At least 10 characters
+        $digit = preg_match("#[\d]#", $pass); // At least one digit
+        $special = preg_match("#[\W]#", $pass); // At least one special character
+        $lower = preg_match("#[a-z]#", $pass); // At least one lowercase
+        $upper = preg_match("#[A-Z]#", $pass); // At least one uppercase
         if (!$length || !$digit || !$special || !$lower || !$upper) return false;
         return true;
     }

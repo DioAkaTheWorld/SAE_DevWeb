@@ -7,16 +7,16 @@ use nrv\auth\AuthnProvider;
 use nrv\exception\AuthnException;
 
 /**
- * Action permettant de se connecter
+ * Action to log in
  */
 class LogInAction extends Action {
 
     /**
-     * Méthode exécutée lors d'une requête GET
-     * @return string le formulaire de connexion
+     * Shows the login form
+     * @return string The HTML code of the login form
      */
     public function executeGet(): string {
-        // Vérification de l'authentification
+        // Check if the user is already signed in
         if (AuthnProvider::isSignedIn()) {
             return <<<FIN
             <div class="alert alert-info my-5" role="alert">
@@ -24,7 +24,6 @@ class LogInAction extends Action {
             FIN;
         }
 
-        // Formulaire de connexion
         return <<<FIN
         <h2 class="p-2">Se connecter</h2>
                 <hr>
@@ -45,11 +44,11 @@ class LogInAction extends Action {
     }
 
     /**
-     * Méthode exécutée lors d'une requête POST
-     * @return string le message de connexion ou le formulaire de connexion avec un message d'erreur
+     * Processes the login form
+     * @return string The HTML code of the result
      */
     public function executePost(): string{
-        // Vérification de l'authentification
+        // Check if the user is already signed in
         if (AuthnProvider::isSignedIn()) {
             return <<<FIN
             <div class="alert alert-info my-5" role="alert">
@@ -57,7 +56,7 @@ class LogInAction extends Action {
             FIN;
         }
 
-        // Traitement de la connexion
+        // Check if the email and password are provided and valid
         $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
         $mdp = filter_var($_POST['mdp'], FILTER_SANITIZE_STRING);
         try {

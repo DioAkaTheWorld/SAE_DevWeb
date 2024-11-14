@@ -6,10 +6,9 @@ namespace nrv\exception;
 use Exception;
 
 /**
- * Classe AuthnException
+ * AuthnException class
  *
- * Cette classe est une exception qui est levée lorsqu'une erreur d'authentification
- * se produit.
+ * Exception thrown when an authentication error occurs
  */
 class AuthnException extends Exception {
 

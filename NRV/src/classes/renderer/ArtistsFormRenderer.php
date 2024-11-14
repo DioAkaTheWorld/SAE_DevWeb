@@ -2,8 +2,19 @@
 
 namespace nrv\renderer;
 
+/**
+ * ArtistsFormRenderer class
+ *
+ * Class used to render the form to associate artists with a show
+ */
 class ArtistsFormRenderer {
 
+    /**
+     * Renders the form to associate artists with a show
+     *
+     * @param array $artists The list of artists to render
+     * @return string The HTML code of the form
+     */
     public function render(array $artists) : string {
         if (empty($artists)) {
             return "<p>Aucun artiste n'est associé à ce spectacle</p>";

@@ -6,10 +6,9 @@ namespace nrv\exception;
 use Exception;
 
 /**
- * Classe AuthzException
+ * AuthzException class
  *
- * Cette classe est une exception qui est levée lorsqu'une erreur d'autorisation
- * se produit.
+ * Exception thrown when an authorization error occurs
  */
 class AuthzException extends Exception {
 

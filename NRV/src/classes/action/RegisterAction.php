@@ -11,28 +11,27 @@ use nrv\exception\AuthzException;
 use nrv\exception\InvalidPropertyNameException;
 
 /**
- * Action pour l'inscription d'un utilisateur.
+ * Action to register a new user
  */
 class RegisterAction extends Action {
 
     /**
-     * Méthode exécutée en cas de requête GET.
-     * @return string Le formulaire d'inscription.
+     * Shows the registration form
+     * @return string The HTML code of the registration form
      */
     public function executeGet(): string {
         $html = "";
         if (AuthnProvider::isSignedIn()) {
-            // On ajoute un deuxième bouton pour ajouter un compte staff si l'utilisateur est un admin
+            // We check if the user is an admin to display the button to register a staff member
             try {
                 $autz = new Authz($_SESSION['user']);
                 $autz->checkRole(User::ADMIN);
                 $html = "<input type='submit' name='register' class='btn btn-primary mx-3' value='Inscription staff'>";
-            } catch (AuthzException|InvalidPropertyNameException $e) {
-                // On ne fait rien
+            } catch (AuthzException|InvalidPropertyNameException) {
+                // Nothing to do
             }
         }
 
-        // Formulaire d'inscription
         return <<<FIN
         <h2 class="p-2">Inscription</h2>
                 <hr>
@@ -57,25 +56,38 @@ class RegisterAction extends Action {
     }
 
     /**
-     * Méthode exécutée en cas de requête POST.
-     * @return string un message de succès ou d'échec.
+     * Processes the registration form
+     * @return string The HTML code of the result
      */
     public function executePost(): string {
-        // Inscription de l'utilisateur
-        $action = $_POST['register']; // Correspond au nom de l'input submit utilisé
+        $html = "";
+        if (AuthnProvider::isSignedIn()) {
+            // We check if the user is an admin to display the button to register a staff member
+            try {
+                $autz = new Authz($_SESSION['user']);
+                $autz->checkRole(User::ADMIN);
+                $html = "<input type='submit' name='register' class='btn btn-primary mx-3' value='Inscription staff'>";
+            } catch (AuthzException|InvalidPropertyNameException) {
+                // Nothing to do
+            }
+        }
+
+        // Validation of the email and password
+        $action = $_POST['register']; // We check which button was clicked
         $email = filter_var($_POST["email"], FILTER_SANITIZE_EMAIL);
         $passwd = filter_var($_POST["mdp"], FILTER_SANITIZE_STRING);
 
-        // Vérification du bouton submit utilisé
+        // We check which role the user wants to register
         if ($action === "Inscription staff") {
             $role = User::STAFF;
         } else {
             $role = User::STANDARD_USER;
         }
 
+        // We register the user
         try {
             AuthnProvider::register($email, $passwd, $role);
-            $html = <<<FIN
+            $html .= <<<FIN
             <div class="alert alert-success my-5" role="alert">
                 Inscription réussie ! Vous pouvez maintenant vous <a href="?action=log-in">connecter</a>.
             </div>
@@ -88,7 +100,6 @@ class RegisterAction extends Action {
             </div>
             FIN;
         }
-
 
         return $html;
     }

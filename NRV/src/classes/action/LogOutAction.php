@@ -6,22 +6,22 @@ use nrv\auth\User;
 use nrv\exception\InvalidPropertyNameException;
 
 /**
- * Action permettant de se déconnecter
+ * Log out action
  */
 class LogOutAction extends Action {
 
     /**
-     * Méthode exécutée lors d'une requête GET
-     * @return string le formulaire de déconnexion
+     * Shows the logout form
+     * @return string The HTML code of the logout form
      * @throws InvalidPropertyNameException
      */
     public function executeGet(): string {
+        // Check if the user is connected
         $check = $this->checkUser(User::STANDARD_USER);
         if ($check !== "") {
             return $check;
         }
 
-        // Formulaire de déconnexion
         return <<<FIN
         <div class="container d-flex flex-column justify-content-center align-items-center h3">
                 <h2 class="h1">Êtes-vous sûr ?</h2>
@@ -35,19 +35,21 @@ class LogOutAction extends Action {
     }
 
     /**
-     * Méthode exécutée lors d'une requête POST
-     * @return string le message de déconnexion
+     * Processes the logout form
+     * @return string The HTML code of the result
      * @throws InvalidPropertyNameException
      */
     public function executePost(): string {
+        // Check if the user is connected
         $check = $this->checkUser(User::STANDARD_USER);
         if ($check !== "") {
             return $check;
         }
 
-        // Déconnexion
+        // Destroy the session
         session_destroy();
         header('Location:index.php');
+        // Return a success message (not displayed)
         return <<<FIN
         <div class="alert alert-success my-5" role="alert">
             Vous avez bien été déconnecté.

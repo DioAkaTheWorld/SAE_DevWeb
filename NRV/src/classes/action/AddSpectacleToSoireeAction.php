@@ -6,20 +6,20 @@ use Exception;
 use nrv\exception\InvalidPropertyValueException;
 use nrv\repository\NrvRepository;
 
-class AddSpectacleToSoireeAction extends Action
-{
+/**
+ * Class to add a spectacle to a party
+ */
+class AddSpectacleToSoireeAction extends Action {
+
     /**
-     * Affiche le formulaire pour ajouter un spectacle à une soirée
-     *
-     * @return string Le code HTML du formulaire
+     * Displays the form to add a spectacle to a party
+     * @return string The HTML code of the form
      */
-    public function executeGet(): string
-    {
+    public function executeGet(): string {
         $repo = NrvRepository::getInstance();
         $soirees = $repo->findAllSoirees();
         $spectacles = $repo->findAllSpectacles();
 
-        // Commence le contenu HTML pour le formulaire
         $res = <<<FIN
         <h2 class="p-2">Ajouter un Spectacle à une Soirée</h2>
         <hr>
@@ -30,7 +30,7 @@ class AddSpectacleToSoireeAction extends Action
                     <option value="">-- Choisir un spectacle --</option>
         FIN;
 
-        // Ajoute les options pour les spectacles
+        // Add the options for the spectacles
         foreach ($spectacles as $spectacle) {
             $res .= "<option value='{$spectacle['id']}'>{$spectacle['titre']}</option>";
         }
@@ -44,7 +44,7 @@ class AddSpectacleToSoireeAction extends Action
                     <option value="">-- Choisir une soirée --</option>
         FIN;
 
-        // Ajoute les options pour les soirées
+        // Add the options for the parties
         foreach ($soirees as $soiree) {
             $res .= "<option value='{$soiree['id']}'>{$soiree['nom']} - {$soiree['date']}</option>";
         }
@@ -60,18 +60,17 @@ class AddSpectacleToSoireeAction extends Action
     }
 
     /**
-     * Traite la soumission du formulaire pour ajouter un spectacle à une soirée
-     *
-     * @return string Retourne une redirection ou un message d'erreur si la redirection échoue
+     * Adds a spectacle to a party
+     * @return string The HTML code of the result
      */
-    public function executePost(): string
-    {
+    public function executePost(): string {
         $repo = NrvRepository::getInstance();
 
-        // Récupération et validation des données du formulaire
+        // Get the data from the form and sanitize it
         $id_soiree = filter_var($_POST['id_soiree'], FILTER_SANITIZE_NUMBER_INT);
         $id_spectacle = filter_var($_POST['id_spectacle'], FILTER_SANITIZE_NUMBER_INT);
 
+        // Check if the party and the spectacle are selected
         try {
             if (empty($id_soiree)) {
                 throw new InvalidPropertyValueException("Soirée non sélectionnée.");
@@ -80,23 +79,15 @@ class AddSpectacleToSoireeAction extends Action
                 throw new InvalidPropertyValueException("Spectacle non sélectionné.");
             }
 
-            // Tente d'ajouter l'association dans la base de données
+            // Add the spectacle to the party
             $success = $repo->addSpectacleToSoiree($id_soiree, $id_spectacle);
             if (!$success) {
                 throw new Exception("Ce spectacle est déjà associé à la soirée sélectionnée.");
             }
-
-            // Mettre un indicateur dans la session pour signaler la mise à jour dans le header
-            $_SESSION['update_header'] = "Le spectacle a été ajouté à la soirée avec succès !";
-
-        } catch (InvalidPropertyValueException $e) {
-            return $this->executeGet() . "<div class='alert alert-danger'>{$e->getMessage()}</div>";
-        } catch (Exception $e) {
-            return $this->executeGet() . "<div class='alert alert-danger'>Erreur : {$e->getMessage()}</div>";
+        } catch (InvalidPropertyValueException|Exception $e) {
+            return $this->executeGet() . "<div class='alert alert-danger my-3'>{$e->getMessage()}</div>";
         }
 
-        // Redirection vers l'index pour voir la mise à jour
-        header("Location: index.php");
-        exit();
+        return $this->executeGet() . "<div class='alert alert-success my-3'>Spectacle ajouté à la soirée avec succès.</div>";
     }
 }

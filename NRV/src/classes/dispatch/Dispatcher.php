@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace nrv\dispatch;
 
-use nrv\action\AddImageToSpecacleAction;
 use nrv\action\AddSoireeAction;
 use nrv\action\AddSpectacleAction;
 use nrv\action\AddSpectacleToSoireeAction;
@@ -18,24 +17,23 @@ use nrv\action\DisplaySpectaclesByLocation;
 use nrv\action\ModifySpectacleAction;
 use nrv\action\LogInAction;
 use nrv\action\LogOutAction;
+use nrv\auth\AuthnProvider;
 use nrv\auth\User;
 
 /**
- * Classe Dispatcher
+ * Dispatcher class
  *
- * Cette classe est le point d'entrée de l'application. Elle est responsable de
- * déterminer quelle action doit être exécutée en fonction de la requête de
- * l'utilisateur, puis d'exécuter cette action et de renvoyer le résultat.
+ * Dispatches the action requested by the user and displays the result.
+ * Each action is represented by an object.
+ * This class is the entry point of the application.
  */
 class Dispatcher {
 
-    /** @var string action à réaliser */
+    /** @var string action to do */
     private string $action;
 
     /**
-     * Constructeur
-     *
-     * Initialise l'action à réaliser en fonction de la requête de l'utilisateur.
+     * Constructor
      */
     public function __construct() {
         if (isset($_GET['action'])) {
@@ -46,7 +44,7 @@ class Dispatcher {
     }
 
     /**
-     * Exécute l'action demandée par l'utilisateur et affiche le résultat.
+     * Dispatches the action requested by the user and displays the result.
      * @return void
      */
     public function run(): void {
@@ -70,12 +68,11 @@ class Dispatcher {
     }
 
     /**
-     * Affiche la page HTML en fonction de l'état de connexion de l'utilisateur.
-     *
-     * @param string $html contenu de la page à afficher selon l'action demandée
+     * Displays the page with the content of the action requested by the user.
+     * @param string $html HTML content of the page
      */
     private function renderPage(string $html): void {
-        $connected = isset($_SESSION['user']);
+        $connected = AuthnProvider::isSignedIn();
 
         echo <<<FIN
         <!DOCTYPE html>
@@ -114,11 +111,9 @@ class Dispatcher {
     }
 
     /**
-     * Renvoie le contenu HTML des éléments de la barre de navigation en fonction
-     * de l'état de connexion de l'utilisateur et de son rôle.
-     *
-     * @param bool $connected état de connexion de l'utilisateur
-     * @return string contenu HTML des éléments de la barre de navigation
+     * Renders the items of the navigation bar according to the user's role.
+     * @param bool $connected True if the user is connected, false otherwise
+     * @return string HTML content of the navigation bar items
      */
     private function renderNavBarItems(bool $connected): string {
         if ($connected) {
@@ -136,8 +131,8 @@ class Dispatcher {
     }
 
     /**
-     * Fais le rendu de la barre de navigation pour un utilisateur standard.
-     * @return string contenu HTML des éléments de la barre de navigation
+     * Renders the navigation bar items for a standard user.
+     * @return string HTML content of the navigation bar items
      */
     private function renderNavBarItemsStandardUser(): string {
         return <<<FIN
@@ -151,8 +146,8 @@ class Dispatcher {
     }
 
     /**
-     * Fais le rendu de la barre de navigation pour un utilisateur staff.
-     * @return string contenu HTML des éléments de la barre de navigation
+     * Renders the navigation bar items for a staff user.
+     * @return string HTML content of the navigation bar items
      */
     private function renderNavBarItemsStaffUser() : string {
         return <<<FIN
@@ -175,8 +170,8 @@ class Dispatcher {
     }
 
     /**
-     * Fais le rendu de la barre de navigation pour un utilisateur admin.
-     * @return string contenu HTML des éléments de la barre de navigation
+     * Renders the navigation bar items for an admin user.
+     * @return string HTML content of the navigation bar items
      */
     private function renderNavBarItemsAdminUser() : string {
         return <<<FIN
@@ -204,8 +199,8 @@ class Dispatcher {
     }
 
     /**
-     * Fais le rendu de la barre de navigation pour un utilisateur non connecté.
-     * @return string contenu HTML des éléments de la barre de navigation
+     * Renders the navigation bar items for a user that is not connected.
+     * @return string HTML content of the navigation bar items
      */
     private function renderNavBarItemsNotConnected() : string {
         return <<<FIN

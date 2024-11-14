@@ -4,10 +4,20 @@ namespace nrv\renderer;
 
 use nrv\repository\NrvRepository;
 
+/**
+ * SpectacleFiltersListRenderer class
+ *
+ * Class to render the list of filters for the spectacle list
+ */
 class SpectacleFiltersListRenderer {
 
+    /**
+     * Renders the list of filters for the spectacle list
+     *
+     * @return string The HTML code of the list
+     */
     public function render() : string {
-        // Récupère la liste des styles de spectacles
+        // Get the list of styles, dates and locations
         $repo = NrvRepository::getInstance();
         $styles = $repo->getListeStyleSpectacle();
         $dates = $repo->getListeDateSpectacle();
@@ -19,7 +29,7 @@ class SpectacleFiltersListRenderer {
 
         FIN;
 
-        // Ajoute les options de date
+        // Add date options
         $html .= <<<FIN
             <option value="?action=display-all-spectacles">-- par date --</option>
         FIN;
@@ -32,7 +42,7 @@ class SpectacleFiltersListRenderer {
             FIN;
         }
 
-        // Ajoute les options de style
+        // Add style options
         $html .= <<<FIN
             <option value="?action=display-all-spectacles">-- par style --</option>
         FIN;
@@ -44,7 +54,7 @@ class SpectacleFiltersListRenderer {
             FIN;
         }
 
-        // Ajoute les options de lieu
+        // Add location options
         $html .= <<<FIN
             <option value="?action=display-all-spectacles">-- par lieu --</option>
         FIN;

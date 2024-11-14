@@ -11,13 +11,18 @@ use nrv\renderer\ArtistsFormRenderer;
 use nrv\renderer\ImageFormRenderer;
 use nrv\repository\NrvRepository;
 
+/**
+ * Action to modify a spectacle
+ */
 class ModifySpectacleAction extends Action {
 
     /**
+     * Displays the form to modify a spectacle
+     * @return string The HTML code of the form
      * @throws InvalidPropertyNameException
      */
     public function executeGet(): string {
-        // Vérifier si l'ID du spectacle est spécifié
+        // Check if the spectacle ID is specified
         if (!isset($_GET['id'])) {
             http_response_code(400);
             return <<<FIN
@@ -30,12 +35,13 @@ class ModifySpectacleAction extends Action {
 
         $spectacleId = (int)$_GET['id'];
 
+        // Check if the user has the right role to modify a spectacle
         $check = $this->checkUser(User::STAFF);
         if ($check !== "") {
             return $check;
         }
 
-        // Obtenir les détails du spectacle depuis le dépôt
+        // Get the details of the spectacle
         try {
             $repository = NrvRepository::getInstance();
             $spectacleDetails = $repository->getSpectacleDetails($spectacleId);
@@ -44,12 +50,9 @@ class ModifySpectacleAction extends Action {
             $artistesRenderer = new ArtistsFormRenderer();
             $imagesRenderer = new ImageFormRenderer();
 
-            // Evite de récupérer les secondes causant une erreur lors de la modification
+            // Avoid displaying seconds in the time fields (only HH:MM)
             $horaire = substr($spectacleDetails['horaire'], 0, 5);
             $duree = substr($spectacleDetails['duree'], 0, 5);
-
-            // Récupérer l'ID de la soirée associée à ce spectacle
-            $soireeId = $repository->getSoireeIdBySpectacleId($spectacleId);
         } catch (Exception $e) {
             return "<p>Erreur lors de la récupération des informations du spectacle : {$e->getMessage()}</p>";
         }
@@ -64,7 +67,7 @@ class ModifySpectacleAction extends Action {
             </div>
             <div class="mb-3">
                 <label for="description" class="form-label">Description<span class="text-danger">*</span></label>
-                <input class="form-control" id="description" name="description" value="{$spectacleDetails['description']}" required></input>
+                <input class="form-control" id="description" name="description" value="{$spectacleDetails['description']}" required>
             </div>
             <div class="mb-3">
                 <label for="horaire" class="form-label">Horaire<span class="text-danger">*</span></label>
@@ -101,15 +104,18 @@ class ModifySpectacleAction extends Action {
     }
 
     /**
+     * Modifies a spectacle
+     * @return string The HTML code of the result
      * @throws InvalidPropertyNameException
      */
     public function executePost(): string {
+        // Check if the user has the right role to modify a spectacle
         $check = $this->checkUser(User::STAFF);
         if ($check !== "") {
             return $check;
         }
 
-        // Récupérer les données du formulaire et les valider
+        // Get and validate the data from the form
         $titre = filter_var($_POST['titre'], FILTER_SANITIZE_STRING);
         $description = filter_var($_POST['description'], FILTER_SANITIZE_STRING);
         $horaire = filter_var($_POST['horaire'], FILTER_SANITIZE_STRING);
@@ -118,18 +124,19 @@ class ModifySpectacleAction extends Action {
         $artistes = [];
         foreach ($_POST as $key => $value) {
             if (str_starts_with($key, 'artiste')) {
-                $artisteId = (int)substr($key, 7); // l'id de l'artiste est après 'artiste' dans le nom de la clé
+                $artisteId = (int)substr($key, 7); // The artist ID is after 'artiste' in the key name, e.g. 'artiste1'
                 $artistes[] = $artisteId;
             }
         }
         $images = [];
         foreach ($_POST as $key => $value) {
             if (str_starts_with($key, 'image')) {
-                $imageId = (int)substr($key, 5); // l'id de l'image est après 'image' dans le nom de la clé
+                $imageId = (int)substr($key, 5); // The image ID is after 'image' in the key name, e.g. 'image1'
                 $images[] = $imageId;
             }
         }
 
+        // Validate the data
         try {
             if (empty($titre)) {
                 throw new InvalidPropertyValueException("Titre manquant.");
@@ -150,6 +157,7 @@ class ModifySpectacleAction extends Action {
             return $this->executeGet() . $e->getMessage();
         }
 
+        // Modify the spectacle
         $spectacle = new Spectacle($titre, $description, $horaire, $duree, $style, "aucune image");
         $spectacle->setId((int)$_GET['id']);
         $repo = NrvRepository::getInstance();
@@ -159,12 +167,12 @@ class ModifySpectacleAction extends Action {
             return "<p>Erreur lors de la modification du spectacle : {$e->getMessage()}</p>";
         }
 
-        // Suppression des artistes
+        // Delete the artists
         foreach($artistes as $id) {
             $repo->deleteArtistFromSpectacle($id, $_GET['id']);
         }
 
-        // Suppression des images
+        // Delete the images
         foreach($images as $id) {
             $path = $repo->getImagePath($id);
             if($repo->deleteImagesFromSpectacle($id, $_GET['id'])) {
@@ -173,9 +181,9 @@ class ModifySpectacleAction extends Action {
 
         }
 
-        // Gestion des fichier
+        // Upload the video and the image
         try {
-            // Gestion de la vidéo
+            // Upload the video
             if ($_FILES["video"]["error"] === UPLOAD_ERR_OK) {
                 $nomFichier = UploadFile::uploadVideo();
                 $previousVideoPath = $repo->getVideoPathFromSpectacle($spectacle->__get('id'));
@@ -186,9 +194,9 @@ class ModifySpectacleAction extends Action {
                 }
             }
 
-            // Gestion de l'image
+            // Upload the image
             if ($_FILES["image"]["error"] === UPLOAD_ERR_OK) {
-                $extension =strrchr($_FILES["image"]["type"], "/");
+                $extension = strrchr($_FILES["image"]["type"], "/");
                 $nomFichier = UploadFile::uploadImage(substr($extension, 1));
                 $idImage = $repo->addImage($nomFichier);
                 $repo->addImageToSpectacle($idImage, $spectacle->__get('id'));

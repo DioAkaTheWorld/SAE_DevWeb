@@ -6,33 +6,32 @@ namespace nrv\auth;
 use nrv\exception\InvalidPropertyNameException;
 
 /**
- * Classe représentant un utilisateur
+ * Class to manage the user
  */
 class User {
 
-    /** @var int identifiant unique */
+    /** @var int unique identifier */
     private int $id;
     /** @var string email */
     private string $email;
-    /** @var string hash du mot de passe */
+    /** @var string password hash */
     private string $hash;
-    /** @var int rôle */
+    /** @var int role */
     private int $role;
 
-    /** @var int constante définissant le role standard */
+    /** @var int constant defining the standard role */
     const STANDARD_USER = 1;
-    /** @var int constante définissant le role staff */
+    /** @var int constant defining the staff role */
     const STAFF = 50;
-    /** @var int constante définissant le role administrateur */
+    /** @var int constant defining the admin role */
     const ADMIN = 100;
 
     /**
-     * Constructeur
-     *
-     * @param int $id identifiant unique
+     * Constructor
+     * @param int $id unique identifier
      * @param string $email email
-     * @param string $hash hash du mot de passe
-     * @param int $role rôle
+     * @param string $hash password hash
+     * @param int $role role
      */
     public function __construct(int $id, string $email, string $hash, int $role) {
         $this->id = $id;
@@ -42,9 +41,9 @@ class User {
     }
 
     /**
-     * Getter magique
-     * @param string $attrName nom de l'attribut
-     * @return mixed valeur de l'attribut
+     * Magic method to get the value of an attribute
+     * @param string $attrName name of the attribute
+     * @return mixed value of the attribute
      * @throws InvalidPropertyNameException
      */
     public function __get(string $attrName) : mixed {

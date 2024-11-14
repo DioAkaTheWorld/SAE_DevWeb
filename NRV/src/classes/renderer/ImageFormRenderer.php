@@ -2,8 +2,19 @@
 
 namespace nrv\renderer;
 
+/**
+ * ImageFormRenderer class
+ *
+ * Class used to render images in a form
+ */
 class ImageFormRenderer {
 
+    /**
+     * Renders the images in a form
+     *
+     * @param array $images The list of images to render
+     * @return string The HTML code of the form
+     */
     public function render(array $images) : string {
         if (empty($images)) {
             return "<p>Aucune image n'est associée à ce spectacle</p>";

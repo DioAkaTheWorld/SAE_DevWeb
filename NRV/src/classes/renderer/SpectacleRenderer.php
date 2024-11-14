@@ -2,23 +2,41 @@
 
 namespace nrv\renderer;
 
+use nrv\exception\InvalidPropertyNameException;
 use nrv\festival\Spectacle;
 
+/**
+ * SpectacleRenderer class
+ *
+ * Renders a spectacle
+ */
 class SpectacleRenderer {
 
+    /** @var Spectacle spectacle */
     private Spectacle $spectacle;
 
+    /**
+     * Constructor
+     * @param Spectacle $spectacle spectacle
+     */
     public function __construct(Spectacle $spectacle) {
         $this->spectacle = $spectacle;
     }
 
+    /**
+     * Renders the spectacle as a compact HTML string
+     * @param string $date The date of the spectacle
+     * @param string $image The image of the spectacle
+     * @return string The HTML code of the spectacle
+     * @throws InvalidPropertyNameException
+     */
     public function renderAsCompact(string $date, string $image): string {
-        // Condition pour éviter d'afficher 01/01/1970
+        // Format the date, the condition is necessary to avoid 01/01/1970 when the date is unknown
         if($date !== "Date inconnue") {
             $date = date('d/m/Y', strtotime($date));
         }
 
-        // Utilise une image par défaut si aucune image ne correspond au spectacle
+        // Display the image of the spectacle, if there is no image, display a default image
         if ($image === "pas d'image") {
             $img = "<img src='/SAE_DevWeb/medias/images/ppp.jpg' alt='image spectacle'>";
         } else {
@@ -40,8 +58,14 @@ class SpectacleRenderer {
         FIN;
     }
 
+    /**
+     * Renders the spectacle as a long HTML string
+     * @param array $artistes Array of artist objects associated with this spectacle.
+     * @param array $images Array of image objects associated with this spectacle.
+     * @return string The HTML code of the spectacle
+     * @throws InvalidPropertyNameException
+     */
     public function renderAsLong(array $artistes, array $images): string {
-        // En-tête
         $html = <<<FIN
             <h1>Spectacle: {$this->spectacle->__get('titre')}</h1>
             <hr>
@@ -54,7 +78,7 @@ class SpectacleRenderer {
 
         FIN;
 
-        // Liste des artistes
+        // Artists associated with the spectacle
         $html .= <<<FIN
             <h2>Artistes</h2>
             <ul>
@@ -64,7 +88,7 @@ class SpectacleRenderer {
         }
         $html .= "</ul>";
 
-        // Images du spectacle
+        // Images
         $html .= <<<FIN
                 <h2>Images</h2>
                 <ul class="list-inline">
@@ -85,7 +109,7 @@ class SpectacleRenderer {
             $html .= "<p>Pas d'images pour ce spectacle</p>";
         }
 
-        // Extrait vidéo
+        // Video
         $html .= <<<FIN
                 <h2>Vidéo</h2>
                 <div>

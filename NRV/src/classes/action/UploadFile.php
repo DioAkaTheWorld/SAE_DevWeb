@@ -4,12 +4,15 @@ namespace nrv\action;
 
 use Exception;
 
+/**
+ * Manage the upload of files
+ */
 abstract class UploadFile {
 
     /**
-     * Upload une image
-     * @param string $format Le format de l'image (sans le point)
-     * @return string Le nom du fichier
+     * Image upload
+     * @param string $format The file format (jpg or jpeg, without the period)
+     * @return string The file name
      * @throws Exception
      */
     public static function uploadImage(string $format): string {
@@ -17,8 +20,8 @@ abstract class UploadFile {
     }
 
     /**
-     * Upload une vidéo
-     * @return string Le nom du fichier
+     * Video upload
+     * @return string The file name
      * @throws Exception
      */
     public static function uploadVideo(): string {
@@ -26,14 +29,14 @@ abstract class UploadFile {
     }
 
     /**
-     * Upload un fichier audio ou vidéo
-     * @param string $type Le type de fichier (image ou video)
-     * @param string $format Le format du fichier (sans le point)
-     * @return string Le nom du fichier
+     * Upload a file
+     * @param string $type The type of file (image or video)
+     * @param string $format The file format (jpg, jpeg or mp4, without the period)
+     * @return string The file name
      * @throws Exception
      */
     private static function uploadFile(string $type, string $format): string {
-        // Vérification des paramètres
+        // Check if the file is an image or a video and if the format is correct
         if ($type !== "image" && $type !== "video") {
             throw new Exception("Type de fichier incorrect");
         }
@@ -51,7 +54,7 @@ abstract class UploadFile {
             }
         }
 
-        // variables intermédiaires pour la lisibilité
+        // Define the directory and the file type
         $dir = __DIR__ . "/../../../../medias/" . $type . "s" . "/"; // NRV/medias/images/ ou NRV/medias/videos/
         $fichierType = $type . "/" . $format; // image/jpg, image/jpeg, image/png, video/mp4
 
@@ -59,7 +62,7 @@ abstract class UploadFile {
         $file_name = uniqid() . "." . $format;
         $tmp = $_FILES[$type]["tmp_name"];
         $dest = $upload_dir . $file_name;
-        // Vérifie si le fichier est dans le bon format et si sa taille est inférieure à 15 Mo
+        // Check if the file is an image or a video, if the format is correct and if the file size is less than 15MB
         if ($_FILES[$type]["type"] === $fichierType && $_FILES[$type]["size"] < 15728640 && move_uploaded_file($tmp, $dest)) {
             return $file_name;
         }

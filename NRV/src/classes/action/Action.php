@@ -11,19 +11,19 @@ use nrv\exception\AuthzException;
 use nrv\exception\InvalidPropertyNameException;
 
 /**
- * Classe absraite Action qui gère les actions GET et POST
+ * Abstract class Action that represents an action to be executed
  */
 abstract class Action {
 
-    /** @var string|mixed|null méthode HTTP */
+    /** @var string|mixed|null HTTP method */
     protected ?string $http_method = null;
-    /** @var string|mixed|null nom de domaine */
+    /** @var string|mixed|null domain name */
     protected ?string $hostname = null;
-    /** @var string|mixed|null nom du script */
+    /** @var string|mixed|null script name */
     protected ?string $script_name = null;
 
     /**
-     * Constructeur
+     * Constructor
      */
     public function __construct(){
         $this->http_method = $_SERVER['REQUEST_METHOD'];
@@ -32,16 +32,16 @@ abstract class Action {
     }
 
     /**
-     * Méthode magique __invoke
-     * @return string le résultat de l'exécution à renvoyer dans le html
+     * Magic method to call the object as a function
+     * @return string the result of the execution to be sent in the html
      */
     public function __invoke() : string {
         return $this->execute();
     }
 
     /**
-     * Exécute l'action en fonction de la méthode HTTP
-     * @return string le résultat de l'exécution à renvoyer dans le html
+     * Execute the action
+     * @return string the result of the execution to be sent in the html
      */
     public function execute() : string {
         if ($this->http_method === 'GET') {
@@ -52,13 +52,13 @@ abstract class Action {
     }
 
     /**
-     * Vérifie si l'utilisateur est authentifié et a le rôle nécessaire
-     * @param int $role rôle nécessaire
-     * @return string message d'erreur ou message vide
+     * Check if the user is connected and has the right role
+     * @param int $role the role to check
+     * @return string the error message if any
      * @throws InvalidPropertyNameException
      */
     protected function checkUser(int $role) : string {
-        // Test de la connexion
+        // Test the connection
         if (!AuthnProvider::isSignedIn()) {
             http_response_code(401);
             return <<<FIN
@@ -69,7 +69,7 @@ abstract class Action {
             FIN;
         }
 
-        // Test du rôle
+        // Test the role
         if ($role !== User::STANDARD_USER && $role !== User::STAFF && $role !== User::ADMIN) {
             http_response_code(500);
             return <<<FIN

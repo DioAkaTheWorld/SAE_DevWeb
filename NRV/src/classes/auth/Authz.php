@@ -8,17 +8,16 @@ use nrv\exception\InvalidPropertyNameException;
 use nrv\repository\NrvRepository;
 
 /**
- * Classe pour la gestion des autorisations
+ * Class to manage the authorization
  */
 class Authz {
 
-    /** @var User Utilisateur connecté */
+    /** @var User Connected user */
     private User $authenticated_user;
 
     /**
-     * Constructeur
-     *
-     * @param User $user Utilisateur connecté
+     * Constructor
+     * @param User $user Connected user
      */
     public function __construct(User $user) {
         $this->authenticated_user = $user;
@@ -26,8 +25,8 @@ class Authz {
 
 
     /**
-     * Vérifie si l'utilisateur connecté a le rôle nécessaire
-     * @param int $required rôle nécessaire
+     * Check if the user has the required role
+     * @param int $required Required role
      * @return void
      * @throws AuthzException
      * @throws InvalidPropertyNameException

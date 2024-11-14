@@ -6,10 +6,9 @@ namespace nrv\exception;
 use Exception;
 
 /**
- * Classe InvalidPropertyValueException
+ * InvalidPropertyValueException class
  *
- * Cette classe est une exception qui est levée lorsqu'une valeur de propriété
- * invalide est utilisée.
+ * Exception thrown when an invalid property value is used
  */
 class InvalidPropertyValueException extends Exception {
 

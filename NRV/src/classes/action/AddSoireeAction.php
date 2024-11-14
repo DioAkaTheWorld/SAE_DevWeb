@@ -7,9 +7,14 @@ use nrv\exception\InvalidPropertyNameException;
 use nrv\festival\Soiree;
 use nrv\repository\NrvRepository;
 
+/**
+ * Class to add a party
+ */
 class AddSoireeAction extends Action {
 
     /**
+     * Displays the form to add a party
+     * @return string The HTML code of the form
      * @throws InvalidPropertyNameException
      */
     public function executeGet(): string {
@@ -58,6 +63,8 @@ class AddSoireeAction extends Action {
     }
 
     /**
+     * Processes the form submission to add a party
+     * @return string The HTML code of the result
      * @throws InvalidPropertyNameException
      */
     public function executePost(): string {
@@ -66,7 +73,7 @@ class AddSoireeAction extends Action {
             return $check;
         }
 
-        // Récupérer les données du formulaire et les valider
+        // Get the data from the form and sanitize it
         $nom = filter_var($_POST['nom'], FILTER_SANITIZE_STRING);
         $thematique = filter_var($_POST['thematique'], FILTER_SANITIZE_STRING);
         $date = filter_var($_POST['date'], FILTER_SANITIZE_STRING);
@@ -77,7 +84,7 @@ class AddSoireeAction extends Action {
 
         $errors = [];
 
-        // Validation des données
+        // Check the data
         if (empty($nom)) {
             $errors[] = "Nom de soirée manquant.";
         }
