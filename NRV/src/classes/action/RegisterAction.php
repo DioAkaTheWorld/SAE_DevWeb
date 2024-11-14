@@ -47,6 +47,10 @@ class RegisterAction extends Action {
                         Au minimum 10 ćaractères, 1 majuscule, 1 minuscule, 1 chiffre, 1 caractère spécial
                     </small>
                 </div>
+                <div class="col-sm-12 col-lg-3">    
+                    <label for="mdpCheck" class="mb-2">Confirmer mot de passe<span class="text-danger">*</span>: </label>
+                    <input class="form-control" type="password" placeholder="Mot de passe" name="mdpCheck" id="mdpCheck" required>
+                </div>
                 <div>
                     <input type="submit" name="register" class="btn btn-primary" value="Inscription">
                     $html
@@ -76,6 +80,16 @@ class RegisterAction extends Action {
         $action = $_POST['register']; // We check which button was clicked
         $email = filter_var($_POST["email"], FILTER_SANITIZE_EMAIL);
         $passwd = filter_var($_POST["mdp"], FILTER_SANITIZE_STRING);
+        $passwdCheck = filter_var($_POST["mdpCheck"], FILTER_SANITIZE_STRING);
+
+        // Check if the passwords match
+        if ($passwd !== $passwdCheck) {
+            return $this->executeGet() . <<<FIN
+            <div class="alert alert-danger my-5" role="alert">
+                Les mots de passe ne correspondent pas.
+            </div>
+            FIN;
+        }
 
         // We check which role the user wants to register
         if ($action === "Inscription staff") {
