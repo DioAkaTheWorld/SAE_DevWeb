@@ -2,7 +2,7 @@
 
 namespace nrv\renderer;
 
-class ArtistsListRenderer {
+class ArtistsFormRenderer {
 
     public function render(array $artists) : string {
         if (empty($artists)) {

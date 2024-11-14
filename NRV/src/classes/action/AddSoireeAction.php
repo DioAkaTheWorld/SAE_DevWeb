@@ -4,7 +4,7 @@ namespace nrv\action;
 
 use nrv\auth\User;
 use nrv\exception\InvalidPropertyNameException;
-use nrv\festivale\Soiree;
+use nrv\festival\Soiree;
 use nrv\repository\NrvRepository;
 
 class AddSoireeAction extends Action {

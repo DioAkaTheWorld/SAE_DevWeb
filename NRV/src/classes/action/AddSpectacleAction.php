@@ -10,8 +10,8 @@ use nrv\exception\AuthnException;
 use nrv\exception\AuthzException;
 use nrv\exception\InvalidPropertyNameException;
 use nrv\exception\InvalidPropertyValueException;
-use nrv\festivale\Spectacle;
-use nrv\renderer\ArtistsListRenderer;
+use nrv\festival\Spectacle;
+use nrv\renderer\ArtistsFormRenderer;
 use nrv\repository\NrvRepository;
 
 class AddSpectacleAction extends Action {
@@ -33,7 +33,7 @@ class AddSpectacleAction extends Action {
             return "<div class='container'>{$e->getMessage()}</div>";
         }
 
-        $artistesRenderer = new ArtistsListRenderer();
+        $artistesRenderer = new ArtistsFormRenderer();
 
         return <<<FIN
         <h2 class="p-2">Ajouter un spectacle</h2>

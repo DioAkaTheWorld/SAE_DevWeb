@@ -2,7 +2,7 @@
 
 namespace nrv\renderer;
 
-use nrv\festivale\Spectacle;
+use nrv\festival\Spectacle;
 
 class SpectacleRenderer {
 

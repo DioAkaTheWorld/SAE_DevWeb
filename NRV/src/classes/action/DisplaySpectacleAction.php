@@ -5,12 +5,12 @@ namespace nrv\action;
 
 use nrv\auth\User;
 use nrv\exception\InvalidPropertyNameException;
-use nrv\festivale\Spectacle;
+use nrv\festival\Spectacle;
 use nrv\renderer\SpectacleRenderer;
 use nrv\repository\NrvRepository;
 use Exception;
 
-class DisplayDetailSpectacleAction extends Action {
+class DisplaySpectacleAction extends Action {
 
     /**
      * @throws InvalidPropertyNameException
@@ -50,7 +50,7 @@ class DisplayDetailSpectacleAction extends Action {
         // Créer le lien vers la soirée associée au spectacle
         $soireeLink = "";
         if ($soireeId) {
-            $soireeLink = "<a class='btn btn-primary' href='?action=display-detail-soiree&id={$soireeId}'>Voir la soirée associée</a>";
+            $soireeLink = "<a class='btn btn-primary' href='?action=display-soiree&id={$soireeId}'>Voir la soirée associée</a>";
         }
 
         // Vérifier si l'utilisateur est connecté pour savoir s'il peut voir le bouton modifier spectacle

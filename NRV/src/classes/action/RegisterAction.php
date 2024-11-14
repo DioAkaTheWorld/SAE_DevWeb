@@ -9,7 +9,7 @@ use nrv\exception\AuthnException;
 /**
  * Action pour l'inscription d'un utilisateur.
  */
-class AddUserAction extends Action {
+class RegisterAction extends Action {
 
     /**
      * Méthode exécutée en cas de requête GET.
@@ -20,7 +20,7 @@ class AddUserAction extends Action {
         return <<<FIN
         <h2 class="p-2">Inscription</h2>
                 <hr>
-                <form class="row g-3" action="?action=add-user" method="post">
+                <form class="row g-3" action="?action=register" method="post">
                 <div class="col-sm-12 col-lg-3">
                     <label for="email" class="mb-2">Email<span class="text-danger">*</span>: </label>
                     <input class="form-control" type="email" placeholder="exemple@mail.com" name="email" id="email" required>
@@ -51,7 +51,7 @@ class AddUserAction extends Action {
             AuthnProvider::register($email, $passwd);
             $html = <<<FIN
             <div class="alert alert-success my-5" role="alert">
-                Inscription réussie ! Vous pouvez maintenant vous <a href="?action=sign-in">connecter</a>.
+                Inscription réussie ! Vous pouvez maintenant vous <a href="?action=log-in">connecter</a>.
             </div>
             FIN;
         } catch (AuthnException $e) {

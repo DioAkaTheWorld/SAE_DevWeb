@@ -5,8 +5,8 @@ namespace nrv\repository;
 
 use Exception;
 use nrv\auth\User;
-use nrv\festivale\Soiree;
-use nrv\festivale\Spectacle;
+use nrv\festival\Soiree;
+use nrv\festival\Spectacle;
 use PDO;
 
 /**

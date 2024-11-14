@@ -1,6 +1,6 @@
 <?php
 
-namespace nrv\festivale;
+namespace nrv\festival;
 
 use nrv\exception\InvalidPropertyNameException;
 

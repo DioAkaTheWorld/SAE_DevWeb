@@ -6,9 +6,9 @@ use Exception;
 use nrv\auth\User;
 use nrv\exception\InvalidPropertyNameException;
 use nrv\exception\InvalidPropertyValueException;
-use nrv\festivale\Spectacle;
-use nrv\renderer\ArtistsListRenderer;
-use nrv\renderer\ImageListRenderer;
+use nrv\festival\Spectacle;
+use nrv\renderer\ArtistsFormRenderer;
+use nrv\renderer\ImageFormRenderer;
 use nrv\repository\NrvRepository;
 
 class ModifySpectacleAction extends Action {
@@ -41,8 +41,8 @@ class ModifySpectacleAction extends Action {
             $spectacleDetails = $repository->getSpectacleDetails($spectacleId);
             $artistes = $repository->getArtistsFromSpectacle($spectacleId);
             $images = $repository->getSpectacleImages($spectacleId);
-            $artistesRenderer = new ArtistsListRenderer();
-            $imagesRenderer = new ImageListRenderer();
+            $artistesRenderer = new ArtistsFormRenderer();
+            $imagesRenderer = new ImageFormRenderer();
 
             // Evite de récupérer les secondes causant une erreur lors de la modification
             $horaire = substr($spectacleDetails['horaire'], 0, 5);

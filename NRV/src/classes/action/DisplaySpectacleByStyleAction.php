@@ -1,7 +1,7 @@
 <?php
 namespace nrv\action;
 
-use nrv\festivale\Spectacle;
+use nrv\festival\Spectacle;
 use nrv\renderer\SpectacleFiltersListRenderer;
 use nrv\renderer\SpectacleRenderer;
 use nrv\repository\NrvRepository;

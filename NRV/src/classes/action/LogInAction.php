@@ -9,7 +9,7 @@ use nrv\exception\AuthnException;
 /**
  * Action permettant de se connecter
  */
-class SignInAction extends Action {
+class LogInAction extends Action {
 
     /**
      * Méthode exécutée lors d'une requête GET
@@ -28,7 +28,7 @@ class SignInAction extends Action {
         return <<<FIN
         <h2 class="p-2">Se connecter</h2>
                 <hr>
-                <form class="row g-3" action="?action=sign-in" method="POST">
+                <form class="row g-3" action="?action=log-in" method="POST">
                     <div class="col-sm-12 col-lg-3">
                         <label for="email" class="mb-2">Email<span class="text-danger">*</span>: </label>
                         <input class="form-control" type="email" placeholder="exemple@mail.com" name="email" id="email" required>

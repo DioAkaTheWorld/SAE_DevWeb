@@ -2,7 +2,7 @@
 
 namespace nrv\renderer;
 
-class ImageListRenderer {
+class ImageFormRenderer {
 
     public function render(array $images) : string {
         if (empty($images)) {

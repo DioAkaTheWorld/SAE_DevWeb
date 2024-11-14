@@ -7,17 +7,17 @@ use nrv\action\AddImageToSpecacleAction;
 use nrv\action\AddSoireeAction;
 use nrv\action\AddSpectacleAction;
 use nrv\action\AddSpectacleToSoireeAction;
-use nrv\action\AddUserAction;
+use nrv\action\RegisterAction;
 use nrv\action\DefaultAction;
 use nrv\action\DisplayAllSpectaclesAction;
-use nrv\action\DisplayDetailSoireeAction;
-use nrv\action\DisplayDetailSpectacleAction;
+use nrv\action\DisplaySoireeAction;
+use nrv\action\DisplaySpectacleAction;
 use nrv\action\DisplaySpectacleByStyleAction;
 use nrv\action\DisplaySpectaclesByDatesAction;
 use nrv\action\DisplaySpectaclesByLocation;
 use nrv\action\ModifySpectacleAction;
-use nrv\action\SignInAction;
-use nrv\action\SignOutAction;
+use nrv\action\LogInAction;
+use nrv\action\LogOutAction;
 use nrv\auth\User;
 
 /**
@@ -55,12 +55,11 @@ class Dispatcher {
             'add-spectacle' => new AddSpectacleAction(),
             'modify-spectacle' => new ModifySpectacleAction(),
             'add-soiree' => new AddSoireeAction(),
-            'display-spectacle' => new DisplayDetailSpectacleAction(),
-            'add-image-to-spectacle' => new AddImageToSpecacleAction(),
-            'display-detail-soiree' => new DisplayDetailSoireeAction(),
-            'add-user' => new AddUserAction(),
-            'sign-in' => new SignInAction(),
-            'sign-out' => new SignOutAction(),
+            'display-spectacle' => new DisplaySpectacleAction(),
+            'display-soiree' => new DisplaySoireeAction(),
+            'register' => new RegisterAction(),
+            'log-in' => new LogInAction(),
+            'log-out' => new LogOutAction(),
             'display-spectacles-by-style' => new DisplaySpectacleByStyleAction(),
             'display-spectacles-by-date' => new DisplaySpectaclesByDatesAction(),
             'display-spectacles-by-lieu' => new DisplaySpectaclesByLocation(),
@@ -146,7 +145,7 @@ class Dispatcher {
                             <a class="nav-link" href="?action=display-all-spectacles">Les spectacles</a>
                         </li>
                         <li class="nav-item p-1 d-flex align-items-center">
-                            <a class="btn btn-danger text-dark my-0 p-2" href="?action=sign-out"><strong>Se déconnecter</strong></a>
+                            <a class="btn btn-danger text-dark my-0 p-2" href="?action=log-out"><strong>Se déconnecter</strong></a>
                         </li>
         FIN;
     }
@@ -170,7 +169,7 @@ class Dispatcher {
                                 <a class="nav-link" href="?action=add-spectacle-to-soiree">Ajouter un spectacle à une soirée</a>
                             </li>
                             <li class="nav-item p-1 d-flex align-items-center">
-                                <a class="btn btn-danger text-dark my-0 p-2" href="?action=sign-out"><strong>Se déconnecter</strong></a>
+                                <a class="btn btn-danger text-dark my-0 p-2" href="?action=log-out"><strong>Se déconnecter</strong></a>
                             </li>
             FIN;
     }
@@ -199,7 +198,7 @@ class Dispatcher {
                             </li>
                             <!--    Nom implémenté     -->
                             <li class="nav-item p-1 d-flex align-items-center">
-                                <a class="btn btn-danger text-dark my-0 p-2" href="?action=sign-out"><strong>Se déconnecter</strong></a>
+                                <a class="btn btn-danger text-dark my-0 p-2" href="?action=log-out"><strong>Se déconnecter</strong></a>
                             </li>
             FIN;
     }
@@ -211,10 +210,10 @@ class Dispatcher {
     private function renderNavBarItemsNotConnected() : string {
         return <<<FIN
             <li class="nav-item p-1">
-                                <a class="nav-link" href="?action=add-user">S'inscrire</a>
+                                <a class="nav-link" href="?action=register">S'inscrire</a>
                             </li>
                             <li class="nav-item p-1 pe-5">
-                                <a class="nav-link" href="?action=sign-in">Se connecter</a>
+                                <a class="nav-link" href="?action=log-in">Se connecter</a>
                             </li>
             FIN;
     }

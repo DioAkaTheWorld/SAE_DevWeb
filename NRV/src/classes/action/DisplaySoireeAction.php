@@ -3,12 +3,12 @@ declare(strict_types=1);
 
 namespace nrv\action;
 
-use nrv\festivale\Soiree;
+use nrv\festival\Soiree;
 use nrv\renderer\SoireeRenderer;
 use nrv\repository\NrvRepository;
 use Exception;
 
-class DisplayDetailSoireeAction extends Action {
+class DisplaySoireeAction extends Action {
 
     public function executeGet(): string {
         // Vérifier si l'ID de la soirée est spécifié
@@ -42,7 +42,7 @@ class DisplayDetailSoireeAction extends Action {
         // Créer un renderer pour la soirée et générer le contenu HTML détaillé
         $soireeRenderer = new SoireeRenderer($soireeObjet);
 
-        return $soireeRenderer->renderAsDetail($lieuDetails, $spectacles,$artistes);
+        return $soireeRenderer->renderAsLong($lieuDetails, $spectacles,$artistes);
     }
 
     public function executePost(): string {

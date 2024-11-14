@@ -2,7 +2,7 @@
 
 namespace nrv\renderer;
 
-use nrv\festivale\Soiree;
+use nrv\festival\Soiree;
 
 class SoireeRenderer {
 
@@ -16,11 +16,11 @@ class SoireeRenderer {
      * Affiche les détails complets de la soirée, incluant les informations sur le lieu et les spectacles associés.
      *
      * @param array $lieuDetails Tableau contenant les informations sur le lieu.
-     * @param array $tarifs Tableau contenant les détails des tarifs pour la soirée.
      * @param array $spectacles Tableau d'objets de type spectacle associés à cette soirée.
+     * @param array $artistes Tableau d'objets de type artiste associés à cette soirée.
      * @return string Le HTML généré pour l'affichage des détails de la soirée.
      */
-    public function renderAsDetail(array $lieuDetails, array $spectacles,array $artistes): string {
+    public function renderAsLong(array $lieuDetails, array $spectacles, array $artistes): string {
         // Détails de base de la soirée
         $html = <<<HTML
             <h1>{$this->soiree->__get('nom')}</h1>
