@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace nrv\action;
 
+use nrv\exception\InvalidPropertyNameException;
 use nrv\festival\Soiree;
 use nrv\renderer\SoireeRenderer;
 use nrv\repository\NrvRepository;
@@ -16,6 +17,7 @@ class DisplaySoireeAction extends Action {
     /**
      * Displays the details of a party
      * @return string The HTML code of the party
+     * @throws InvalidPropertyNameException
      */
     public function executeGet(): string {
         // Check if the party ID is set
@@ -54,6 +56,7 @@ class DisplaySoireeAction extends Action {
     /**
      * Displays the details of a party
      * @return string The HTML code of the party
+     * @throws InvalidPropertyNameException
      */
     public function executePost(): string {
         return $this->executeGet();

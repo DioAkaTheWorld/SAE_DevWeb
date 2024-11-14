@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : mar. 12 nov. 2024 à 16:21
+-- Généré le : jeu. 14 nov. 2024 à 23:44
 -- Version du serveur : 10.4.32-MariaDB
 -- Version de PHP : 8.0.30
 
@@ -59,6 +59,14 @@ CREATE TABLE `image` (
                          `id` int(200) NOT NULL,
                          `chemin_fichier` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Déchargement des données de la table `image`
+--
+
+INSERT INTO `image` (`id`, `chemin_fichier`) VALUES
+                                                 (1, 'ppp.jpg'),
+                                                 (2, 'rock.jpg');
 
 -- --------------------------------------------------------
 
@@ -239,6 +247,9 @@ CREATE TABLE `spectacle2image` (
 -- Déchargement des données de la table `spectacle2image`
 --
 
+INSERT INTO `spectacle2image` (`id_spectacle`, `id_image`) VALUES
+    (1, 1);
+
 -- --------------------------------------------------------
 
 --
@@ -257,11 +268,9 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id`, `email`, `hash`, `role`) VALUES
-                                                       (1, 'user1@mail.com', '$2y$12$FSUq4wa9exgiHC/58tbpo.IGJ/1BxLLR54txC/GZhhbF.SOJqa8Qq', 1),
-                                                       (2, 'user2@mail.com', '$2y$12$SZDTxmdvrvEBR4ynZ/OqveQkiJK3ySVcZhvZBiOpNfjFpseBdf4VS', 1),
-                                                       (3, 'user3@mail.com', '$2y$12$WFClWVtZkGOvS3zIOKEDYOqImLUpEpiGyrmRShIvTsaJRoPTsqu0q', 1),
-                                                       (4, 'staff1@mail.com', '$2y$12$0CrM3aprwss8D498m4Dcq.h3ABfeoJpth2Y3TPRGV.bwF0R8sz5IW', 50),
-                                                       (5, 'admin1@mail.com', '$2y$12$Lx0F4AGW4u0wyoHr6KCXQ.8QzBnP1Uj/4vTcf0Xn2n5uex3diU6Cq', 100);
+                                                       (1, 'user1@mail.com', '$2y$12$Ip2EBJpNpAUIOh87T72I.ealNJe6uQRn3TRQnsw8mMbGyusuW4pGe', 1),
+                                                       (4, 'staff1@mail.com', '$2y$12$CC2PkjHpZOVDOulSD8Lw2O/mt6jbPcYBn6XLQ5Eg6dbZMYTyidRGm', 50),
+                                                       (5, 'admin1@mail.com', '$2y$12$CArg13T9e8mUfR9CfPKe.uf7HL.qhWh/9IhganxI/tyKpzyb/cFwu', 100);
 
 --
 -- Index pour les tables déchargées
@@ -284,7 +293,8 @@ ALTER TABLE `image`
 --
 ALTER TABLE `image2lieu`
     ADD PRIMARY KEY (`id_image`,`id_lieu`),
-    ADD KEY `image2lieu_ibfk_2` (`id_lieu`);
+    ADD KEY `image2lieu_ibfk_2` (`id_lieu`),
+    ADD KEY `id_image` (`id_image`);
 
 --
 -- Index pour la table `lieu`
@@ -303,7 +313,8 @@ ALTER TABLE `soiree`
 --
 ALTER TABLE `soiree2spectacle`
     ADD PRIMARY KEY (`id_soiree`,`id_spectacle`),
-    ADD KEY `soiree2spectacle_ibfk_2` (`id_spectacle`);
+    ADD KEY `soiree2spectacle_ibfk_2` (`id_spectacle`),
+    ADD KEY `id_soiree` (`id_soiree`);
 
 --
 -- Index pour la table `spectacle`
@@ -316,14 +327,16 @@ ALTER TABLE `spectacle`
 --
 ALTER TABLE `spectacle2artiste`
     ADD PRIMARY KEY (`id_spectacle`,`id_artiste`),
-    ADD KEY `spectacle2artiste_ibfk_2` (`id_artiste`);
+    ADD KEY `spectacle2artiste_ibfk_2` (`id_artiste`),
+    ADD KEY `id_spectacle` (`id_spectacle`);
 
 --
 -- Index pour la table `spectacle2image`
 --
 ALTER TABLE `spectacle2image`
     ADD PRIMARY KEY (`id_spectacle`,`id_image`),
-    ADD KEY `spectacle2image_ibfk_2` (`id_image`);
+    ADD KEY `spectacle2image_ibfk_2` (`id_image`),
+    ADD KEY `id_spectacle` (`id_spectacle`);
 
 --
 -- Index pour la table `user`
@@ -374,13 +387,6 @@ ALTER TABLE `user`
 --
 -- Contraintes pour les tables déchargées
 --
-
---
--- Contraintes pour la table `image2lieu`
---
-ALTER TABLE `image2lieu`
-    ADD CONSTRAINT `image2lieu_ibfk_1` FOREIGN KEY (`id_image`) REFERENCES `image` (`id`),
-    ADD CONSTRAINT `image2lieu_ibfk_2` FOREIGN KEY (`id_lieu`) REFERENCES `lieu` (`id`);
 
 --
 -- Contraintes pour la table `soiree2spectacle`
