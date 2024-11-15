@@ -58,12 +58,12 @@ class DisplaySpectacleAction extends Action {
         }
 
         // Check if the user is connected and has the right role to display the button to modify the spectacle
-        if ($this->checkUser(User::STANDARD_USER) !== "") {
-            return $spectacleRenderer->renderAsLong($artistes, $images) . $soireeLink;
+        if ($this->checkUser(User::ADMIN) == "") {
+            return $spectacleRenderer->renderAsLong($artistes, $images) . "<a class='btn btn-primary m-3' href='?action=modify-spectacle&id=$spectacleId'>Modifier ce spectacle</a>" . $soireeLink;
         }
 
-        // Display the spectacle with the button to modify it
-        return $spectacleRenderer->renderAsLong($artistes, $images) . "<a class='btn btn-primary m-3' href='?action=modify-spectacle&id=$spectacleId'>Modifier ce spectacle</a>" . $soireeLink;
+        // Display the spectacle
+        return $spectacleRenderer->renderAsLong($artistes, $images) . $soireeLink;
     }
 
     /**
