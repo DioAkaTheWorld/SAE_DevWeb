@@ -441,7 +441,7 @@ class NrvRepository
      */
     public function findSpectaclesByDate(string $date): array
     {
-        $stmt = $this->pdo->prepare("SELECT s.* 
+        $stmt = $this->pdo->prepare("SELECT S.* 
                                             FROM spectacle S
                                             JOIN soiree2spectacle S2P ON S.id = S2P.id_spectacle
                                             JOIN soiree SO ON S2P.id_soiree = SO.id

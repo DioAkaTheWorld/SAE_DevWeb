@@ -74,7 +74,7 @@ class DisplaySpectacleAction extends Action {
         {$spectacleListRenderer->renderSpectacleList($spectacleByStyle)}
         <h2 class='my-5'>Voir les spectacles du même lieu : </h2>
         {$spectacleListRenderer->renderSpectacleList($spectacleByLieu)}
-        
+
         FIN;
 
         // Check if the user is connected and has the right role to display the button to modify the spectacle
