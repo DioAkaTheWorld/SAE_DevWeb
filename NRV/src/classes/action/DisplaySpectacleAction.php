@@ -38,11 +38,12 @@ class DisplaySpectacleAction extends Action {
         // Get the details of the spectacle
         try {
             $repository = NrvRepository::getInstance();
-            $date = $repository->getDateSpectacle($spectacleId);
-            $spectacleByDate = $repository->findSpectaclesByDate($date);
             $spectacleDetails = $repository->getSpectacleDetails($spectacleId );
             $artistes = $repository->getArtistsFromSpectacle($spectacleId);
             $images = $repository->getSpectacleImages($spectacleId);
+
+            $date = $repository->getDateSpectacle($spectacleId);
+            $spectacleByDate = $repository->findSpectaclesByDate($date);
             $style =$repository ->getStyleFromSpectacleId($spectacleId);
             $spectacleByStyle = $repository->findSpectaclesByStyle($style);
             $lieu = $repository ->getLieuFromSpectacleId($spectacleId);
