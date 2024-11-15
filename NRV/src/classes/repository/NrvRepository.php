@@ -234,7 +234,7 @@ class NrvRepository {
      * @throws Exception
      */
     public function getSpectacleDetails(int $spectacleId): array {
-        $stmt = $this->pdo->prepare("SELECT * FROM Spectacle WHERE id = ?");
+        $stmt = $this->pdo->prepare("SELECT * FROM spectacle WHERE id = ?");
         $stmt->execute([$spectacleId]);
         $spectacle = $stmt->fetch(PDO::FETCH_ASSOC);
         if (!$spectacle) {
