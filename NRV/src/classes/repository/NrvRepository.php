@@ -610,7 +610,7 @@ class NrvRepository
     public function getStyleFromSpectacleId(int $spectacleId): ?string
     {
         $sql = "SELECT style 
-                FROM Soiree s 
+                FROM soiree s 
                 JOIN soiree2spectacle s2s on s.id = s2s.id_soiree 
                 JOIN spectacle Sp on Sp.id = s2s.id_spectacle 
                 WHERE s.id = :id ";
