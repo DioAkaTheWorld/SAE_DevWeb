@@ -87,7 +87,10 @@ class Dispatcher {
         <body data-bs-theme="dark">
             <nav class="navbar navbar-expand-lg navbar-dark bg-dark p-3">
                 <div class="container-fluid">
-                    <a class="navbar-brand" href="index.php">NRV Festival</a>
+                    <a class="navbar-brand" href="index.php">
+                        <img src="/SAE_DevWeb/medias/images/rock.webp" alt="Logo" width="60" height="48" class="d-inline-block align-text-center">
+                        <span class="mx-2">NRV Festival</span>
+                    </a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
