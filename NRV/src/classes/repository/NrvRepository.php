@@ -14,7 +14,8 @@ use PDO;
  * NrvRepository class
  * Manage the data access
  */
-class NrvRepository {
+class NrvRepository
+{
 
     /** @var PDO Connexion with the DB */
     private PDO $pdo;
@@ -27,7 +28,8 @@ class NrvRepository {
      * Private constructor
      * @param array $conf configuration of the connexion
      */
-    private function __construct(array $conf) {
+    private function __construct(array $conf)
+    {
         $this->pdo = new PDO($conf['dsn'], $conf['user'], $conf['pass'], [
             PDO::ATTR_PERSISTENT => true,
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
@@ -40,7 +42,8 @@ class NrvRepository {
      * Get the unique instance of the class
      * @return NrvRepository|null the unique instance
      */
-    public static function getInstance(): ?NrvRepository {
+    public static function getInstance(): ?NrvRepository
+    {
         if (is_null(self::$instance)) {
             self::$instance = new NrvRepository(self::$config);
         }
@@ -53,7 +56,8 @@ class NrvRepository {
      * @return void
      * @throws Exception
      */
-    public static function setConfig(string $file): void {
+    public static function setConfig(string $file): void
+    {
         $conf = parse_ini_file($file);
         if ($conf === false) {
             throw new Exception("Error reading configuration file");
@@ -72,7 +76,8 @@ class NrvRepository {
      * @param string $email email of the user
      * @return User the user
      */
-    public function getUser(string $email) : User {
+    public function getUser(string $email): User
+    {
         $stmt = $this->pdo->prepare("SELECT id, role FROM user WHERE email = ?");
         $stmt->execute([$email]);
         $res = $stmt->fetchAll()[0];
@@ -89,7 +94,8 @@ class NrvRepository {
      * @param int $role role of the user
      * @return void
      */
-    public function addUser(string $email, string $hash, int $role) : void {
+    public function addUser(string $email, string $hash, int $role): void
+    {
         $stmt = $this->pdo->prepare("INSERT INTO user (email, hash, role) VALUES (?, ?, ?)");
         $stmt->execute([$email, $hash, $role]);
     }
@@ -99,7 +105,8 @@ class NrvRepository {
      * @param string $email email of the user
      * @return bool true if the user exists, false otherwise
      */
-    public function userExistsEmail(string $email) : bool {
+    public function userExistsEmail(string $email): bool
+    {
         $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM user WHERE email = ?");
         $stmt->execute([$email]);
         return $stmt->fetch()[0] > 0;
@@ -110,7 +117,8 @@ class NrvRepository {
      * @param string $email email of the user
      * @return string hash of the password
      */
-    public function getHash(string $email) : string {
+    public function getHash(string $email): string
+    {
         $stmt = $this->pdo->prepare("SELECT hash FROM user WHERE email = ?");
         $stmt->execute([$email]);
         return $stmt->fetch()[0];
@@ -120,7 +128,8 @@ class NrvRepository {
      * Get all spectacles
      * @return array list of all spectacles
      */
-    public function findAllSpectacles() : array {
+    public function findAllSpectacles(): array
+    {
         $stmt = $this->pdo->prepare("SELECT * FROM spectacle");
         $stmt->execute();
         return $stmt->fetchAll();
@@ -131,7 +140,8 @@ class NrvRepository {
      * @param int $id id of the spectacle
      * @return string|null date of the spectacle
      */
-    public function getDateSpectacle(int $id) : ?string {
+    public function getDateSpectacle(int $id): ?string
+    {
         $stmt = $this->pdo->prepare("SELECT S.date 
                                  FROM soiree S
                                  JOIN soiree2spectacle S2P ON S.id = S2P.id_soiree
@@ -143,13 +153,13 @@ class NrvRepository {
     }
 
 
-
     /**
      * Get images of a spectacle
      * @param int $id id of the spectacle
      * @return array list of images
      */
-    public function getImagesSpectacle(int $id) : array {
+    public function getImagesSpectacle(int $id): array
+    {
         $stmt = $this->pdo->prepare("SELECT I.chemin_fichier
                                             FROM image I
                                             JOIN spectacle2image S2I ON I.id = S2I.id_image
@@ -163,7 +173,8 @@ class NrvRepository {
      * @param int $id id of the image
      * @return string path of the image
      */
-    public function getImagePath(int $id) : string {
+    public function getImagePath(int $id): string
+    {
         $stmt = $this->pdo->prepare("SELECT I.chemin_fichier
                                             FROM image I
                                             WHERE I.id = ?");
@@ -177,7 +188,8 @@ class NrvRepository {
      * @return Spectacle added spectacle
      * @throws InvalidPropertyNameException
      */
-    function ajouterSpectacle(Spectacle $s) : Spectacle {
+    function ajouterSpectacle(Spectacle $s): Spectacle
+    {
         $sql = "INSERT INTO spectacle (titre, description, chemin_video, horaire, duree, style) VALUES (?, ?, ?, ?, ?, ?)";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([$s->__get('titre'), $s->__get('description'), $s->__get('chemin_fichier'), $s->__get('horaire'), $s->__get('duree'), $s->__get('style')]);
@@ -191,7 +203,8 @@ class NrvRepository {
      * @return Spectacle modified spectacle
      * @throws Exception
      */
-    function modifierSpectacle(Spectacle $s) : Spectacle {
+    function modifierSpectacle(Spectacle $s): Spectacle
+    {
         $stmt = $this->pdo->prepare("SELECT * FROM spectacle WHERE id = ?");
         $stmt->execute([$s->__get('id')]);
         $spectacle = $stmt->fetch();
@@ -210,7 +223,8 @@ class NrvRepository {
      * @return Soiree added party
      * @throws InvalidPropertyNameException
      */
-    function ajouterSoiree(Soiree $s) : Soiree {
+    function ajouterSoiree(Soiree $s): Soiree
+    {
         $sql = "INSERT INTO soiree (nom, thematique, date, horaire_debut, horaire_fin, id_lieu, tarif) 
             VALUES (:nom, :thematique, :date, :horaire_debut, :horaire_fin, :id_lieu, :tarif)";
         $stmt = $this->pdo->prepare($sql);
@@ -233,7 +247,8 @@ class NrvRepository {
      * @return array spectacle details
      * @throws Exception
      */
-    public function getSpectacleDetails(int $spectacleId): array {
+    public function getSpectacleDetails(int $spectacleId): array
+    {
         $stmt = $this->pdo->prepare("SELECT * FROM spectacle WHERE id = ?");
         $stmt->execute([$spectacleId]);
         $spectacle = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -248,7 +263,8 @@ class NrvRepository {
      * @param int $spectacleId spectacle ID
      * @return array list of artists
      */
-    public function getArtistsFromSpectacle(int $spectacleId): array {
+    public function getArtistsFromSpectacle(int $spectacleId): array
+    {
         $stmt = $this->pdo->prepare("SELECT DISTINCT a.nom, a.id
                                             FROM artiste a 
                                             JOIN spectacle2artiste sa ON a.id = sa.id_artiste 
@@ -261,7 +277,8 @@ class NrvRepository {
      * Get all artists
      * @return array list of all artists
      */
-    public function getAllArtists(): array {
+    public function getAllArtists(): array
+    {
         $stmt = $this->pdo->prepare("SELECT * FROM artiste");
         $stmt->execute();
         return $stmt->fetchAll();
@@ -271,7 +288,8 @@ class NrvRepository {
      * Get the number of artists
      * @return int number of artists
      */
-    public function getNbArtistes(): int {
+    public function getNbArtistes(): int
+    {
         $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM artiste");
         $stmt->execute();
         return $stmt->fetchColumn();
@@ -283,7 +301,8 @@ class NrvRepository {
      * @param int $idSpectacle spectacle ID
      * @return void
      */
-    public function addArtisteToSpectacle(int $idArtiste, int $idSpectacle): void {
+    public function addArtisteToSpectacle(int $idArtiste, int $idSpectacle): void
+    {
         $stmt = $this->pdo->prepare("INSERT INTO spectacle2artiste (id_spectacle, id_artiste) VALUES (?, ?)");
         $stmt->execute([$idSpectacle, $idArtiste]);
     }
@@ -294,7 +313,8 @@ class NrvRepository {
      * @param int $idSpectacle spectacle ID
      * @return void
      */
-    public function deleteArtistFromSpectacle(int $idArtiste, int $idSpectacle): void {
+    public function deleteArtistFromSpectacle(int $idArtiste, int $idSpectacle): void
+    {
         $stmt = $this->pdo->prepare("DELETE FROM spectacle2artiste WHERE id_spectacle = ? AND id_artiste = ?");
         $stmt->execute([$idSpectacle, $idArtiste]);
     }
@@ -305,7 +325,8 @@ class NrvRepository {
      * @param int $idSpectacle spectacle ID
      * @return bool true if the image is deleted, false otherwise
      */
-    public function deleteImagesFromSpectacle(int $idImage, int $idSpectacle): bool {
+    public function deleteImagesFromSpectacle(int $idImage, int $idSpectacle): bool
+    {
         // Delete the link between the spectacle and the image
         $stmt = $this->pdo->prepare("DELETE FROM spectacle2image WHERE id_spectacle = ? AND id_image = ?");
         $stmt->execute([$idSpectacle, $idImage]);
@@ -332,7 +353,8 @@ class NrvRepository {
      * @param int $spectacleId spectacle ID
      * @return array list of images
      */
-    public function getSpectacleImages(int $spectacleId): array {
+    public function getSpectacleImages(int $spectacleId): array
+    {
         $stmt = $this->pdo->prepare("SELECT * 
                                             FROM image i 
                                             JOIN spectacle2image si ON i.id = si.id_image 
@@ -346,7 +368,8 @@ class NrvRepository {
      * @param string $chemin path of the image
      * @return int image ID
      */
-    public function addImage(string $chemin) : int {
+    public function addImage(string $chemin): int
+    {
         $stmt = $this->pdo->prepare("INSERT INTO image (chemin_fichier) VALUES (?)");
         $stmt->execute([$chemin]);
         return (int)$this->pdo->lastInsertId();
@@ -358,7 +381,8 @@ class NrvRepository {
      * @param int $idSpectacle spectacle ID
      * @return void
      */
-    public function addImageToSpectacle(int $idImage, int $idSpectacle) : void {
+    public function addImageToSpectacle(int $idImage, int $idSpectacle): void
+    {
         $stmt = $this->pdo->prepare("INSERT INTO spectacle2image (id_spectacle, id_image) VALUES (?, ?)");
         $stmt->execute([$idSpectacle, $idImage]);
     }
@@ -369,7 +393,8 @@ class NrvRepository {
      * @param int $idSpectacle spectacle ID
      * @return void
      */
-    public function updateVideoPathForSpectacle(string $chemin, int $idSpectacle) : void {
+    public function updateVideoPathForSpectacle(string $chemin, int $idSpectacle): void
+    {
         $stmt = $this->pdo->prepare("UPDATE spectacle SET chemin_video = ? WHERE id = ?");
         $stmt->execute([$chemin, $idSpectacle]);
     }
@@ -379,7 +404,8 @@ class NrvRepository {
      * @param int $idSpectacle spectacle ID
      * @return string path of the video
      */
-    public function getVideoPathFromSpectacle(int $idSpectacle): string {
+    public function getVideoPathFromSpectacle(int $idSpectacle): string
+    {
         $stmt = $this->pdo->prepare("SELECT chemin_video FROM spectacle WHERE id = ?");
         $stmt->execute([$idSpectacle]);
         return $stmt->fetchColumn();
@@ -390,7 +416,8 @@ class NrvRepository {
      * @param string $style style of the spectacle
      * @return array list of spectacles
      */
-    public function findSpectaclesByStyle(string $style) : array {
+    public function findSpectaclesByStyle(string $style): array
+    {
         $stmt = $this->pdo->prepare("SELECT * FROM spectacle WHERE style = ?");
         $stmt->execute([$style]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -400,7 +427,8 @@ class NrvRepository {
      * Get the list of styles
      * @return array list of styles
      */
-    public function getListeStyleSpectacle() : array {
+    public function getListeStyleSpectacle(): array
+    {
         $stmt = $this->pdo->prepare("SELECT DISTINCT style FROM spectacle");
         $stmt->execute();
         return $stmt->fetchAll();
@@ -411,7 +439,8 @@ class NrvRepository {
      * @param string $date date of the spectacle
      * @return array list of spectacles
      */
-    public function findSpectaclesByDate(string $date) : array {
+    public function findSpectaclesByDate(string $date): array
+    {
         $stmt = $this->pdo->prepare("SELECT * 
                                             FROM spectacle S
                                             JOIN soiree2spectacle S2P ON S.id = S2P.id_spectacle
@@ -425,7 +454,8 @@ class NrvRepository {
      * Get the list of dates
      * @return array list of dates
      */
-    public function getListeDateSpectacle() : array {
+    public function getListeDateSpectacle(): array
+    {
         $stmt = $this->pdo->prepare("SELECT DISTINCT date FROM soiree");
         $stmt->execute();
         return $stmt->fetchAll();
@@ -436,7 +466,8 @@ class NrvRepository {
      * @param string $lieu location of the spectacle
      * @return array list of spectacles
      */
-    public function findSpectaclesByLieu(string $lieu) : array {
+    public function findSpectaclesByLieu(string $lieu): array
+    {
         $stmt = $this->pdo->prepare("SELECT *
                                             FROM spectacle
                                             JOIN soiree2spectacle ON spectacle.id = soiree2spectacle.id_spectacle
@@ -451,7 +482,8 @@ class NrvRepository {
      * Get the list of locations
      * @return array list of locations
      */
-    public function getListeLieuSpectacle() :array {
+    public function getListeLieuSpectacle(): array
+    {
         $stmt = $this->pdo->prepare("SELECT DISTINCT nom FROM lieu");
         $stmt->execute();
         return $stmt->fetchAll();
@@ -461,7 +493,8 @@ class NrvRepository {
      * Get the list of all the parties
      * @return array list of all the parties
      */
-    public function findAllSoirees(): array {
+    public function findAllSoirees(): array
+    {
         $sql = "SELECT id, nom, date FROM soiree ORDER BY date";
         $stmt = $this->pdo->query($sql);
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
@@ -473,7 +506,8 @@ class NrvRepository {
      * @param int $id_spectacle spectacle ID
      * @return bool true if the spectacle is added, false otherwise
      */
-    public function addSpectacleToSoiree(int $id_soiree, int $id_spectacle): bool {
+    public function addSpectacleToSoiree(int $id_soiree, int $id_spectacle): bool
+    {
         // Check if the association already exists
         $checkSql = "SELECT COUNT(*) FROM soiree2spectacle WHERE id_soiree = :id_soiree AND id_spectacle = :id_spectacle";
         $stmt = $this->pdo->prepare($checkSql);
@@ -494,7 +528,8 @@ class NrvRepository {
      * Get all the parties with their associated spectacles
      * @return array list of all the parties with their associated spectacles
      */
-    public function findAllSoireesWithSpectacles(): array {
+    public function findAllSoireesWithSpectacles(): array
+    {
         $sql = "
         SELECT s.id AS soiree_id, s.nom AS soiree_nom, s.date, s.thematique, 
                sp.id AS spectacle_id, sp.titre AS spectacle_titre, sp.horaire, sp.style
@@ -513,7 +548,8 @@ class NrvRepository {
      * @return array party details
      * @throws Exception
      */
-    public function getSoireeDetails(int $soireeId): array {
+    public function getSoireeDetails(int $soireeId): array
+    {
         $query = "SELECT nom, thematique, date, horaire_debut, horaire_fin, id_lieu, tarif FROM soiree WHERE id = :id";
         $stmt = $this->pdo->prepare($query);
         $stmt->bindParam(':id', $soireeId, PDO::PARAM_INT);
@@ -531,7 +567,8 @@ class NrvRepository {
      * @return array location details
      * @throws Exception
      */
-    public function getLieuDetails(int $lieuId): array {
+    public function getLieuDetails(int $lieuId): array
+    {
         $query = "SELECT nom, adresse FROM lieu WHERE id = :id";
         $stmt = $this->pdo->prepare($query);
         $stmt->bindParam(':id', $lieuId, PDO::PARAM_INT);
@@ -549,7 +586,8 @@ class NrvRepository {
      * @return array list of spectacles
      * @throws Exception
      */
-    public function getSpectaclesFromSoiree(int $soireeId): array {
+    public function getSpectaclesFromSoiree(int $soireeId): array
+    {
         $query = "
         SELECT *
         FROM spectacle s 
@@ -570,7 +608,8 @@ class NrvRepository {
      * @param int $spectacleId spectacle ID
      * @return int|null party ID
      */
-    public function getSoireeIdBySpectacleId(int $spectacleId): ?int {
+    public function getSoireeIdBySpectacleId(int $spectacleId): ?int
+    {
         $sql = 'SELECT id_lieu FROM soiree 
             JOIN soiree2spectacle ON soiree.id = soiree2spectacle.id_soiree 
             WHERE soiree2spectacle.id_spectacle = ? LIMIT 1';
@@ -579,5 +618,25 @@ class NrvRepository {
         $result = $stmt->fetch(\PDO::FETCH_ASSOC);
 
         return $result ? (int)$result['id_lieu'] : null;
+    }
+
+    public function getStyleFromSpectacleId(int $spectacleId): ?string
+
+    {
+        $sql = "SELECT style FROM Soiree s join soiree2spectacle on s.id = soiree2spectacle.id_soiree join spectacle Sp on Sp.id=soiree2spectacle.id_spectacle where s.id = :id ";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([$spectacleId]);
+        $result = $stmt->fetch(\PDO::FETCH_ASSOC);
+        return $result ? (string)$result['style'] : null;
+    }
+
+    public function getLieuFromSpectacleId(int $spectacleId): ?string
+
+    {
+        $sql = "SELECT l.nom, l.adresse FROM lieu l join soiree s on s.id_lieu= l.id join soiree2spectacle on soiree2spectacle.id_soiree = s.id join spectacle sp on sp.id=soiree2spectacle.id_spectacle where sp.id = :id ";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([$spectacleId]);
+        $result = $stmt->fetch(\PDO::FETCH_ASSOC);
+        return $result ? (string)$result['nom'] : null;
     }
 }

@@ -7,6 +7,7 @@ use nrv\auth\User;
 use nrv\exception\InvalidPropertyNameException;
 use nrv\festival\Spectacle;
 use nrv\renderer\SpectacleRenderer;
+use nrv\renderer\SpectaclesListRenderer;
 use nrv\repository\NrvRepository;
 use Exception;
 
@@ -37,9 +38,15 @@ class DisplaySpectacleAction extends Action {
         // Get the details of the spectacle
         try {
             $repository = NrvRepository::getInstance();
+            $date = $repository->getDateSpectacle($spectacleId);
+            $spectacleByDate = $repository->findSpectaclesByDate($date);
             $spectacleDetails = $repository->getSpectacleDetails($spectacleId );
             $artistes = $repository->getArtistsFromSpectacle($spectacleId);
             $images = $repository->getSpectacleImages($spectacleId);
+            $style =$repository ->getStyleFromSpectacleId($spectacleId);
+            $spectacleByStyle = $repository->findSpectaclesByStyle($style);
+            $lieu = $repository ->getLieuFromSpectacleId($spectacleId);
+            $spectacleByLieu = $repository->findSpectaclesByLieu($lieu);
 
             // Get the ID of the party associated with the spectacle
             $soireeId = $repository->getSoireeIdBySpectacleId($spectacleId);
@@ -62,8 +69,31 @@ class DisplaySpectacleAction extends Action {
             return $spectacleRenderer->renderAsLong($artistes, $images) . "<a class='btn btn-primary m-3' href='?action=modify-spectacle&id=$spectacleId'>Modifier ce spectacle</a>" . $soireeLink;
         }
 
+        $spectacleListRenderer = new SpectaclesListRenderer();
+
         // Display the spectacle
-        return $spectacleRenderer->renderAsLong($artistes, $images) . $soireeLink;
+        return $spectacleRenderer->renderAsLong($artistes, $images) . $soireeLink ."<h2 class='my-5'>Voir les spectacles de la même date :</h2>".
+            $spectacleListRenderer->renderSpectacleList($spectacleByDate). "<h2 class='my-5'>Voir les spectacles du même style :</h2>".
+            $spectacleListRenderer->renderSpectacleList($spectacleByStyle). "<h2 class='my-5'>Voir les spectacles du même lieu : </h2>".
+            $spectacleListRenderer->renderSpectacleList($spectacleByLieu);
+    }
+
+    private function renderRelatedLinks(?string $date, ?string $style, ?int $lieuId): string {
+        // Générer les URLs pour chaque filtre si les valeurs sont définies
+        $dateUrl = $date ? "?action=display-spectacles-by-date&date=" . urlencode($date) : null;
+        $styleUrl = $style ? "?action=display-spectacles-by-style&style=" . urlencode($style) : null;
+        $lieuUrl = $lieuId ? "?action=display-spectacles-by-lieu&lieuId=" . urlencode((string)$lieuId) : null;
+
+        // Afficher les liens vers les spectacles similaires
+        return <<<FIN
+            <hr>
+            <h3>Voir d'autres spectacles similaires</h3>
+            <ul class="related-links">
+                <li><a href="{$dateUrl}">Autres spectacles à la même date : {$date}</a></li>
+                <li><a href="{$styleUrl}">Autres spectacles du même style : {$style}</a></li>
+                <li><a href="{$lieuUrl}">Autres spectacles au même lieu : </a></li>
+            </ul>
+        FIN;
     }
 
     /**
