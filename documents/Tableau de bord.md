@@ -37,12 +37,12 @@
 
 ### Fonctionnalités étendues
 
-- [ ] **8**. En lien avec l’affichage d’un spectacle : accès aux spectacles du même lieu
-  - Fait par :
-- [ ] **9**. En lien avec l’affichage d’un spectacle : accès aux spectacles du même style
-  - Fait par :
-- [ ] **10**. En lien avec l’affichage d’un spectacle : accès aux spectacles à la même date
-  - Fait par :
+- [X] **8**. En lien avec l’affichage d’un spectacle : accès aux spectacles du même lieu
+  - Fait par : **Paul**
+- [X] **9**. En lien avec l’affichage d’un spectacle : accès aux spectacles du même style
+  - Fait par : **Paul**
+- [X] **10**. En lien avec l’affichage d’un spectacle : accès aux spectacles à la même date
+  - Fait par : **Paul**
 - [ ] **17**. Annuler un spectacle : le spectacle est conservé dans les affichages mais est marqué
   comme annulé
   - Fait par :
