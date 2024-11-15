@@ -268,9 +268,9 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id`, `email`, `hash`, `role`) VALUES
-                                                       (1, 'user1@mail.com', '$2y$12$Ip2EBJpNpAUIOh87T72I.ealNJe6uQRn3TRQnsw8mMbGyusuW4pGe', 1),
-                                                       (4, 'staff1@mail.com', '$2y$12$CC2PkjHpZOVDOulSD8Lw2O/mt6jbPcYBn6XLQ5Eg6dbZMYTyidRGm', 50),
-                                                       (5, 'admin1@mail.com', '$2y$12$CArg13T9e8mUfR9CfPKe.uf7HL.qhWh/9IhganxI/tyKpzyb/cFwu', 100);
+                                                       (1, 'user@mail.com', '$2y$12$jtvH3h3wwyUw9Vch9e7BjOxeGETpdYaOdmCxc54kUuy9daZ7Io/Yu', 1),
+                                                       (4, 'staff@mail.com', '$2y$12$8qw5a1zYWkNobiUTQmv0NOK25K9yMepQtjT3DkAatjbDpcOqOeRYC', 50),
+                                                       (5, 'admin@mail.com', '$2y$12$Jpyra63mnvfNEsVgF5zjRujfYdoQifswHJTHm/8vKcP1luH4cRGU6', 100);
 
 --
 -- Index pour les tables déchargées
