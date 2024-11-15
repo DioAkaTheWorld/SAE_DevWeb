@@ -26,7 +26,8 @@ class SpectacleFiltersListRenderer {
         $html = <<<FIN
             <select class="form-select my-4" name="filtre" onchange="location = this.value;">;
             <option value="?action=display-all-spectacles">Filtre</option>
-
+            <option value="?action=display-all-spectacles">Ne pas filtrer</option>
+            
         FIN;
 
         // Add date options
