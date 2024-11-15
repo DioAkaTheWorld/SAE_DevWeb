@@ -64,36 +64,24 @@ class DisplaySpectacleAction extends Action {
             $soireeLink = "<a class='btn btn-primary my-3' href='?action=display-soiree&id=$soireeId'>Voir la soirée associée</a>";
         }
 
+        // Render the related spectacles
+        $spectacleListRenderer = new SpectaclesListRenderer();
+        $relatedSpectacles = <<<FIN
+        <h2 class='my-5'>Voir les spectacles de la même date :</h2>
+        {$spectacleListRenderer->renderSpectacleList($spectacleByDate)}
+        <h2 class='my-5'>Voir les spectacles du même style :</h2>
+        {$spectacleListRenderer->renderSpectacleList($spectacleByStyle)}
+        <h2 class='my-5'>Voir les spectacles du même lieu : </h2>
+        {$spectacleListRenderer->renderSpectacleList($spectacleByLieu)}
+        
+        FIN;
+
         // Check if the user is connected and has the right role to display the button to modify the spectacle
         if ($this->checkUser(User::ADMIN) == "") {
-            return $spectacleRenderer->renderAsLong($artistes, $images) . "<a class='btn btn-primary m-3' href='?action=modify-spectacle&id=$spectacleId'>Modifier ce spectacle</a>" . $soireeLink;
+            return $spectacleRenderer->renderAsLong($artistes, $images) . "<a class='btn btn-primary m-3' href='?action=modify-spectacle&id=$spectacleId'>Modifier ce spectacle</a>" . $soireeLink . $relatedSpectacles;
         }
 
-        $spectacleListRenderer = new SpectaclesListRenderer();
-
-        // Display the spectacle
-        return $spectacleRenderer->renderAsLong($artistes, $images) . $soireeLink ."<h2 class='my-5'>Voir les spectacles de la même date :</h2>".
-            $spectacleListRenderer->renderSpectacleList($spectacleByDate). "<h2 class='my-5'>Voir les spectacles du même style :</h2>".
-            $spectacleListRenderer->renderSpectacleList($spectacleByStyle). "<h2 class='my-5'>Voir les spectacles du même lieu : </h2>".
-            $spectacleListRenderer->renderSpectacleList($spectacleByLieu);
-    }
-
-    private function renderRelatedLinks(?string $date, ?string $style, ?int $lieuId): string {
-        // Générer les URLs pour chaque filtre si les valeurs sont définies
-        $dateUrl = $date ? "?action=display-spectacles-by-date&date=" . urlencode($date) : null;
-        $styleUrl = $style ? "?action=display-spectacles-by-style&style=" . urlencode($style) : null;
-        $lieuUrl = $lieuId ? "?action=display-spectacles-by-lieu&lieuId=" . urlencode((string)$lieuId) : null;
-
-        // Afficher les liens vers les spectacles similaires
-        return <<<FIN
-            <hr>
-            <h3>Voir d'autres spectacles similaires</h3>
-            <ul class="related-links">
-                <li><a href="{$dateUrl}">Autres spectacles à la même date : {$date}</a></li>
-                <li><a href="{$styleUrl}">Autres spectacles du même style : {$style}</a></li>
-                <li><a href="{$lieuUrl}">Autres spectacles au même lieu : </a></li>
-            </ul>
-        FIN;
+        return $spectacleRenderer->renderAsLong($artistes, $images) . $soireeLink . $relatedSpectacles;
     }
 
     /**

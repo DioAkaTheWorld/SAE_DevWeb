@@ -525,24 +525,6 @@ class NrvRepository
     }
 
     /**
-     * Get all the parties with their associated spectacles
-     * @return array list of all the parties with their associated spectacles
-     */
-    public function findAllSoireesWithSpectacles(): array
-    {
-        $sql = "
-        SELECT s.id AS soiree_id, s.nom AS soiree_nom, s.date, s.thematique, 
-               sp.id AS spectacle_id, sp.titre AS spectacle_titre, sp.horaire, sp.style
-        FROM soiree AS so
-        LEFT JOIN soiree2spectacle AS s2s ON so.id = s2s.id_soiree
-        LEFT JOIN spectacle AS sp ON s2s.id_spectacle = sp.id
-        ORDER BY so.date DESC, so.nom, sp.horaire
-    ";
-        $stmt = $this->pdo->query($sql);
-        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
-    }
-
-    /**
      * Get the details of a party
      * @param int $soireeId party ID
      * @return array party details
@@ -620,20 +602,37 @@ class NrvRepository
         return $result ? (int)$result['id_lieu'] : null;
     }
 
+    /**
+     * Gety the style of a spectacle
+     * @param int $spectacleId spectacle ID
+     * @return string|null style of the spectacle
+     */
     public function getStyleFromSpectacleId(int $spectacleId): ?string
-
     {
-        $sql = "SELECT style FROM Soiree s join soiree2spectacle on s.id = soiree2spectacle.id_soiree join spectacle Sp on Sp.id=soiree2spectacle.id_spectacle where s.id = :id ";
+        $sql = "SELECT style 
+                FROM Soiree s 
+                JOIN soiree2spectacle s2s on s.id = s2s.id_soiree 
+                JOIN spectacle Sp on Sp.id = s2s.id_spectacle 
+                WHERE s.id = :id ";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([$spectacleId]);
         $result = $stmt->fetch(\PDO::FETCH_ASSOC);
         return $result ? (string)$result['style'] : null;
     }
 
+    /**
+     * Get the location of a spectacle
+     * @param int $spectacleId spectacle ID
+     * @return string|null location of the spectacle
+     */
     public function getLieuFromSpectacleId(int $spectacleId): ?string
-
     {
-        $sql = "SELECT l.nom, l.adresse FROM lieu l join soiree s on s.id_lieu= l.id join soiree2spectacle on soiree2spectacle.id_soiree = s.id join spectacle sp on sp.id=soiree2spectacle.id_spectacle where sp.id = :id ";
+        $sql = "SELECT l.nom, l.adresse 
+                FROM lieu l 
+                JOIN soiree s on s.id_lieu= l.id 
+                JOIN soiree2spectacle s2s on s2s.id_soiree = s.id 
+                JOIN spectacle sp on sp.id = s2s.id_spectacle 
+                WHERE sp.id = :id ";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([$spectacleId]);
         $result = $stmt->fetch(\PDO::FETCH_ASSOC);
