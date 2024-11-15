@@ -310,6 +310,11 @@ class NrvRepository {
         $stmt = $this->pdo->prepare("DELETE FROM spectacle2image WHERE id_spectacle = ? AND id_image = ?");
         $stmt->execute([$idSpectacle, $idImage]);
 
+        // Check if the image is the image 1 or 2 (these are permanent images in the DB)
+        if ($idImage === 1 || $idImage === 2) {
+            return false;
+        }
+
         // Delete the image if it is not linked to any spectacle
         $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM spectacle2image WHERE id_image = ?");
         $stmt->execute([$idImage]);
