@@ -14,6 +14,10 @@ class SpectacleRenderer {
 
     /** @var Spectacle spectacle */
     private Spectacle $spectacle;
+    /** @var string path of the images */
+    private string $imagesPath = "/SAE_DevWeb/medias/images/";
+    /** @var string path of the videos */
+    private string $videosPath = "/SAE_DevWeb/medias/videos/";
 
     /**
      * Constructor
@@ -38,9 +42,9 @@ class SpectacleRenderer {
 
         // Display the image of the spectacle, if there is no image, display a default image
         if ($image === "pas d'image") {
-            $img = "<img src='/SAE_DevWeb/medias/images/ppp.jpg' alt='image spectacle'>";
+            $img = "<img src='{$this->imagesPath}ppp.jpg' alt='image spectacle'>";
         } else {
-            $img = "<img src='/SAE_DevWeb/medias/images/$image' alt='image spectacle'>";
+            $img = "<img src='$this->imagesPath$image' alt='image spectacle'>";
         }
 
         return <<<FIN
@@ -98,7 +102,7 @@ class SpectacleRenderer {
                 $html .= <<<FIN
                     <li class="list-inline-item m-3">
                         <div class="card text-center" style="width: 18rem;">
-                            <img src='/SAE_DevWeb/medias/images/{$image['chemin_fichier']}' alt='Image du spectacle' class="img-thumbnail">
+                            <img src='$this->imagesPath{$image['chemin_fichier']}' alt='Image du spectacle' class="img-thumbnail">
                         </div>
                     </li>
 
@@ -117,7 +121,7 @@ class SpectacleRenderer {
         if (!empty($this->spectacle->__get('chemin_video')) && $this->spectacle->__get('chemin_video') !== "aucune video") {
             $html .= <<<FIN
                 <video width='320' height='240' controls>
-                    <source src='/SAE_DevWeb/medias/videos/{$this->spectacle->__get('chemin_video')}' type='video/mp4'>
+                    <source src='$this->videosPath{$this->spectacle->__get('chemin_video')}' type='video/mp4'>
                 </video>
             </div>
             FIN;

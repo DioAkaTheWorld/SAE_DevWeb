@@ -121,7 +121,7 @@ class NrvRepository
     {
         $stmt = $this->pdo->prepare("SELECT hash FROM user WHERE email = ?");
         $stmt->execute([$email]);
-        return $stmt->fetch()[0];
+        return $stmt->fetch()[0] ?? "";
     }
 
     /**
